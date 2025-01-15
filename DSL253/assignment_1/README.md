@@ -4,7 +4,9 @@
 
 ## *Prepared by Amay Dixit \- 12340220*
 
-# Notebook Link:  [https://colab.research.google.com/drive/1o6nFTad4ZSJoeHF6j1IKj0g4iJUQ00et?usp=sharing](https://colab.research.google.com/drive/1o6nFTad4ZSJoeHF6j1IKj0g4iJUQ00et?usp=sharing) Github Link:  [https://github.com/amaydixit11/Academics/tree/main/DSL253/assignment\_1](https://colab.research.google.com/drive/1o6nFTad4ZSJoeHF6j1IKj0g4iJUQ00et?usp=sharing) Docs Link: [https://docs.google.com/document/d/143dyjNots-8kMUZzZPAzHFNwkEHArXHWc22G-gjbrmY/edit?usp=sharing](https://docs.google.com/document/d/143dyjNots-8kMUZzZPAzHFNwkEHArXHWc22G-gjbrmY/edit?usp=sharing)
+### [Notebook Link](https://colab.research.google.com/drive/1o6nFTad4ZSJoeHF6j1IKj0g4iJUQ00et?usp=sharing) 
+### [Github Link](https://github.com/amaydixit11/Academics/tree/main/DSL253/assignment_1) 
+### [Docs Link](https://docs.google.com/document/d/143dyjNots-8kMUZzZPAzHFNwkEHArXHWc22G-gjbrmY/edit?usp=sharing)
 
 # INTRODUCTION
 
