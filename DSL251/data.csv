@@ -1,0 +1,44 @@
+Location Name,Time to Reach (hr),Distance (km),Train Only,Road Only,Train+Road
+surat,18,1020,1,0,0
+Kolkata ,18,870,0,0,1
+Hyderabad ,13.5,676,0,0,1
+Hyderabad ,13.5,680,0,0,1
+Delhi,18,977,1,0,0
+visakhapatnam,14,580,0,0,1
+new delhi,18,977,0,0,1
+Anand,21,1157,1,0,0
+Rewari(Haryana),26,1264,1,0,0
+Nashik( Maharashtra),15,861,1,0,0
+Hyderabad ,13,669,1,0,1
+Raipur,1.25,44,0,0,1
+Bhilai,0.5,9,0,1,0
+warangal,14,756,0,0,1
+Thrissur(Kerala),35,1743,0,0,1
+guntur,19,970,0,0,1
+Gwalior (M.P),18,1044,1,0,0
+Pipariya(M.P),12,727,1,0,0
+Hyderabad ,14,683,0,0,1
+delhi,22,1200,1,0,0
+vijayawada ,16,750,1,0,0
+delhi,21,1232,1,0,0
+Hyderabad ,13,700,0,1,0
+Sambalpur(OD),5.47,309,0,1,0
+Ranchi,10,600,0,0,1
+kanpur ,20,949,0,0,1
+Bhopal ,12,600,0,0,1
+Nagaon(Assam),48,1782,0,0,1
+Jalgaon ,11,700,0,1,0
+Varanasi,18,720,1,0,0
+Ranchi,12,620,0,0,1
+guntur ,19,965,0,0,1
+Ongole ,19,982,1,0,0
+Kakinada,18,624,0,0,1
+Hasimara,28,1354,1,0,0
+Jaipur ,23,1200,1,0,0
+Nellore,19,1006,1,0,0
+Kolkata ,20,900,1,0,0
+hyderabad ,13,646,0,0,1
+Chhatarpur,18,584,1,0,0
+Hyderabad ,14,700,0,0,1
+Vadodara,20,1159,1,0,0
+Ghaziabad,22,1230,1,0,0
