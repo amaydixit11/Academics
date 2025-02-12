@@ -1,0 +1,413 @@
+\documentclass[12pt]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{float}
+
+\title{Assignment 4 \\ DSL253 - Statistical Programming}
+\author{Amay Dixit - 12340220}
+\date{Submitted to Dr. Anil Kumar Sao}
+
+\begin{document}
+
+\maketitle
+
+\section*{Links}
+\begin{sloppypar}
+\begin{itemize}
+    \item Notebook Link: \\ \url{https://colab.research.google.com/drive/1qFhSLRBXMIceuHT40LFdzxjQe6SIDQyq?usp=sharing}
+    \item Github Link: \\ \url{https://github.com/amaydixit11/Academics/tree/main/DSL253/assignment_4}
+\end{itemize}
+\end{sloppypar}
+
+\section{Introduction}
+This report presents the analysis of three statistical problems: brain region coactivation patterns, chi-squared distribution verification, and Gaussian distribution properties. The analysis encompasses time series analysis, dimensionality reduction, and statistical distribution validation using Python programming.
+
+\section{Data}
+\subsection{Dataset Descriptions}
+\begin{itemize}
+    \item \textbf{Question 1}: Two datasets containing time series signals from 50 brain regions over 190 time points were provided, which were uploaded to github for ease of access
+    \begin{itemize}
+        \item Format: CSV file with no headers
+        \item Dimensions: 50 brain regions × 190 time points
+        \item Data organized with regions as rows and time points as columns        
+        \item \textbf{Data Processing}: Both datasets were loaded and transposed to facilitate time series analysis and correlation computation
+    \end{itemize}
+    \item \textbf{Question 2}: Generated normal distribution samples for chi-squared verification
+    \item \textbf{Question 3}: Gaussian dataset with noise for empirical rule verification
+\end{itemize}
+
+\section{Methodology}
+
+\subsection{Question 1}
+Let $\mathbf{X} \in \mathbb{R}^{50 \times 190}$ represent the time series data matrix for dataset $k \in \{1,2\}$, where each row vector $\mathbf{x}_i \in \mathbb{R}^{190}$ corresponds to the temporal signals from brain region $i$.
+
+\subsubsection{Correlation Analysis}
+For each dataset, we compute the correlation matrix $\mathbf{C} \in \mathbb{R}^{50 \times 50}$ where each element $C_{ij}$ represents the correlation coefficient between regions $i$ and $j$:
+
+\begin{equation}
+    C_{ij} = \frac{\sum_{t=1}^{T} (X_{it} - \mu_i)(X_{jt} - \mu_j)}{\sqrt{\sum_{t=1}^{T} (X_{it} - \mu_i)^2 \sum_{t=1}^{T} (X_{jt} - \mu_j)^2}}
+\end{equation}
+
+where $T = 190$ is the number of time points, and $\mu_i = \frac{1}{T}\sum_{t=1}^{T} X_{it}$ is the mean of region $i$.
+
+\subsubsection{Normalization}
+We use min-max scalar to normalize the data: 
+
+\begin{equation}
+    \tilde{X}_{it} = f(X_{it}) = 2 \times \frac{X_{it} - \min_{i,t}(X_{it})}{\max_{i,t}(X_{it}) - \min_{i,t}(X_{it})} - 1
+\end{equation}
+
+This yields normalized matrices $\tilde{\mathbf{X}}$ with elements $\tilde{X}_{it} \in [-1,1]$. The normalized correlation matrices $\tilde{\mathbf{C}}$ are then computed using the same formulation as above.
+
+\subsubsection{Dimensionality Reduction}
+Principal Component Analysis is applied to the normalized data matrices. Let $\tilde{\mathbf{X}} = \mathbf{U}\mathbf{\Sigma}{\mathbf{V}}^T$ be the singular value decomposition of $\tilde{\mathbf{X}}$. The PCA transformation is defined as:
+
+\begin{equation}
+    \mathbf{X}_{PCA} = \tilde{\mathbf{X}}\mathbf{W}
+\end{equation}
+
+where $\mathbf{W} \in \mathbb{R}^{50 \times 10}$ consists of the first 10 right singular vectors of $\tilde{\mathbf{X}}$, resulting in $\mathbf{X}_{PCA} \in \mathbb{R}^{190 \times 10}$.
+
+\subsubsection{Comparative Analysis Framework}
+The analysis generates three correlation matrices for each dataset $k$:
+\begin{enumerate}
+    \item Raw correlation matrix: $\mathbf{C}$
+    \item Normalized correlation matrix: $\tilde{\mathbf{C}}$
+    \item PCA-transformed correlation matrix: $\mathbf{C}_{PCA}$
+\end{enumerate}
+
+Each matrix $\mathbf{M} \in \{\mathbf{C}, \tilde{\mathbf{C}}, \mathbf{C}_{PCA}\}$ satisfies:
+\begin{itemize}
+    \item Symmetry: $M_{ij} = M_{ji}$
+    \item Bounded elements: $M_{ij} \in [-1,1]$
+    \item Unit diagonal: $M_{ii} = 1$
+\end{itemize}
+
+\subsection{Question 2: Chi-Squared Distribution Verification}
+Verification procedure for $X \sim N(\mu, \sigma^2)$:
+\begin{equation}
+    V = \frac{(X-\mu)^2}{\sigma^2} \sim \chi^2(1)
+\end{equation}
+
+
+\subsubsection{Empirical Verification}
+To verify this theorem empirically, 
+
+\begin{enumerate}
+    \item Generate random samples $\{X_i\}_{i=1}^n$ from $\mathcal{N}(\mu, \sigma^2)$:
+    \begin{equation}
+        X_i \sim \mathcal{N}(\mu, \sigma^2), \quad i = 1,\ldots,n
+    \end{equation}
+    
+    \item Transform each sample to compute $\{V_i\}_{i=1}^n$:
+    \begin{equation}
+        V_i = \frac{(X_i-\mu)^2}{\sigma^2}, \quad i = 1,\ldots,n
+    \end{equation}
+    
+    \item Compare the empirical distribution of $V$ with the theoretical $\chi^2(1)$ distribution using:
+    \begin{itemize}
+        \item Probability density function (PDF) comparison
+        \item Histogram of empirical values
+        \item Theoretical $\chi^2(1)$ PDF:
+        \begin{equation}
+            f(x) = \frac{1}{\sqrt{2\pi x}}e^{-x/2}, \quad x > 0
+        \end{equation}
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Implementation Details}
+The verification was performed using the following parameters:
+\begin{itemize}
+    \item Sample sizes: $n \in \{100, 1000, 10000\}$
+    \item Distribution parameters: $\mu = 0$, $\sigma^2 = 1$
+    \item Number of histogram bins: 50
+    \item Theoretical PDF evaluation points: 1000
+\end{itemize}
+
+\subsection{Question 3: Gaussian Distribution Analysis}
+Given a dataset with Gaussian distribution and noise, we perform:
+
+\subsubsection{Statistical Parameters}
+For dataset $X = \{x_1, ..., x_n\}$, compute:
+\begin{itemize}
+    \item Sample mean: $\mu = \frac{1}{n}\sum_{i=1}^n x_i$
+    \item Sample variance: $\sigma^2 = \frac{1}{n}\sum_{i=1}^n (x_i - \mu)^2$
+    \item Standard deviation: $\sigma = \sqrt{\sigma^2}$
+\end{itemize}
+
+\subsubsection{Empirical Rule Verification}
+For intervals $[\mu - k\sigma, \mu + k\sigma]$, $k \in \{1,2,3\}$, calculate:
+\begin{equation}
+    P_k = \frac{\text{count}(\mu - k\sigma \leq x_i \leq \mu + k\sigma)}{n} \times 100\%
+\end{equation}
+
+\subsubsection{CDF Analysis}
+For standard normal distribution $Z = \frac{X-\mu}{\sigma}$:
+\begin{equation}
+    P(|Z| > 2) = 2\int_2^{\infty} \frac{1}{\sqrt{2\pi}} e^{-z^2/2} dz
+\end{equation}
+
+\section{Results}
+
+\subsection{Question 1}
+\subsubsection{Initial Correlation Analysis}
+The initial correlation matrices revealed complex coactivation patterns across the 50 brain regions:
+
+\begin{itemize}
+        \item Strong positive correlations in regions 10-13 ($C_{ij} \approx 0.75$)
+        \item A prominent cluster of high correlation in regions 22-27
+        \item A distinct block of strong correlation in regions 42-49
+        \item Scattered negative correlations (approximately -0.25 to -0.5) throughout the matrix
+    
+        \item Nearly identical correlation structure in both dataset
+        \item Slightly weaker correlation strengths in some regions
+        \item Preservation of the same major correlation clusters
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q1_unsorted_unnormalized.png}
+    \caption{Correlation Matrices}
+    \label{fig:enter-label}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{sorted_unnormalized.png}
+    \caption{Sorted Correlation Matrices}
+    \label{fig:enter-label}
+\end{figure}
+\subsubsection{Normalization Effects}
+After normalization to the [-1, 1] range:
+\begin{itemize}
+    \item The correlation structure remained virtually unchanged for both datasets
+    \item No significant distortion of correlation patterns was observed
+    \item The relative strengths of correlations between regions were preserved
+\end{itemize}
+
+\subsubsection{PCA Transformation Results}
+The PCA transformation to 10 dimensions produced striking changes:
+\begin{itemize}
+    \item Both datasets showed complete decorrelation between principal components:
+    \begin{itemize}
+        \item Perfect correlation along the diagonal ($C_{ii} = 1$)
+        \item Negligible correlation between different components ($C_{ij} = 0$ for $i \neq j$)
+    \end{itemize}
+    \item The transformation successfully separated the signal into orthogonal components
+    \item Both datasets exhibited identical correlation structure after PCA
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q1_PCA.png}
+    \caption{PCA Transformed Correlation Matrices}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Comparative Analysis}
+The analysis revealed several key insights:
+\begin{enumerate}
+    \item \textbf{Pattern Stability:}
+    \begin{itemize}
+        \item Initial correlation patterns were highly consistent between datasets
+        \item Normalization preserved these patterns faithfully
+        \item PCA successfully decorrelated the signals in both cases
+    \end{itemize}
+    
+    \item \textbf{Structural Changes:}
+    \begin{itemize}
+        \item Original data showed complex, hierarchical correlation patterns
+        \item Normalized data maintained these intricate relationships
+        \item PCA-transformed data showed complete decorrelation, indicating successful separation of independent components
+    \end{itemize}
+
+\end{enumerate}
+
+This analysis demonstrates that while the original brain signals showed complex, hierarchical correlation patterns, the PCA transformation successfully separated these into independent components. The high similarity between datasets suggests these patterns represent robust underlying features of brain region coactivation.
+
+
+\subsection{Question 2: Chi-Squared Verification Results}
+
+\subsubsection{Distribution Analysis}
+Analysis across sample sizes revealed:
+
+\subsubsection{n = 100}
+\begin{itemize}
+    \item Approximate match to $\chi^2(1)$ distribution
+    \item Tail region deviations
+    \item High empirical variance
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{q2_n100.png}
+    \caption{n = 100}
+    \label{fig:enter-label}
+\end{figure}
+\subsubsection{n = 1000}
+\begin{itemize}
+    \item Close alignment with theoretical distribution
+    \item Clear right-skewed shape
+    \item Lower variance
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{q2_n1000.png}
+    \caption{n = 1000}
+    \label{fig:enter-label}
+\end{figure}
+\subsubsection{n = 10000}
+\begin{itemize}
+    \item Strong agreement with $\chi^2(1)$ distribution
+    \item Accurate peak and tail representation
+    \item Minimal variance
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{q2_n10000.png}
+    \caption{n = 10000}
+    \label{fig:enter-label}
+\end{figure}
+\subsubsection{Statistical Convergence}
+Observed properties:
+\begin{enumerate}
+    \item Mean: $\bar{V}_n \approx \mathbb{E}[\chi^2(1)] = 1$
+    \item Variance: $\text{Var}(V_n) \approx \text{Var}[\chi^2(1)] = 2$
+\end{enumerate}
+
+\subsection{Question 3: Gaussian Analysis Results}
+\subsubsection{Statistical Parameters}
+Computed values:
+\begin{itemize}
+    \item $\mu = 49.8583$
+    \item $\sigma^2 = 111.7279$
+    \item $\sigma = 10.5701$
+\end{itemize}
+
+\subsubsection{Empirical Rule Verification}
+Observed percentages:
+\begin{itemize}
+    \item Within $1\sigma$: 68.40\% (Expected: 68\%)
+    \item Within $2\sigma$: 95.20\% (Expected: 95\%)
+    \item Within $3\sigma$: 99.90\% (Expected: 99.7\%)
+\end{itemize}
+
+\subsubsection{CDF Analysis}
+Probability beyond $2\sigma$:
+\begin{equation}
+    P(|Z| > 2) = 0.0455
+\end{equation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q3.png}
+    \caption{Distribution of Data with Normal Curve}
+    \label{fig:enter-label}
+\end{figure}
+\section{Discussion}
+
+\subsection{Question 1}
+The analysis of brain region coactivation patterns revealed several key insights into neural organization. The most notable finding was the remarkable consistency of correlation patterns between the two datasets, suggesting these patterns reflect fundamental properties of brain organization rather than random variations.
+
+\subsubsection{Pattern Stability}
+The correlation structures remained notably stable across multiple analytical stages:
+\begin{itemize}
+    \item Initial correlation matrices showed identical clustering patterns between datasets
+    \item Normalization preserved these patterns, indicating scale-invariant relationships
+    \item PCA transformation produced identical decorrelated components in both datasets
+\end{itemize}
+
+\subsubsection{Functional Organization}
+The analysis revealed distinct organizational features:
+\begin{itemize}
+    \item Strong positive correlations ($C_{ij} \approx 0.75$) in specific clusters (regions 10-13, 22-27, and 42-49)
+    \item Scattered negative correlations ($-0.25$ to $-0.5$) suggesting inhibitory relationships
+    \item Complete decorrelation after PCA, indicating separable functional components
+\end{itemize}
+
+\subsubsection{Implications}
+These findings suggest that:
+\begin{enumerate}
+    \item Brain activity exhibits robust hierarchical organization that persists across different analytical approaches
+    \item The relationships between brain regions are primarily driven by temporal dynamics rather than signal magnitude
+    \item Dimensionality reduction through PCA can effectively capture independent modes of brain activity
+\end{enumerate}
+
+\subsection{Chi-Squared Property}
+\subsubsection{Convergence Properties}
+The empirical results strongly support the theoretical relationship between normally distributed variables and the $\chi^2(1)$ distribution. Key observations include:
+
+\begin{enumerate}
+    \item \textbf{Sample Size Effect:} 
+    \begin{itemize}
+        \item Larger sample sizes ($n \geq 1000$) provide substantially better approximations
+        \item Convergence rate appears to follow the law of large numbers
+    \end{itemize}
+    
+    \item \textbf{Distribution Features:}
+    \begin{itemize}
+        \item Characteristic right-skewed shape emerges clearly
+        \item Peak at x = 0 and exponential decay accurately reproduced
+        \item Tail behavior becomes more stable with increasing n
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Gaussian Properties}
+\subsubsection{Distribution Characteristics}
+The dataset shows strong adherence to Gaussian properties:
+\begin{itemize}
+    \item Symmetrical distribution around mean
+    \item Close alignment with theoretical percentages
+    \item Expected tail behavior beyond $2\sigma$
+\end{itemize}
+
+\subsubsection{Empirical Rule Validation}
+Results confirm the 68-95-99.7 rule:
+\begin{itemize}
+    \item Observed percentages match theoretical values within 0.5\%
+    \item Slight variation attributable to noise in dataset
+    \item Strong evidence of underlying normal distribution
+\end{itemize}
+
+\subsubsection{Tail Behavior}
+The probability beyond $2\sigma$ (0.0455) aligns with theoretical expectation (~0.0455), confirming:
+\begin{itemize}
+    \item Proper tail behavior
+    \item Consistency with standard normal distribution
+    \item Minimal impact of noise on extreme values
+\end{itemize}
+
+\section{Conclusion}
+
+This study explored three key statistical problems, yielding the following insights:
+
+\begin{itemize}
+    \item \textbf{Brain Coactivation Analysis:}  
+    \begin{itemize}
+        \item Revealed consistent organizational patterns across datasets, suggesting an inherent brain structure rather than random variation.  
+        \item Principal Component Analysis (PCA) further confirmed a hierarchical organization.  
+    \end{itemize}
+
+    \item \textbf{Chi-Squared Distribution:}  
+    \begin{itemize}
+        \item Empirical validation showed strong agreement with theoretical expectations.  
+        \item For $n \geq 1000$, convergence improved, and characteristic distribution properties became more pronounced.  
+    \end{itemize}
+
+    \item \textbf{Gaussian Characteristics:}  
+    \begin{itemize}
+        \item Empirical results closely matched theoretical predictions.  
+        \item The empirical rule held within 0.5\% accuracy, and probabilities beyond $2\sigma$ aligned almost perfectly.  
+    \end{itemize}
+\end{itemize}
+
+Overall, these findings validate fundamental statistical principles and provide practical insights into data analysis, emphasizing:
+\begin{itemize}
+    \item The importance of sufficient sample size for reliable results.  
+    \item The impact of normalization on data consistency.  
+    \item The role of dimensionality reduction techniques in uncovering meaningful structures.  
+\end{itemize}
+
+\end{document}
