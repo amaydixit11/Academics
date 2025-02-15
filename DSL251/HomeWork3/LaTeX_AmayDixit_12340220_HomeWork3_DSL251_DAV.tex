@@ -1,0 +1,909 @@
+\documentclass[12pt]{article}
+\usepackage{subcaption}
+\usepackage{amsmath, amssymb, geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor} 
+\usepackage{fontenc}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{booktabs}
+
+\geometry{a4paper, margin=1in}
+
+% Document metadata
+\title{DSL251 \\ Data Analytics and Visualization \\ Homework 3}
+\author{Amay Dixit \\ 12340220}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\href{https://colab.research.google.com/drive/1xmye8SiFHBd7Q1njTCQr2zVWI1KtCea0?usp=sharing}{\texttt{Google Colab Notebook Link}} \\
+\texttt{https://colab.research.google.com/drive/\\1xmye8SiFHBd7Q1njTCQr2zVWI1KtCea0?usp=sharing}
+\end{center}
+
+\section{Neighbor Distribution and Density Distribution Analysis}
+
+This section presents a comprehensive analysis of the point distributions and density patterns in the dataset. Multiple visualization techniques were employed to understand the spatial relationships between data points.
+
+\subsection{Dataset Summary Statistics}
+The dataset contains measurements of width and length, with the following key statistics:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Statistic & Width & Length \\
+\midrule
+Count & 70.000 & 70.000 \\
+Mean & 2.290 & 13.793 \\
+Standard Deviation & 1.603 & 6.166 \\
+Minimum & 0.500 & 1.100 \\
+25th Percentile & 1.400 & 8.100 \\
+Median & 1.800 & 15.150 \\
+75th Percentile & 2.800 & 18.075 \\
+Maximum & 12.100 & 24.600 \\
+\bottomrule
+\end{tabular}
+\caption{Summary statistics of the dataset}
+\end{table}
+
+\subsection{Nearest Neighbor Analysis}
+The nearest neighbor analysis revealed:
+\begin{itemize}
+    \item Average nearest neighbor distance: 0.59
+    \item Median nearest neighbor distance: 0.41
+    \item Standard deviation of distances: 0.94
+\end{itemize}
+
+\subsection{Distribution Characteristics}
+The analysis included multiple visualizations:
+\begin{enumerate}
+    \item Point Distribution Plot: Revealed the spatial arrangement of data points in the width-length space
+    \item Distance Matrix Heatmap: Showed the pairwise distances between all points
+    \item K-Nearest Neighbor Distance Distribution: Illustrated the distribution of distances to the 3 nearest neighbors
+    \item Kernel Density Estimation: Visualized the density of points across the feature space
+\end{enumerate}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{q1.png}
+    % \caption{Question 1}
+    % \label{fig:enter-label}
+\end{figure}
+
+\section{Outlier/Noise Detection using DBSCAN}
+
+\subsection{Parameter Selection}
+Based on the k-distance graph analysis and the density distribution plots from Question 1, we selected the following DBSCAN parameters:
+\begin{itemize}
+    \item Epsilon (eps) = 0.5: This value was chosen based on the elbow point in the k-distance graph, where we observed a significant change in the slope of the distance curve.
+    \item Minimum Points (min\_samples) = 7: This parameter was selected to ensure robust cluster formation while maintaining sensitivity to noise detection.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q2_parameter.png}
+    \caption{Parameter Selection}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Implementation Results}
+The DBSCAN algorithm was applied to the standardized dataset, resulting in the following classification:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lr}
+\toprule
+Point Type & Count \\
+\midrule
+Core Points & 50 \\
+Border Points & 14 \\
+Noise Points & 6 \\
+\bottomrule
+\end{tabular}
+\caption{DBSCAN Classification Summary}
+\end{table}
+
+\subsection{Identified Noise Points}
+The algorithm identified six points as noise, with the following coordinates:
+\begin{table}[H]
+\centering
+\begin{tabular}{ccc}
+\toprule
+Index & Width & Length \\
+\midrule
+5 & 4.5 & 3.5 \\
+22 & 4.2 & 12.3 \\
+24 & 4.4 & 12.9 \\
+50 & 4.9 & 17.5 \\
+59 & 12.1 & 19.8 \\
+68 & 2.9 & 24.5 \\
+\bottomrule
+\end{tabular}
+\caption{Identified Noise Points}
+\end{table}
+
+\subsection{Visualization}
+A scatter plot was created to visualize the DBSCAN results, with:
+\begin{itemize}
+    \item Green points representing core points
+    \item Yellow points representing border points
+    \item Red points representing noise points
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q2.png}
+    \caption{DBSCAN Results}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Analysis}
+The DBSCAN implementation effectively identified outliers in the dataset:
+\begin{itemize}
+    \item Most noise points were found at the periphery of the data distribution
+    \item The identified noise points show unusual width-to-length ratios compared to the main clusters
+    \item The algorithm successfully maintained the core structure of the data while isolating anomalous points
+\end{itemize}
+\section{DBSCAN Clustering Analysis}
+
+\subsection{Clustering Results}
+The DBSCAN algorithm identified three distinct clusters in the dataset, with the following distribution:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lr}
+\toprule
+Cluster & Number of Points \\
+\midrule
+Cluster 0 & 21 \\
+Cluster 1 & 31 \\
+Cluster 2 & 12 \\
+Noise & 6 \\
+\bottomrule
+\end{tabular}
+\caption{Distribution of Points Across Clusters}
+\end{table}
+
+\subsection{Cluster Quality Metrics}
+The clustering quality was evaluated using several metrics:
+\begin{itemize}
+    \item Silhouette Score: 0.538, indicating moderately well-separated clusters
+    \item Average intra-cluster distances:
+    \begin{itemize}
+        \item Cluster 0: 0.747
+        \item Cluster 1: 0.689
+        \item Cluster 2: 0.563
+    \end{itemize}
+\end{itemize}
+
+\subsection{Inter-cluster Relationships}
+Analysis of the distances between clusters revealed:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\toprule
+From & To & Average Distance \\
+\midrule
+Cluster 0 & Cluster 1 & 1.956 \\
+Cluster 0 & Cluster 2 & 2.238 \\
+Cluster 1 & Cluster 2 & 1.392 \\
+\bottomrule
+\end{tabular}
+\caption{Inter-cluster Distances}
+\end{table}
+
+\subsection{Cluster Characteristics}
+\begin{enumerate}
+    \item \textbf{Cluster Separation}:
+    \begin{itemize}
+        \item Clusters 0 and 2 show the highest separation (distance: 2.238)
+        \item Clusters 1 and 2 are relatively closer (distance: 1.392)
+        \item The moderate silhouette score suggests distinct but not completely isolated clusters
+    \end{itemize}
+    
+    \item \textbf{Cluster Cohesion}:
+    \begin{itemize}
+        \item Cluster 2 shows the highest cohesion (lowest intra-cluster distance: 0.563)
+        \item Cluster 0 has the lowest cohesion (highest intra-cluster distance: 0.747)
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Visualization}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q3.png}
+    \caption{DBSCAN Clustering Results showing three distinct clusters and noise points}
+\end{figure}
+
+\subsection{Interpretation}
+The DBSCAN clustering analysis reveals:
+\begin{itemize}
+    \item Three well-defined clusters with distinct characteristics
+    \item Moderate overlap between clusters, particularly between Clusters 1 and 2
+    \item Clear separation of noise points from the main clusters
+    \item A hierarchical structure where Cluster 0 is most isolated, while Clusters 1 and 2 show some proximity
+\end{itemize}
+
+The clustering results suggest natural groupings in the data that could correspond to different categories of leaves, with some boundary cases represented by the noise points.
+
+\section{Comparison of K-means and DBSCAN Clustering}
+
+\subsection{Experimental Setup}
+Three clustering approaches were implemented and compared:
+\begin{enumerate}
+    \item DBSCAN clustering (from Section 3)
+    \item K-means clustering on the original dataset
+    \item K-means clustering on the dataset with noise points removed
+\end{enumerate}
+
+\subsection{Clustering Results}
+
+\subsubsection{K-means on Original Data}
+\begin{table}[H]
+\centering
+\begin{tabular}{ccccccc}
+\toprule
+Cluster & Size & \multicolumn{2}{c}{Center Coordinates} & \multicolumn{2}{c}{Spread} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+& & Width & Length & Width & Length \\
+\midrule
+0 & 47 & 2.37 & 17.36 & 1.08 & 3.13 \\
+1 & 1 & 12.10 & 19.80 & 0.00 & 0.00 \\
+2 & 22 & 1.67 & 5.89 & 0.88 & 2.65 \\
+\bottomrule
+\end{tabular}
+\caption{K-means Clustering Statistics (Original Data)}
+\end{table}
+
+\subsubsection{K-means on Noise-Removed Data}
+\begin{table}[H]
+\centering
+\begin{tabular}{ccccccc}
+\toprule
+Cluster & Size & \multicolumn{2}{c}{Center Coordinates} & \multicolumn{2}{c}{Spread} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+& & Width & Length & Width & Length \\
+\midrule
+0 & 31 & 1.66 & 17.59 & 0.34 & 3.19 \\
+1 & 12 & 3.63 & 16.97 & 0.47 & 1.93 \\
+2 & 21 & 1.54 & 6.00 & 0.65 & 2.66 \\
+\bottomrule
+\end{tabular}
+\caption{K-means Clustering Statistics (Noise-Removed Data)}
+\end{table}
+
+\subsection{Impact of Noise Removal}
+The comparison reveals several key differences between the clustering approaches:
+
+\subsubsection{Cluster Size and Distribution}
+\begin{itemize}
+    \item \textbf{Original Data}: Shows highly imbalanced clusters (47-1-22 distribution)
+    \item \textbf{Noise-Removed Data}: Exhibits more balanced clustering (31-12-21 distribution)
+\end{itemize}
+
+\subsubsection{Cluster Characteristics}
+\begin{itemize}
+    \item \textbf{Spread Reduction}:
+    \begin{itemize}
+        \item Width spread decreased significantly (from 1.08 to 0.34 in the largest cluster)
+        \item Length spread remained relatively stable
+    \end{itemize}
+    
+    \item \textbf{Center Shifts}:
+    \begin{itemize}
+        \item Cluster centers are more representative after noise removal
+        \item Elimination of singleton cluster (previous Cluster 1 with single point)
+    \end{itemize}
+\end{itemize}
+
+\subsection{Visualization}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q4.png}
+    \caption{Comparison of DBSCAN and K-means clustering results with and without noise removal}
+\end{figure}
+\subsection{Analysis of Methods}
+\begin{enumerate}
+    \item \textbf{DBSCAN Advantages}:
+    \begin{itemize}
+        \item Automatically identifies and isolates noise points
+        \item Creates more natural cluster shapes
+        \item No assumption about cluster sizes
+    \end{itemize}
+    
+    \item \textbf{K-means Characteristics}:
+    \begin{itemize}
+        \item Sensitive to outliers in original data
+        \item Produces more compact, spherical clusters
+        \item Improved performance after noise removal
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Conclusion}
+The removal of noisy points significantly affects the K-means clustering solution:
+\begin{itemize}
+    \item Improves cluster balance and representation
+    \item Reduces within-cluster spread
+    \item Creates more meaningful and interpretable clusters
+    \item Eliminates the impact of outliers on cluster centers
+\end{itemize}
+
+This comparison demonstrates the importance of noise removal in clustering applications and the complementary nature of DBSCAN and K-means algorithms.
+
+[Previous sections remain the same...]
+
+\section{K-means++ Clustering Analysis}
+
+\subsection{Implementation Results}
+K-means++ was implemented with 4 clusters, using the improved initialization method to optimize centroid placement. The algorithm converged in 3 iterations.
+
+\subsection{Cluster Statistics}
+\begin{table}[H]
+\centering
+\begin{tabular}{cccccccc}
+\toprule
+Cluster & Size & \multicolumn{2}{c}{Center Coordinates} & \multicolumn{2}{c}{Spread} & Inertia \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+& & Width & Length & Width & Length & \\
+\midrule
+0 & 32 & -0.373 & 0.656 & 0.249 & 0.549 & 11.615 \\
+1 & 22 & -0.388 & -1.291 & 0.554 & 0.433 & 10.889 \\
+2 & 15 & 0.953 & 0.429 & 0.352 & 0.375 & 3.964 \\
+3 & 1 & 6.165 & 0.981 & 0.000 & 0.000 & 0.000 \\
+\bottomrule
+\end{tabular}
+\caption{K-means++ Clustering Statistics}
+\end{table}
+
+\subsection{Clustering Quality}
+\begin{itemize}
+    \item Total Inertia: 26.47
+    \item Fast convergence (3 iterations)
+    \item Cluster distribution:
+    \begin{itemize}
+        \item Main cluster (0): 32 points, moderate spread
+        \item Secondary cluster (1): 22 points, larger width spread
+        \item Tertiary cluster (2): 15 points, balanced spread
+        \item Singleton cluster (3): 1 point, isolated outlier
+    \end{itemize}
+\end{itemize}
+
+\subsection{Visualization}
+\begin{figure}[H]
+\centering
+    \includegraphics[width=1\linewidth]{q5.png}
+\caption{K-means++ clustering results showing cluster assignments and density distribution}
+\end{figure}
+
+\subsection{Analysis of Results}
+
+\subsubsection{Cluster Characteristics}
+\begin{enumerate}
+    \item \textbf{Main Cluster (0)}:
+    \begin{itemize}
+        \item Largest group with 32 points
+        \item Compact spread in both dimensions
+        \item Centrally located in the feature space
+    \end{itemize}
+    
+    \item \textbf{Secondary Cluster (1)}:
+    \begin{itemize}
+        \item 22 points with higher width variation
+        \item Distinct negative length center
+        \item Moderate inertia despite size
+    \end{itemize}
+    
+    \item \textbf{Tertiary Cluster (2)}:
+    \begin{itemize}
+        \item 15 points with balanced spread
+        \item Positive width center
+        \item Lowest non-zero inertia
+    \end{itemize}
+    
+    \item \textbf{Singleton Cluster (3)}:
+    \begin{itemize}
+        \item Single point at extreme width
+        \item Likely represents an outlier
+        \item Zero inertia due to single point
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Density Distribution}
+The density plot reveals:
+\begin{itemize}
+    \item Clear separation between main cluster groups
+    \item Overlapping regions between clusters 0 and 2
+    \item Distinct isolation of the singleton cluster
+    \item Varying density patterns across clusters
+\end{itemize}
+
+\subsection{Advantages of K-means++}
+\begin{itemize}
+    \item Improved initial centroid placement
+    \item Fast convergence (3 iterations)
+    \item Clear cluster separation where data structure permits
+    \item Effective handling of varying cluster densities
+\end{itemize}
+
+\subsection{Limitations}
+\begin{itemize}
+    \item Still sensitive to outliers (singleton cluster)
+    \item Fixed number of clusters required a priori
+    \item Assumes spherical cluster shapes
+\end{itemize}
+
+\section{Hierarchical Clustering Analysis Using Ward's Method}
+
+\subsection{Implementation Methodology}
+Ward's hierarchical clustering method was implemented to analyze both the original dataset and the noise-removed dataset. The analysis included dendrograms, cluster visualizations, and density distributions to provide a comprehensive comparison of how noise affects the hierarchical structure.
+
+\subsection{Comparative Analysis of Clustering Results}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lrr|rr}
+\toprule
+& \multicolumn{2}{c|}{Without Noise} & \multicolumn{2}{c}{With Noise} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+Characteristic & Value & Spread & Value & Spread \\
+\midrule
+\multicolumn{5}{l}{\textbf{Cluster 1}} \\
+Size & 21 & -- & 22 & -- \\
+Center Width & 1.54 & 0.65 & 1.67 & 0.88 \\
+Center Length & 6.00 & 2.66 & 5.89 & 2.65 \\
+\midrule
+\multicolumn{5}{l}{\textbf{Cluster 2}} \\
+Size & 13 & -- & 47 & -- \\
+Center Width & 3.55 & 0.54 & 2.37 & 1.08 \\
+Center Length & 16.98 & 1.86 & 17.36 & 3.13 \\
+\midrule
+\multicolumn{5}{l}{\textbf{Cluster 3}} \\
+Size & 30 & -- & 1 & -- \\
+Center Width & 1.63 & 0.31 & 12.10 & 0.00 \\
+Center Length & 17.61 & 3.24 & 19.80 & 0.00 \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of Clustering Statistics With and Without Noise}
+\end{table}
+
+\subsection{Structural Changes Due to Noise}
+
+\begin{enumerate}
+    \item \textbf{Cluster Size Distribution}
+    \begin{itemize}
+        \item \textit{Without Noise}: Relatively balanced (21-13-30)
+        \item \textit{With Noise}: Highly imbalanced (22-47-1)
+    \end{itemize}
+    
+    \item \textbf{Cluster Centers}
+    \begin{itemize}
+        \item \textit{Without Noise}: Well-distributed centers with reasonable separation
+        \item \textit{With Noise}: One cluster reduced to a single outlier point
+    \end{itemize}
+    
+    \item \textbf{Spread Characteristics}
+    \begin{itemize}
+        \item \textit{Without Noise}: Consistent and moderate spread across clusters
+        \item \textit{With Noise}: Large variation in spread, with one degenerate cluster
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Visual Analysis}
+
+
+\begin{figure}[H]
+    \includegraphics[width=1\textwidth]{q6_no_noise_1.png}
+    \caption{Dendrogram and Clustering (Without Noise)}
+\end{figure}
+\begin{figure}[H]
+    \includegraphics[width=1\linewidth]{q6_noise_1.png}
+    \caption{Dendrogram and Clustering (With Noise)}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{q6_no_noise_2.png}
+        \caption{Density Distribution (Without Noise)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{q6_noise_2.png}
+        \caption{Density Distribution (With Noise)}
+    \end{subfigure}
+    \caption{Comparison of Cluster Density Distributions}
+\end{figure}
+
+\subsection{Key Observations}
+\begin{enumerate}
+    \item \textbf{Dendrogram Structure}
+    \begin{itemize}
+        \item \textit{Without Noise}: Shows clear, well-defined hierarchical relationships
+        \item \textit{With Noise}: Exhibits more extreme distance variations and unbalanced merging
+    \end{itemize}
+    
+    \item \textbf{Cluster Separation}
+    \begin{itemize}
+        \item \textit{Without Noise}: Distinct clusters with moderate overlap
+        \item \textit{With Noise}: One highly isolated point and two less distinct clusters
+    \end{itemize}
+    
+    \item \textbf{Density Distribution}
+    \begin{itemize}
+        \item \textit{Without Noise}: Smooth, continuous density contours
+        \item \textit{With Noise}: Disrupted density patterns with isolated regions
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Impact of Noise Removal}
+The comparison demonstrates that noise removal leads to:
+\begin{itemize}
+    \item More balanced cluster sizes
+    \item Better-defined cluster boundaries
+    \item More interpretable hierarchical structure
+    \item More reliable center and spread estimates
+    \item Improved density distribution patterns
+\end{itemize}
+
+\section{Separating Hyperplanes Analysis}
+
+\subsection{Methodology}
+Using the hierarchical clustering results from Question 6, we applied the Learning with Prototypes approach to determine the separating hyperplanes between the three clusters. The process involved:
+\begin{enumerate}
+    \item Computing cluster prototypes (centroids)
+    \item Calculating hyperplane equations between each pair of clusters
+    \item Visualizing the separating boundaries
+\end{enumerate}
+
+\subsection{Results}
+
+\subsubsection{Data Without Noise}
+The separating hyperplanes for the noise-removed dataset are:
+\begin{align*}
+    \text{Hyperplane 1-2:} & \quad 0.576x + 0.818y + 0.216 = 0 \\
+    \text{Hyperplane 1-3:} & \quad 0.030x + 1.000y + 0.338 = 0 \\
+    \text{Hyperplane 2-3:} & \quad -0.996x + 0.085y + 0.138 = 0
+\end{align*}
+
+\subsubsection{Data With Noise}
+The separating hyperplanes for the original dataset (including noise) are:
+\begin{align*}
+    \text{Hyperplane 1-2:} & \quad 0.228x + 0.974y + 0.383 = 0 \\
+    \text{Hyperplane 1-3:} & \quad 0.945x + 0.328y - 2.678 = 0 \\
+    \text{Hyperplane 2-3:} & \quad 0.998x + 0.065y - 3.152 = 0
+\end{align*}
+
+\subsection{Visualization}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q7_no_noise.png}
+    \caption{Clusters and Separating Hyperplanes (Without Noise)}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{q7_noise.png}
+    \caption{Clusters and Separating Hyperplanes (With Noise)}
+\end{figure}
+
+\subsection{Analysis}
+
+\subsubsection{Without Noise}
+\begin{itemize}
+    \item The hyperplanes effectively separate the three clusters with minimal overlap
+    \item Hyperplane 1-2 shows a diagonal boundary with balanced coefficients
+    \item Hyperplane 1-3 is nearly horizontal, indicating separation primarily based on the y-coordinate
+    \item Hyperplane 2-3 is almost vertical, suggesting separation mainly based on the x-coordinate
+\end{itemize}
+
+\subsubsection{With Noise}
+\begin{itemize}
+    \item The presence of noise significantly affects the hyperplane orientations
+    \item Hyperplane 1-2 becomes more vertically oriented
+    \item Hyperplanes 1-3 and 2-3 show substantial shifts due to outlier influence
+    \item The separation boundaries are less optimal compared to the noise-free case
+\end{itemize}
+
+\subsection{Impact of Noise on Hyperplane Formation}
+The comparison reveals several key differences:
+\begin{enumerate}
+    \item \textbf{Coefficient Changes}:
+    \begin{itemize}
+        \item Without noise: More balanced coefficients indicating natural boundaries
+        \item With noise: More extreme coefficients suggesting distorted boundaries
+    \end{itemize}
+    
+    \item \textbf{Boundary Orientation}:
+    \begin{itemize}
+        \item Without noise: Hyperplanes align with natural cluster separations
+        \item With noise: Hyperplanes show more extreme angles and positions
+    \end{itemize}
+    
+    \item \textbf{Separation Quality}:
+    \begin{itemize}
+        \item Without noise: Clear, well-defined separation between clusters
+        \item With noise: More ambiguous boundaries with potential misclassification regions
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Classification Implications}
+The hyperplane equations provide a basis for classifying new points:
+\begin{itemize}
+    \item A point's position relative to all hyperplanes determines its cluster
+    \item The noise-free model offers more reliable classification boundaries
+    \item The presence of noise introduces uncertainty in boundary regions
+\end{itemize}
+
+\section{Multivariate Gaussian Distribution Analysis}
+
+\subsection{Methodology}
+Using the hierarchical clustering results from the previous sections, we fitted multivariate Gaussian distributions to each cluster. For each cluster, we:
+\begin{enumerate}
+    \item Calculated the mean vector (µ)
+    \item Computed the covariance matrix (Σ)
+    \item Visualized the resulting probability density functions
+\end{enumerate}
+\vspace{2cm}
+
+\subsection{Results}
+% Cluster 1
+\noindent\textbf{Cluster 1} \\[0.5cm]
+\begin{tabular}{l|l|l}
+\textbf{Parameter} & \textbf{Without Noise} & \textbf{With Noise} \\[0.3cm]
+\hline \\[0.3cm]
+Size & n = 21 & n = 22 \\[0.5cm]
+Mean Vector & $\begin{aligned}
+\text{Width} &= -0.4725 \\[0.2cm]
+\text{Length} &= -1.2723
+\end{aligned}$ & 
+$\begin{aligned}
+\text{Width} &= -0.3879 \\[0.2cm]
+\text{Length} &= -1.2909
+\end{aligned}$ \\[0.8cm]
+Covariance Matrix & $\begin{bmatrix}
+0.1728 & 0.1528 \\[0.2cm]
+0.1528 & 0.1983
+\end{bmatrix}$ & 
+$\begin{bmatrix}
+0.3220 & 0.1109 \\[0.2cm]
+0.1109 & 0.1965
+\end{bmatrix}$
+\end{tabular}
+
+\vspace{2cm}
+
+% Cluster 2
+\noindent\textbf{Cluster 2} \\[0.5cm]
+\begin{tabular}{l|l|l}
+\textbf{Parameter} & \textbf{Without Noise} & \textbf{With Noise} \\[0.3cm]
+\hline \\[0.3cm]
+Size & n = 13 & n = 47 \\[0.5cm]
+Mean Vector & $\begin{aligned}
+\text{Width} &= 0.7894 \\[0.2cm]
+\text{Length} &= 0.5202
+\end{aligned}$ & 
+$\begin{aligned}
+\text{Width} &= 0.0504 \\[0.2cm]
+\text{Length} &= 0.5834
+\end{aligned}$ \\[0.8cm]
+Covariance Matrix & $\begin{bmatrix}
+0.1261 & 0.0644 \\[0.2cm]
+0.0644 & 0.0995
+\end{bmatrix}$ & 
+$\begin{bmatrix}
+0.4739 & -0.0003 \\[0.2cm]
+-0.0003 & 0.2664
+\end{bmatrix}$
+\end{tabular}
+
+\vspace{2cm}
+
+% Cluster 3
+\noindent\textbf{Cluster 3} \\[0.5cm]
+\begin{tabular}{l|l|l}
+\textbf{Parameter} & \textbf{Without Noise} & \textbf{With Noise} \\[0.3cm]
+\hline \\[0.3cm]
+Size & n = 30 & n = 1 \\[0.5cm]
+Mean Vector & $\begin{aligned}
+\text{Width} &= -0.4148 \\[0.2cm]
+\text{Length} &= 0.6230
+\end{aligned}$ & 
+$\begin{aligned}
+\text{Width} &= 6.1650 \\[0.2cm]
+\text{Length} &= 0.9813
+\end{aligned}$ \\[0.8cm]
+Covariance Matrix & $\begin{bmatrix}
+0.0382 & 0.0632 \\[0.2cm]
+0.0632 & 0.2892
+\end{bmatrix}$ & 
+$\begin{bmatrix}
+0.0100 & 0.0000 \\[0.2cm]
+0.0000 & 0.0100
+\end{bmatrix}$
+\end{tabular}
+
+\vspace{1cm}
+
+\subsection{Visualization}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{q8_no_noise.png}
+    \caption{Multivariate Gaussian Distributions (Without Noise)}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{q8_noise.png}
+    \caption{Multivariate Gaussian Distributions (With Noise)}
+\end{figure}
+
+\subsection{Analysis}
+
+\subsubsection{Cluster Characteristics Without Noise}
+\begin{itemize}
+    \item Well-defined clusters with distinct means and reasonable covariance structures
+    \item Moderate correlation between width and length in Cluster 1 (covariance = 0.1528)
+    \item Cluster 3 shows higher variance in length (0.2892) compared to width (0.0382)
+    \item Cluster 2 exhibits the most compact distribution with smallest variances
+\end{itemize}
+
+\subsubsection{Impact of Noise}
+\begin{itemize}
+    \item Significant increase in variance for Cluster 2 (width variance from 0.1261 to 0.4739)
+    \item Creation of a singleton cluster with minimal artificial covariance
+    \item Higher uncertainty in cluster boundaries
+    \item Reduced correlation between dimensions in Cluster 2 (near-zero covariance)
+\end{itemize}
+
+\subsection{Implications for Classification}
+The Gaussian parameters provide a probabilistic framework for classification:
+\begin{itemize}
+    \item Points can be assigned to clusters based on maximum likelihood
+    \item Noise-free model provides more reliable probability estimates
+    \item Presence of singleton cluster in noisy data requires special handling
+    \item Overlapping distributions indicate potential classification uncertainty regions
+\end{itemize}
+
+\section{Classification Analysis of Test Point}
+
+\subsection{Overview}
+We analyzed the classification of the test point (1.9, 6) using three distinct methods:
+\begin{enumerate}
+    \item Maximum Likelihood Estimation (MLE)
+    \item Hyperplane-based classification
+    \item K-Nearest Neighbors (K-NN)
+\end{enumerate}
+
+The analysis was performed on both the original dataset (with noise) and the noise-removed dataset to understand the impact of noise on classification results.
+
+\subsection{Classification Results}
+
+\subsubsection{Maximum Likelihood Estimation (MLE)}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        & \textbf{Without Noise} & \textbf{With Noise} \\
+        \hline
+        Classification & Cluster 1 & Cluster 1 \\
+        \hline
+        Cluster 1 Likelihood & \(3.117 \times 10^{-1}\) & \(2.140 \times 10^{-1}\) \\
+        \hline
+        Cluster 2 Likelihood & \(3.087 \times 10^{-8}\) & \(4.255 \times 10^{-4}\) \\
+        \hline
+        Cluster 3 Likelihood & \(1.617 \times 10^{-6}\) & \(0.000\) \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Hyperplane-Based Classification}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        & \textbf{Without Noise} & \textbf{With Noise} \\
+        \hline
+        Classification & Cluster 1 & Cluster 1 \\
+        \hline
+        Distance to Cluster 1 & 0.2274 & 0.1439 \\
+        \hline
+        Distance to Cluster 2 & 2.0702 & 1.8798 \\
+        \hline
+        Distance to Cluster 3 & 1.9037 & 6.7950 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{K-Nearest Neighbors (k=5)}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        & \textbf{Without Noise} & \textbf{With Noise} \\
+        \hline
+        Classification & Cluster 1 & Cluster 1 \\
+        \hline
+        Neighbor Classes & [1, 1, 1, 1, 1] & [1, 1, 1, 1, 1] \\
+        \hline
+        Distances & [0.0649, 0.1904, 0.2698, 0.3180, 0.3654] & [0.0649, 0.1904, 0.2698, 0.3180, 0.3654] \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\subsection{Visualization}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{q9_no_noise.png}
+        \caption{Classification Results (Without Noise)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{q9_noise.png}
+        \caption{Classification Results (With Noise)}
+    \end{subfigure}
+    \caption{Visualization of test point classification using different methods}
+\end{figure}
+
+\subsection{Analysis}
+
+\subsubsection{Consensus Among Methods}
+All three classification methods consistently assigned the test point (1.9, 6) to Cluster 1, both with and without noise, indicating:
+\begin{itemize}
+    \item Strong agreement across different classification approaches
+    \item Robust classification despite different underlying assumptions
+    \item High confidence in the final classification
+\end{itemize}
+
+\subsubsection{Method-Specific Insights}
+\begin{enumerate}
+    \item \textbf{MLE Method:}
+    \begin{itemize}
+        \item Shows strongest discrimination between clusters
+        \item Likelihood values clearly favor Cluster 1
+        \item Noise affects absolute likelihood values but not final classification
+    \end{itemize}
+    
+    \item \textbf{Hyperplane Method:}
+    \begin{itemize}
+        \item Demonstrates clear separation between clusters
+        \item Distance to Cluster 1 prototype significantly smaller
+        \item Noise increases distance to Cluster 3 prototype substantially
+    \end{itemize}
+    
+    \item \textbf{K-NN Method:}
+    \begin{itemize}
+        \item Shows perfect consistency in nearest neighbors
+        \item Identical results with and without noise
+        \item Suggests strong local structure around the test point
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Impact of Noise}
+The presence of noise affects the classification methods differently:
+\begin{itemize}
+    \item MLE shows reduced likelihood values but maintains relative relationships
+    \item Hyperplane method shows increased distances but preserves classification
+    \item K-NN remains completely stable, suggesting robust local structure
+\end{itemize}
+
+\subsection{Conclusion}
+The unanimous classification of the test point (1.9, 6) to Cluster 1 across all methods and datasets suggests:
+\begin{itemize}
+    \item High reliability of the classification
+    \item Robustness to noise in the dataset
+    \item Strong local and global structure in the data supporting this classification
+\end{itemize}
+
+The consistency across methods provides strong confidence in the classification result, while the different approaches offer complementary insights into the data structure around the test point.
+
+\end{document}
