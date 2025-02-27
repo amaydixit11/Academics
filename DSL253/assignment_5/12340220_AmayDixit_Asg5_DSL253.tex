@@ -1,0 +1,349 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor} 
+\usepackage{fontenc}
+\usepackage{float}
+\usepackage{hyperref}
+
+\title{Assignment 5 \\ DSL253 - Statistical Programming}
+\author{Amay Dixit - 12340220}
+\date{Submitted to Dr. Anil Kumar Sao}
+
+\begin{document}
+\maketitle
+
+\section*{Links}
+\begin{sloppypar}
+\begin{itemize}
+    \item Notebook Link: \\ \url{https://colab.research.google.com/drive/1Dt-RE_pgcAek6BIsJN8iltmUtlyTknIa?usp=sharing}
+    \item Github Link: \\ \url{https://github.com/amaydixit11/Academics/tree/main/DSL253/assignment_5}
+\end{itemize}
+\end{sloppypar}
+
+\section{Question 1: Bivariate Normal Distribution Probabilities}
+
+\subsection{Introduction}
+This report addresses the calculation and visualization of various probabilities within a bivariate normal distribution. The bivariate normal distribution is a key statistical concept that extends the normal distribution to two dimensions, allowing for the modeling of correlated random variables.
+
+\subsection{Data}
+We are given a bivariate normal distribution for random variables $X$ and $Y$ with the following parameters:
+\begin{align*}
+\mu_X &= 3 \\
+\mu_Y &= 1 \\
+\sigma_X^2 &= 16 \\
+\sigma_Y^2 &= 25 \\
+\rho_{XY} &= \frac{3}{5}
+\end{align*}
+
+\subsection{Methodology}
+To calculate the requested probabilities, we use properties of the bivariate normal distribution:
+
+\begin{enumerate}
+    \item For marginal probabilities: We use the fact that the marginal distributions of $X$ and $Y$ are univariate normal distributions.
+    \item For conditional probabilities: We use the fact that the conditional distribution of one variable given the other is also normally distributed with adjusted parameters.
+\end{enumerate}
+
+Specifically, for a bivariate normal distribution:
+\begin{itemize}
+    \item The marginal distribution of $X$ is $N(\mu_X, \sigma_X^2)$
+    \item The marginal distribution of $Y$ is $N(\mu_Y, \sigma_Y^2)$
+    \item The conditional distribution of $Y$ given $X=x$ is $N(\mu_{Y|X}, \sigma_{Y|X}^2)$ where:
+    \begin{align*}
+        \mu_{Y|X} &= \mu_Y + \rho_{XY}\frac{\sigma_Y}{\sigma_X}(x - \mu_X) \\
+        \sigma_{Y|X}^2 &= \sigma_Y^2(1 - \rho_{XY}^2)
+    \end{align*}
+    \item Similarly, the conditional distribution of $X$ given $Y=y$ is $N(\mu_{X|Y}, \sigma_{X|Y}^2)$ where:
+    \begin{align*}
+        \mu_{X|Y} &= \mu_X + \rho_{XY}\frac{\sigma_X}{\sigma_Y}(y - \mu_Y) \\
+        \sigma_{X|Y}^2 &= \sigma_X^2(1 - \rho_{XY}^2)
+    \end{align*}
+\end{itemize}
+
+\subsection{Results and Discussion}
+
+Using the given parameters, the calculated probabilities are:
+
+\begin{enumerate}
+    \item[(a)] $P(3 < Y < 8) = 0.263822$
+    
+    This represents the marginal probability that the random variable $Y$ falls between 3 and 8. The calculation uses the univariate normal CDF with $\mu_Y = 1$ and $\sigma_Y = 5$.
+    
+    \item[(b)] $P(3 < Y < 8 | X = 7) = 0.440051$
+    
+    This is the conditional probability that $Y$ falls between 3 and 8 given that $X = 7$. When we condition on $X = 7$, the distribution of $Y$ shifts toward higher values since $X$ is above its mean and the correlation is positive, resulting in a higher probability than part (a).
+    
+    \item[(c)] $P(-3 < X < 3) = 0.433193$
+    
+    This represents the marginal probability that the random variable $X$ falls between -3 and 3. The calculation uses the univariate normal CDF with $\mu_X = 3$ and $\sigma_X = 4$.
+    
+    \item[(d)] $P(-3 < X < 3 | Y = -4) = 0.643078$
+    
+    This is the conditional probability that $X$ falls between -3 and 3 given that $Y = -4$. When we condition on $Y = -4$, which is below its mean, the distribution of $X$ shifts toward lower values due to the positive correlation. This makes the region centered at $X = 0$ more likely, increasing the probability compared to part (c).
+\end{enumerate}
+
+\subsection{Visualization}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{asg5_q1.png}
+    \caption{Question 1}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Conclusion}
+
+The calculation of probabilities in a bivariate normal distribution requires understanding both marginal and conditional distributions. The results show how conditioning on one variable affects the distribution of the other, particularly in the presence of correlation.
+
+The implementation provided is flexible and can accommodate any set of parameters, making it useful for analyzing various bivariate normal scenarios. The visualization technique offers an intuitive understanding of how these probabilities relate to areas under the bivariate normal density function.
+
+
+
+
+\section{Question 2}
+
+\subsection{Introduction}
+This section investigates the statistical properties of Mahalanobis distance and its relationship to the chi-square distribution. The Mahalanobis distance measures how many standard deviations away a point is from the mean of a distribution, taking into account the covariance structure. For multivariate normal data, the squared Mahalanobis distance follows a chi-square distribution.
+
+\subsection{Data}
+For this, we generate samples from multivariate normal distributions with varying dimensions ($n$) and sample sizes ($P$):
+\begin{itemize}
+    \item Dimensions $n \in \{2, 5, 10\}$
+    \item Sample sizes $P \in \{1000, 10000\}$
+    \item Mean vector $\mu = \mathbf{0}$ (vector of zeros)
+    \item Covariance matrix $\Sigma = \mathbf{I}$ (identity matrix)
+\end{itemize}
+
+\subsection{Methodology}
+Our approach consists of three main steps:
+
+\begin{enumerate}
+    \item[(a)] Generate $P$ samples from a multivariate normal distribution $\mathcal{N}_n(\mu, \Sigma)$.
+    \item[(b)] For each sample $X$, compute the squared Mahalanobis distance:
+    \begin{equation}
+        Y = (X - \mu)^T \Sigma^{-1} (X - \mu)
+    \end{equation}
+    \item[(c)] Calculate the probability $\text{Prob}[(X - \mu)^T \Sigma^{-1} (X - \mu) \leq c^2]$ for different values of $c$.
+\end{enumerate}
+
+According to statistical theory, for $X \sim \mathcal{N}_n(\mu, \Sigma)$, the squared Mahalanobis distance follows a chi-square distribution with $n$ degrees of freedom:
+\begin{equation}
+    (X - \mu)^T \Sigma^{-1} (X - \mu) \sim \chi^2_n
+\end{equation}
+
+\subsection{Results and Discussion}
+
+\subsubsection{Distribution of Squared Mahalanobis Distance}
+
+The histograms in Figure 1 show the distribution of the squared Mahalanobis distance $Y$ for different dimensions and sample sizes. For each combination of $n$ and $P$, the observed distribution (blue histogram) closely follows the theoretical chi-square distribution with $n$ degrees of freedom (red line).
+
+Key observations:
+\begin{itemize}
+    \item As the dimension $n$ increases, the distribution shifts to the right, with both the mode and mean increasing.
+    \item The shape of the distribution changes with dimension:
+    \begin{itemize}
+        \item For $n=2$, the distribution is highly right-skewed with a peak near zero.
+        \item For $n=5$, the distribution becomes more symmetric but still maintains some right skewness.
+        \item For $n=10$, the distribution becomes more symmetric and approaches a normal-like shape.
+    \end{itemize}
+    \item Increasing the sample size from $P=1000$ to $P=10000$ provides a smoother histogram that more closely follows the theoretical distribution, but doesn't change the fundamental shape.
+\end{itemize}
+
+These observations confirm that the squared Mahalanobis distance follows a chi-square distribution with degrees of freedom equal to the dimension of the data.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{asg5_q2_a.png}
+    \caption{Distribution}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Probability Analysis}
+
+Figure 2 shows the cumulative distribution function (CDF) for the squared Mahalanobis distance, representing the probability $\text{Prob}[(X - \mu)^T \Sigma^{-1} (X - \mu) \leq c^2]$ for different values of $c$ and dimensions $n$.
+
+Key observations:
+\begin{itemize}
+    \item For a fixed value of $c$, the probability decreases as dimension $n$ increases.
+    \item For example, at $c=2$:
+    \begin{itemize}
+        \item For $n=2$, approximately 86\% of points fall within a Mahalanobis distance of 2.
+        \item For $n=5$, approximately 45\% of points fall within a Mahalanobis distance of 2.
+        \item For $n=10$, only about 8\% of points fall within a Mahalanobis distance of 2.
+    \end{itemize}
+    \item The specific calculation shows that $\text{Prob}[(X - \mu)^T \Sigma^{-1} (X - \mu) \leq 2^2]$ for $n=5$ is approximately 0.450584.
+\end{itemize}
+
+This has important implications for multivariate outlier detection and confidence region estimation: as the dimension increases, a larger Mahalanobis distance threshold is needed to capture the same proportion of the data.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{asg5_q2_c.png}
+    \caption{Probability vs. Threshold}
+    \label{fig:enter-label}
+\end{figure}
+\subsection{Conclusion}
+
+The experimental results confirm that for multivariate normal data, the squared Mahalanobis distance follows a chi-square distribution with degrees of freedom equal to the dimension of the data. This relationship holds regardless of sample size, though larger samples provide better approximations to the theoretical distribution.
+
+The probability analysis demonstrates that higher-dimensional spaces require larger distance thresholds to capture the same proportion of data points. This illustrates the curse of dimensionality: as the number of dimensions increases, data becomes more sparse and points tend to be farther from the center in terms of Mahalanobis distance.
+
+These findings have important applications in:
+\begin{itemize}
+    \item Multivariate outlier detection
+    \item Constructing confidence regions for multivariate normal distributions
+    \item Statistical process control for multivariate processes
+    \item Classification and pattern recognition
+\end{itemize}
+
+\section{Question 3: Bayes Classification with Multivariate Normal Distributions}
+
+\subsection{Introduction}
+This section explores Bayesian classification for data drawn from two different classes, each following a multivariate normal distribution with distinct parameters. Bayes' theorem provides a principled approach to classification by calculating posterior probabilities based on class-conditional densities and prior probabilities.
+
+\subsection{Problem Formulation}
+We are given two classes with probability distributions that follow multivariate normal distributions with the following parameters:
+
+\begin{align*}
+\boldsymbol{\mu}_1 &= \begin{bmatrix} 2 \\ 3 \end{bmatrix}, &
+\boldsymbol{\mu}_2 &= \begin{bmatrix} -2 \\ -3 \end{bmatrix} \\
+\boldsymbol{\Sigma}_1 &= \begin{bmatrix} 1 & 0.5 \\ 0.5 & 2 \end{bmatrix}, &
+\boldsymbol{\Sigma}_2 &= \begin{bmatrix} 2 & -0.3 \\ -0.3 & 1 \end{bmatrix}
+\end{align*}
+
+The goal is to classify a set of data points using Bayes' theorem and illustrate the decision boundary between the two classes.
+
+\subsection{Theoretical Background}
+For a classification problem with $K$ classes, Bayes' theorem gives the posterior probability of class $\omega_i$ given the observation $\mathbf{x}$ as:
+
+\begin{equation}
+P(\omega_i | \mathbf{x}) = \frac{p(\mathbf{x} | \omega_i) P(\omega_i)}{\sum_{j=1}^{K} p(\mathbf{x} | \omega_j) P(\omega_j)}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $P(\omega_i | \mathbf{x})$ is the posterior probability of class $\omega_i$ given observation $\mathbf{x}$
+    \item $p(\mathbf{x} | \omega_i)$ is the class-conditional probability density function for class $\omega_i$
+    \item $P(\omega_i)$ is the prior probability of class $\omega_i$
+    \item The denominator is the evidence, which serves as a normalization constant
+\end{itemize}
+
+For multivariate normal distributions, the class-conditional density for class $\omega_i$ is given by:
+
+\begin{equation}
+p(\mathbf{x} | \omega_i) = \frac{1}{(2\pi)^{d/2}|\boldsymbol{\Sigma}_i|^{1/2}} \exp\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu}_i)^T \boldsymbol{\Sigma}_i^{-1} (\mathbf{x} - \boldsymbol{\mu}_i)\right)
+\end{equation}
+
+where $d$ is the dimensionality of the feature space (in our case, $d=2$).
+
+\subsection{Decision Boundary Derivation}
+The Bayes decision rule assigns an observation $\mathbf{x}$ to the class with the highest posterior probability. For a two-class problem with equal priors $P(\omega_1) = P(\omega_2) = 0.5$, the decision boundary is determined by the points where:
+
+\begin{equation}
+P(\omega_1 | \mathbf{x}) = P(\omega_2 | \mathbf{x})
+\end{equation}
+
+Which, using Bayes' theorem, is equivalent to:
+
+\begin{equation}
+p(\mathbf{x} | \omega_1) P(\omega_1) = p(\mathbf{x} | \omega_2) P(\omega_2)
+\end{equation}
+
+Taking the natural logarithm of both sides and substituting the multivariate normal densities:
+
+\begin{align}
+&\ln\left(\frac{p(\mathbf{x} | \omega_1)}{p(\mathbf{x} | \omega_2)}\right) + \ln\left(\frac{P(\omega_1)}{P(\omega_2)}\right) = 0 \\
+&\ln\left(\frac{|\boldsymbol{\Sigma}_2|^{1/2}}{|\boldsymbol{\Sigma}_1|^{1/2}}\right) - \frac{1}{2}(\mathbf{x} - \boldsymbol{\mu}_1)^T \boldsymbol{\Sigma}_1^{-1} (\mathbf{x} - \boldsymbol{\mu}_1) + \frac{1}{2}(\mathbf{x} - \boldsymbol{\mu}_2)^T \boldsymbol{\Sigma}_2^{-1} (\mathbf{x} - \boldsymbol{\mu}_2) + \ln\left(\frac{P(\omega_1)}{P(\omega_2)}\right) = 0
+\end{align}
+
+This can be simplified to:
+
+\begin{align}
+&\frac{1}{2}\ln\left(\frac{|\boldsymbol{\Sigma}_2|}{|\boldsymbol{\Sigma}_1|}\right) - \frac{1}{2}\mathbf{x}^T\boldsymbol{\Sigma}_1^{-1}\mathbf{x} + \frac{1}{2}\boldsymbol{\mu}_1^T\boldsymbol{\Sigma}_1^{-1}\mathbf{x} + \frac{1}{2}\mathbf{x}^T\boldsymbol{\Sigma}_1^{-1}\boldsymbol{\mu}_1 - \frac{1}{2}\boldsymbol{\mu}_1^T\boldsymbol{\Sigma}_1^{-1}\boldsymbol{\mu}_1 \\
+&+ \frac{1}{2}\mathbf{x}^T\boldsymbol{\Sigma}_2^{-1}\mathbf{x} - \frac{1}{2}\boldsymbol{\mu}_2^T\boldsymbol{\Sigma}_2^{-1}\mathbf{x} - \frac{1}{2}\mathbf{x}^T\boldsymbol{\Sigma}_2^{-1}\boldsymbol{\mu}_2 + \frac{1}{2}\boldsymbol{\mu}_2^T\boldsymbol{\Sigma}_2^{-1}\boldsymbol{\mu}_2 + \ln\left(\frac{P(\omega_1)}{P(\omega_2)}\right) = 0
+\end{align}
+
+Further simplification leads to a quadratic decision boundary in the form:
+
+\begin{equation}
+\mathbf{x}^T \mathbf{A} \mathbf{x} + \mathbf{b}^T \mathbf{x} + c = 0
+\end{equation}
+
+where:
+\begin{align}
+\mathbf{A} &= \frac{1}{2}(\boldsymbol{\Sigma}_2^{-1} - \boldsymbol{\Sigma}_1^{-1}) \\
+\mathbf{b} &= \boldsymbol{\Sigma}_1^{-1}\boldsymbol{\mu}_1 - \boldsymbol{\Sigma}_2^{-1}\boldsymbol{\mu}_2 \\
+c &= \frac{1}{2}\ln\left(\frac{|\boldsymbol{\Sigma}_2|}{|\boldsymbol{\Sigma}_1|}\right) - \frac{1}{2}\boldsymbol{\mu}_1^T\boldsymbol{\Sigma}_1^{-1}\boldsymbol{\mu}_1 + \frac{1}{2}\boldsymbol{\mu}_2^T\boldsymbol{\Sigma}_2^{-1}\boldsymbol{\mu}_2 + \ln\left(\frac{P(\omega_1)}{P(\omega_2)}\right)
+\end{align}
+
+This quadratic equation describes the decision boundary between the two classes.
+
+\subsection{Classification Implementation}
+To classify each data point $\mathbf{x}$, we compute the posterior probabilities using Bayes' theorem:
+
+\begin{align}
+P(\omega_1 | \mathbf{x}) &= \frac{p(\mathbf{x} | \omega_1) P(\omega_1)}{p(\mathbf{x} | \omega_1) P(\omega_1) + p(\mathbf{x} | \omega_2) P(\omega_2)} \\
+P(\omega_2 | \mathbf{x}) &= 1 - P(\omega_1 | \mathbf{x})
+\end{align}
+
+The classification rule is then:
+\begin{equation}
+\text{Predicted class} = 
+\begin{cases}
+\omega_1, & \text{if } P(\omega_1 | \mathbf{x}) > P(\omega_2 | \mathbf{x}) \\
+\omega_2, & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\subsection{Results and Analysis}
+Based on the classification of the given data points, the following results were obtained:
+\begin{itemize}
+    \item Number of points classified as Class 1: 398
+    \item Number of points classified as Class 2: 602
+\end{itemize}
+
+The Mahalanobis distance was also computed for each point with respect to both class means, providing insight into how distant points are from each class center in terms of the class covariance structure:
+
+\begin{itemize}
+    \item Class 1 Mahalanobis distances:
+    \begin{itemize}
+        \item Mean: 7.444
+        \item Minimum: 0.218
+        \item Maximum: 15.100
+    \end{itemize}
+    \item Class 2 Mahalanobis distances:
+    \begin{itemize}
+        \item Mean: 7.353
+        \item Minimum: 0.417
+        \item Maximum: 17.122
+    \end{itemize}
+\end{itemize}
+
+Figure below shows the visualization of the classification results. The points are colored according to their assigned class (blue for Class 1, red for Class 2), with the intensity of the color representing the posterior probability of the assigned class. The decision boundary between the two classes is shown as a dashed black line.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{asg5_q3.png}
+    \caption{Bayes classification results showing the distribution of points classified into two classes. The class means are shown as blue and red crosses, and the background color represents the posterior probability of Class 1.}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsection{Discussion}
+Several observations can be made from the results:
+
+\begin{enumerate}
+    \item The decision boundary between the two classes is not linear but quadratic. This is because the covariance matrices of the two classes are different, leading to a quadratic discriminant function.
+    
+    \item The contours of equal posterior probability around each class mean form ellipses that are oriented according to the covariance matrices of the respective classes. For Class 1, the ellipses are stretched more along the vertical axis due to the higher variance in that direction ($\Sigma_{1,(2,2)} = 2$), while for Class 2, the ellipses are stretched more horizontally ($\Sigma_{2,(1,1)} = 2$).
+    
+    \item The positive correlation in Class 1 (due to $\Sigma_{1,(1,2)} = 0.5$) causes the ellipses to be oriented in a direction with positive slope, while the negative correlation in Class 2 (due to $\Sigma_{2,(1,2)} = -0.3$) causes the ellipses to be oriented in a direction with negative slope.
+    
+    \item Points that are close to the decision boundary have posterior probabilities close to 0.5 for both classes, indicating higher classification uncertainty.
+\end{enumerate}
+
+\subsection{Conclusion}
+Bayes classification with multivariate normal distributions provides a probabilistic framework for assigning data points to classes based on their posterior probabilities. The derived decision boundary depends on the means and covariance matrices of the class distributions, and can be linear or quadratic depending on whether the covariance matrices are equal across classes.
+
+The approach not only provides a classification decision but also a measure of confidence through the posterior probabilities, which is valuable for understanding the reliability of the classifications. The Mahalanobis distance calculations further provide insight into how "typical" or "atypical" each point is with respect to its assigned class.
+
+This implementation demonstrates the flexibility of Bayesian classification, which can accommodate any given values of means and covariance matrices for the class distributions, making it widely applicable in various domains.
+
+\end{document}
