@@ -1,0 +1,387 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, geometry}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor} 
+\usepackage{fontenc}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{subcaption}
+
+\title{Assignment 6 \\ DSL253 - Statistical Programming}
+\author{Amay Dixit - 12340220}
+\date{Submitted to Dr. Anil Kumar Sao}
+
+\begin{document}
+\maketitle
+
+\section*{Links}
+\begin{sloppypar}
+\begin{itemize}
+    \item Notebook Link: \\ \url{https://colab.research.google.com/drive/1gOniYZIlsmZR73GdulgA8GCDAFppYbbI?usp=sharing}
+    \item Github Link: \\ \url{https://github.com/amaydixit11/Academics/tree/main/DSL253/assignment_7}
+\end{itemize}
+\end{sloppypar}
+
+\section{Question 1}
+
+\subsection{Introduction}
+Quality control in manufacturing requires precise statistical methods to assess product batch parameters. This study investigates the reliability of confidence intervals for mean weight and standard deviation estimation under varying sampling conditions. We explore how sample size and confidence levels impact the accuracy of statistical estimates, with a particular focus on the proportion of intervals that successfully capture true population parameters.
+
+\subsection{Methodology}
+\subsubsection{Experimental Design}
+We conducted a comprehensive simulation study with the following key parameters:
+\begin{itemize}
+    \item True Population Mean: 50
+    \item True Population Standard Deviation: 5
+    \item Number of Simulations: 1,000
+    \item Sample Sizes: 10, 30, and 50
+    \item Confidence Levels: 90\%, 95\%, and 99\%
+\end{itemize}
+
+The methodology involved:
+\begin{enumerate}
+    \item Generating random samples from a normal distribution
+    \item Calculating confidence intervals for mean and standard deviation
+    \item Determining the proportion of intervals capturing true parameters
+\end{enumerate}
+
+\subsubsection{Noise Simulation}
+To model real-world measurement uncertainties, we introduced uniform noise in the range $[-1, 1]$ to examine its impact on confidence interval reliability.
+
+\subsection{Results}
+
+\subsubsection{Part A: Baseline Confidence Interval Analysis}
+Figure \ref{fig:asg7_q1_part_a_results} illustrates the coverage proportions for mean and standard deviation across different sample sizes and confidence levels.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{asg7_q1_part_a_results.png}
+    \caption{Confidence Interval Coverage for Mean and Standard Deviation}
+    \label{fig:asg7_q1_part_a_results}
+\end{figure}
+
+Key observations from Part A:
+\begin{itemize}
+    \item Mean Coverage:
+    \begin{itemize}
+        \item 90\% Confidence Level: Coverage ranges from 0.876 to 0.894
+        \item 95\% Confidence Level: Coverage ranges from 0.952 to 0.958
+        \item 99\% Confidence Level: Coverage ranges from 0.983 to 0.992
+    \end{itemize}
+    
+    \item Standard Deviation Coverage:
+    \begin{itemize}
+        \item 90\% Confidence Level: Coverage ranges from 0.887 to 0.913
+        \item 95\% Confidence Level: Coverage ranges from 0.934 to 0.953
+        \item 99\% Confidence Level: Coverage ranges from 0.994 to 0.995
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Part B: Noise Impact on Confidence Intervals}
+Figure \ref{fig:asg7_q1_part_b_results} demonstrates the effects of uniform noise on confidence interval coverage.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{asg7_q1_part_b_results.png}
+    \caption{Confidence Interval Coverage with Measurement Noise}
+    \label{fig:asg7_q1_part_b_results}
+\end{figure}
+
+Key observations from Part B:
+\begin{itemize}
+    \item Noise Introduction:
+    \begin{itemize}
+        \item Slightly increased variability in coverage proportions
+        \item Marginal reduction in mean and standard deviation interval reliability
+    \end{itemize}
+    
+    \item Confidence Level Impact:
+    \begin{itemize}
+        \item 99\% confidence level most stable under noise conditions
+        \item 90\% confidence level shows most significant variability
+    \end{itemize}
+\end{itemize}
+
+\subsection{Discussion}
+The simulation reveals critical insights into confidence interval estimation:
+
+\begin{enumerate}
+    \item Sample Size Influence:
+    \begin{itemize}
+        \item Larger sample sizes (30 and 50) demonstrate more consistent coverage
+        \item Smaller sample sizes (10) exhibit higher variability in interval estimation
+    \end{itemize}
+    
+    \item Confidence Level Reliability:
+    \begin{itemize}
+        \item Higher confidence levels (99\%) provide more robust interval estimates
+        \item Coverage proportions closely align with theoretical expectations
+    \end{itemize}
+    
+    \item Noise Sensitivity:
+    \begin{itemize}
+        \item Uniform noise minimally impacts confidence interval reliability
+        \item Robust estimation techniques demonstrate resilience to minor measurement variations
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Conclusion}
+This study provides empirical evidence supporting the reliability of confidence interval estimation in manufacturing quality control. Key findings include:
+
+\begin{itemize}
+    \item Larger sample sizes and higher confidence levels enhance parameter estimation accuracy
+    \item Minor measurement noise has limited impact on interval reliability
+    \item 99\% confidence level offers the most stable and conservative estimation approach
+\end{itemize}
+
+Practical Implications:
+\begin{itemize}
+    \item Recommend sampling strategies with larger sample sizes
+    \item Utilize higher confidence levels for critical quality control assessments
+    \item Implement robust statistical methods to account for potential measurement variations
+\end{itemize}
+
+
+\section{Question 2}
+
+\subsection{Introduction}
+Pharmaceutical research relies on rigorous statistical methods to compare the effectiveness of different drug formulations. This study investigates the confidence interval estimation for the difference in blood pressure reduction between two drug formulations, exploring the reliability of statistical inference under various experimental conditions.
+
+\subsection{Methodology}
+\subsubsection{Experimental Design}
+The simulation was conducted with the following key parameters:
+\begin{itemize}
+    \item Drug Formulation 1:
+    \begin{itemize}
+        \item Mean Effectiveness ($\mu_1$): 10
+        \item Standard Deviation ($\sigma_1$): 2
+        \item Sample Size: 50
+    \end{itemize}
+    
+    \item Drug Formulation 2:
+    \begin{itemize}
+        \item Mean Effectiveness ($\mu_2$): 8
+        \item Standard Deviation ($\sigma_2$): 2.5
+        \item Sample Size: 50
+    \end{itemize}
+    
+    \item True Difference in Effectiveness: 2
+    \item Confidence Level: 95\%
+    \item Iteration Counts: 50, 100, 500, 1,000
+\end{itemize}
+
+\subsubsection{Statistical Approach}
+The methodology employed:
+\begin{enumerate}
+    \item Generate random samples for both drug formulations
+    \item Calculate confidence intervals for the difference in mean effectiveness
+    \item Determine the proportion of intervals capturing the true difference
+    \item Analyze the impact of increasing simulation iterations
+\end{enumerate}
+
+\subsection{Results}
+
+\subsubsection{Confidence Interval Coverage Analysis}
+Table \ref{tab:coverage_results} summarizes the simulation results across different iteration counts.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Confidence Interval Coverage Results}
+    \label{tab:coverage_results}
+    \begin{tabular}{cccc}
+        \hline
+        Iterations & Coverage Rate & Captured Intervals & Missed Intervals \\
+        \hline
+        50 & 92.00\% & 46 & 4 \\
+        100 & 96.00\% & 96 & 4 \\
+        500 & 95.00\% & 475 & 25 \\
+        1,000 & 94.30\% & 943 & 57 \\
+        \hline
+    \end{tabular}
+\end{table}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{asg7_q2.png}
+    \caption{Coverage Rates Across Different Iteration Counts}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Key Observations}
+\begin{itemize}
+    \item Iteration Impact:
+    \begin{itemize}
+        \item Initial iterations (50-100) show high variability in coverage rates
+        \item Larger iteration counts (500-1,000) demonstrate more stable results
+    \end{itemize}
+    
+    \item Confidence Interval Characteristics:
+    \begin{itemize}
+        \item Coverage rates consistently approach the theoretical 95\% level
+        \item Slight variations observed due to random sampling
+    \end{itemize}
+\end{itemize}
+
+\subsection{Discussion}
+The simulation provides critical insights into the statistical inference of drug effectiveness:
+
+\begin{enumerate}
+    \item Reliability of Confidence Intervals:
+    \begin{itemize}
+        \item Most intervals successfully capture the true difference in effectiveness
+        \item Increased number of iterations leads to more stable estimation
+    \end{itemize}
+    
+    \item Sampling Variability:
+    \begin{itemize}
+        \item Small sample sizes introduce higher uncertainty
+        \item Larger simulation counts help mitigate random variation
+    \end{itemize}
+    
+    \item Statistical Precision:
+    \begin{itemize}
+        \item 95\% confidence level provides robust interval estimation
+        \item Minimal discrepancy between theoretical and observed coverage rates
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Conclusion}
+The study demonstrates the robustness of confidence interval estimation in pharmaceutical research:
+
+\begin{itemize}
+    \item Confidence intervals provide reliable estimates of drug effectiveness differences
+    \item Larger sample sizes and more iterations enhance statistical inference
+    \item 95\% confidence level offers a balanced approach to statistical uncertainty
+\end{itemize}
+
+Practical Implications:
+\begin{itemize}
+    \item Recommend comprehensive simulation studies in drug efficacy research
+    \item Use multiple iterations to validate statistical findings
+    \item Consider sample size and variation when comparing drug formulations
+\end{itemize}
+
+\section{Question 3}
+
+\subsection{Introduction}
+Election polling requires precise statistical methods to estimate voter preferences. This study investigates the reliability of confidence intervals for proportional voter support, exploring how sample size and true population proportion impact interval estimation accuracy.
+
+\subsection{Methodology}
+\subsubsection{Experimental Design}
+Key simulation parameters:
+\begin{itemize}
+    \item Population Proportions Studied ($p$): 0.2, 0.5, 0.8
+    \item Sample Sizes: 10, 50, 100, 500, 1,000
+    \item Confidence Level: 95\%
+    \item Number of Simulations: 1,000
+\end{itemize}
+
+\subsubsection{Statistical Approach}
+Methodology included:
+\begin{enumerate}
+    \item Generate Bernoulli distributed samples
+    \item Calculate confidence intervals using normal approximation
+    \item Assess:
+    \begin{itemize}
+        \item Coverage probability (proportion of intervals capturing true proportion)
+        \item Interval width
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Results}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Confidence Interval Characteristics}
+    \label{tab:election_polling_results}
+    \begin{tabular}{cccc}
+        \hline
+        Population Proportion ($p$) & Sample Size & Coverage Probability & Avg. Interval Width \\
+        \hline
+        \multirow{5}{*}{0.2} & 10 & 0.8960 & 0.4025 \\
+        & 50 & 0.9470 & 0.2193 \\
+        & 100 & 0.9280 & 0.1554 \\
+        & 500 & 0.9480 & 0.0700 \\
+        & 1,000 & 0.9480 & 0.0495 \\
+        \hline
+        \multirow{5}{*}{0.5} & 10 & 0.9020 & 0.5818 \\
+        & 50 & 0.9250 & 0.2743 \\
+        & 100 & 0.9360 & 0.1950 \\
+        & 500 & 0.9320 & 0.0876 \\
+        & 1,000 & 0.9310 & 0.0619 \\
+        \hline
+        \multirow{5}{*}{0.8} & 10 & 0.8930 & 0.4016 \\
+        & 50 & 0.9170 & 0.2166 \\
+        & 100 & 0.9200 & 0.1556 \\
+        & 500 & 0.9470 & 0.0699 \\
+        & 1,000 & 0.9530 & 0.0495 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Asg7/asg7_q3.png}
+    \caption{Confidence Interval Characteristics Across Different Proportions}
+    \label{fig:enter-label}
+\end{figure}
+
+\subsubsection{Key Observations}
+\begin{itemize}
+    \item Coverage Probability:
+    \begin{itemize}
+        \item Consistently approaches 95\% theoretical level
+        \item Slight variations across different population proportions
+        \item Smallest sample size (10) shows most deviation
+    \end{itemize}
+    
+    \item Interval Width:
+    \begin{itemize}
+        \item Decreases substantially with increasing sample size
+        \item Wider intervals for extreme proportions (0.2 and 0.8)
+        \item Narrowest intervals at large sample sizes (500-1,000)
+    \end{itemize}
+\end{itemize}
+
+\subsection{Discussion}
+Comprehensive analysis reveals critical insights:
+
+\begin{enumerate}
+    \item Sample Size Impact:
+    \begin{itemize}
+        \item Larger samples provide more precise estimates
+        \item Interval width reduces significantly with increased samples
+        \item Convergence towards true population proportion
+    \end{itemize}
+    
+    \item Proportion Sensitivity:
+    \begin{itemize}
+        \item Different population proportions show varying interval characteristics
+        \item Extreme proportions (0.2, 0.8) display more variability
+        \item Midpoint proportion (0.5) demonstrates most stable estimation
+    \end{itemize}
+    
+    \item Estimation Reliability:
+    \begin{itemize}
+        \item 95\% confidence level maintains consistent coverage
+        \item Minimal systematic bias observed across proportions
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Conclusion}
+The study provides crucial insights into polling and proportion estimation:
+
+\begin{itemize}
+    \item Sample size critically influences estimation precision
+    \item Confidence intervals effectively capture true population proportions
+    \item Larger samples reduce uncertainty in voter preference estimates
+\end{itemize}
+
+Practical Implications:
+\begin{itemize}
+    \item Recommend minimum sample size of 100-500 for reliable polling
+    \item Account for proportion variability in survey design
+    \item Use confidence intervals to communicate estimation uncertainty
+\end{itemize}
+
+\end{document}
