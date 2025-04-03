@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        #q9-div {
+            width: 200px;
+            height: 100px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Q1: d3.select() and d3.selectAll() -->
+    <div class="question" id="q1">
+        <h2>Q1: d3.select() and d3.selectAll()</h2>
+        <p>This is paragraph 1</p>
+        <p>This is paragraph 2</p>
+        <p>This is paragraph 3</p>
+    </div>
+    <script>
+        d3.select("#q1 p")
+            .text("Hello D3!");
+
+        d3.selectAll("#q1 p")
+            .style("color", "red");
+    </script>
+
+    <!-- Q2: d3.append() and d3.remove() -->
+    <div class="question" id="q2">
+        <h2>Q2: d3.append() and d3.remove()</h2>
+        <div id="append-remove-container"></div>
+    </div>
+    <script>
+        const container = d3.select("#append-remove-container");
+        
+        const heading = container.append("h2")
+            .text("New Heading");
+            
+        setTimeout(() => {
+            heading.remove();
+        }, 3000);
+    </script>
+
+    <!-- Q3: d3.attr() and d3.style() -->
+    <div class="question" id="q3">
+        <h2>Q3: d3.attr() and d3.style()</h2>
+        <div id="svg-container"></div>
+    </div>
+    <script>
+        const svg = d3.select("#svg-container")
+            .append("svg")
+            .attr("width", 100)
+            .attr("height", 100);
+            
+        svg.append("circle")
+            .attr("cx", 50)
+            .attr("cy", 50)
+            .attr("r", 40)
+            .attr("fill", "blue")
+            .style("stroke", "black")
+            .style("stroke-width", "3px");
+    </script>
+
+    <!-- Q4: d3.text() and d3.html() -->
+    <div class="question" id="q4">
+        <h2>Q4: d3.text() and d3.html()</h2>
+        <p id="text-demo">Original text</p>
+        <div id="html-demo">Original HTML</div>
+    </div>
+    <script>
+        d3.select("#text-demo")
+            .text("This is D3 text");
+            
+        d3.select("#html-demo")
+            .html("<strong>Bold Text</strong>");
+    </script>
+
+    <!-- Q5: d3.data() and d3.enter() -->
+    <div class="question" id="q5">
+        <h2>Q5: d3.data() and d3.enter()</h2>
+        <div id="data-container"></div>
+    </div>
+    <script>
+        const dataContainer = d3.select("#data-container");
+        
+        dataContainer.selectAll("p")
+            .data([10, 20, 30, 40])
+            .enter()
+            .append("p")
+            .text(d => `Data point: ${d}`);
+    </script>
+
+    <!-- Q6: d3.scaleLinear() -->
+    <div class="question" id="q6">
+        <h2>Q6: d3.scaleLinear()</h2>
+        <div id="scale-container"></div>
+    </div>
+    <script>
+        const scale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([0, 500]);
+            
+        const scaledValue = scale(50);
+        
+        d3.select("#scale-container")
+            .append("p")
+            .text(`The scaled value of 50 is: ${scaledValue}`);
+    </script>
+
+    <!-- Q7: d3.axisBottom() and d3.axisLeft() -->
+    <div class="question" id="q7">
+        <h2>Q7: d3.axisBottom() and d3.axisLeft()</h2>
+        <div id="axis-container"></div>
+    </div>
+    <script>
+        const axisSvg = d3.select("#axis-container")
+            .append("svg")
+            .attr("width", 400)
+            .attr("height", 300);
+            
+        const xScale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([50, 350]);
+            
+        const yScale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([250, 50]);
+            
+        axisSvg.append("g")
+            .attr("transform", "translate(0, 250)")
+            .call(d3.axisBottom(xScale));
+            
+        axisSvg.append("g")
+            .attr("transform", "translate(50, 0)")
+            .call(d3.axisLeft(yScale));
+    </script>
+
+    <!-- Q8: d3.transition() -->
+    <div class="question" id="q8">
+        <h2>Q8: d3.transition()</h2>
+        <div id="transition-container"></div>
+        <button id="animate-button">Animate Rectangle</button>
+    </div>
+    <script>
+        const transitionSvg = d3.select("#transition-container")
+            .append("svg")
+            .attr("width", 300)
+            .attr("height", 150);
+            
+        const rect = transitionSvg.append("rect")
+            .attr("x", 10)
+            .attr("y", 25)
+            .attr("width", 50)
+            .attr("height", 100)
+            .attr("fill", "steelblue");
+            
+        d3.select("#animate-button").on("click", function() {
+            rect.transition()
+                .duration(2000)
+                .attr("width", 200)
+                .transition()
+                .duration(2000)
+                .attr("width", 50);
+        });
+    </script>
+
+    <!-- Q9: d3.event and d3.on() -->
+    <div class="question" id="q9">
+        <h2>Q9: d3.event and d3.on()</h2>
+        <button id="color-button">Change Color</button>
+        <div id="q9-div">Click the button to change my color</div>
+    </div>
+    <script>
+        d3.select("#color-button")
+            .on("click", function() {
+                d3.select("#q9-div")
+                    .style("background-color", "lightblue");
+            });
+    </script>
+
+    <!-- Q10: d3.line() and d3.path() -->
+    <div class="question" id="q10">
+        <h2>Q10: d3.line() and d3.path()</h2>
+        <div id="line-container"></div>
+    </div>
+    <script>
+        const lineData = [
+            {x: 10, y: 30},
+            {x: 20, y: 80},
+            {x: 30, y: 50},
+            {x: 40, y: 100}
+        ];
+        
+        const lineSvg = d3.select("#line-container")
+            .append("svg")
+            .attr("width", 300)
+            .attr("height", 200);
+            
+        const lineXScale = d3.scaleLinear()
+            .domain([0, 50])
+            .range([20, 280]);
+            
+        const lineYScale = d3.scaleLinear()
+            .domain([0, 120])
+            .range([180, 20]);
+            
+        const lineGenerator = d3.line()
+            .x(d => lineXScale(d.x))
+            .y(d => lineYScale(d.y));
+            
+        lineSvg.append("g")
+            .attr("transform", "translate(0, 180)")
+            .call(d3.axisBottom(lineXScale));
+            
+        lineSvg.append("g")
+            .attr("transform", "translate(20, 0)")
+            .call(d3.axisLeft(lineYScale));
+            
+        lineSvg.append("path")
+            .datum(lineData)
+            .attr("d", lineGenerator)
+            .attr("stroke", "red")
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
+            
+        lineSvg.selectAll("circle")
+            .data(lineData)
+            .enter()
+            .append("circle")
+            .attr("cx", d => lineXScale(d.x))
+            .attr("cy", d => lineYScale(d.y))
+            .attr("r", 5)
+            .attr("fill", "red");
+    </script>
+</body>
+</html>

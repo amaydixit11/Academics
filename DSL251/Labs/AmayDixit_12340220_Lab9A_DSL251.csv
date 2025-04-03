@@ -1,0 +1,42 @@
+Source,Target,Type,Id,Label,Weight,distance (km)
+New York (JFK),London (LHR),Directed,0,,1,5567
+Los Angeles (LAX),Tokyo (NRT),Directed,1,,1,8770
+Dubai (DXB),Sydney (SYD),Directed,2,,1,12040
+Singapore (SIN),Paris (CDG),Directed,3,,1,10730
+Hong Kong (HKG),San Francisco (SFO),Directed,4,,1,11130
+Chicago (ORD),Frankfurt (FRA),Directed,5,,1,6980
+Toronto (YYZ),Dubai (DXB),Directed,6,,1,11090
+Mumbai (BOM),London (LHR),Directed,7,,1,7180
+Delhi (DEL),New York (JFK),Directed,8,,1,11770
+Bangkok (BKK),Melbourne (MEL),Directed,9,,1,7400
+Istanbul (IST),Los Angeles (LAX),Directed,10,,1,11010
+Shanghai (PVG),Chicago (ORD),Directed,11,,1,11250
+Madrid (MAD),Miami (MIA),Directed,12,,1,7100
+Seoul (ICN),Toronto (YYZ),Directed,13,,1,10600
+Johannesburg (JNB),Amsterdam (AMS),Directed,14,,1,9050
+Rio de Janeiro (GIG),Lisbon (LIS),Directed,15,,1,7700
+Mexico City (MEX),Madrid (MAD),Directed,16,,1,9100
+Beijing (PEK),London (LHR),Directed,17,,1,8130
+Cape Town (CPT),Dubai (DXB),Directed,18,,1,7640
+Sydney (SYD),Los Angeles (LAX),Directed,19,,1,12050
+Jakarta (CGK),Doha (DOH),Directed,20,,1,7320
+Berlin (BER),New York (JFK),Directed,21,,1,6370
+Kuala Lumpur (KUL),London (LHR),Directed,22,,1,10530
+Zurich (ZRH),San Francisco (SFO),Directed,23,,1,9400
+Sao Paulo (GRU),New York (JFK),Directed,24,,1,7730
+Athens (ATH),Dubai (DXB),Directed,25,,1,3260
+Cairo (CAI),Toronto (YYZ),Directed,26,,1,9150
+Manila (MNL),Hong Kong (HKG),Directed,27,,1,1140
+Hanoi (HAN),Seoul (ICN),Directed,28,,1,2740
+Lisbon (LIS),Paris (CDG),Directed,29,,1,1450
+Moscow (SVO),Bangkok (BKK),Directed,30,,1,7080
+Buenos Aires (EZE),Madrid (MAD),Directed,31,,1,10120
+Warsaw (WAW),New York (JFK),Directed,32,,1,6870
+Oslo (OSL),Dubai (DXB),Directed,33,,1,5270
+Lima (LIM),Los Angeles (LAX),Directed,34,,1,6680
+Stockholm (ARN),Beijing (PEK),Directed,35,,1,7180
+Brussels (BRU),Chicago (ORD),Directed,36,,1,6660
+Rome (FCO),New York (JFK),Directed,37,,1,6870
+Boston (BOS),Dublin (DUB),Directed,38,,1,4800
+Vienna (VIE),Tokyo (NRT),Directed,39,,1,9370
+Bangkok (BKK),Dubai (DXB),Directed,40,,1,4880

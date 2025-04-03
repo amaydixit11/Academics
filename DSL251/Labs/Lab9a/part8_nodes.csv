@@ -1,0 +1,51 @@
+Id,Label,indegree,outdegree,Degree,Cluter-ID
+New York (JFK),,5,1,6,0
+London (LHR),,4,0,4,10
+Los Angeles (LAX),,3,1,4,9
+Tokyo (NRT),,2,0,2,9
+Dubai (DXB),,5,1,6,1
+Sydney (SYD),,1,1,2,9
+Singapore (SIN),,0,1,1,2
+Paris (CDG),,2,0,2,2
+Hong Kong (HKG),,1,1,2,3
+San Francisco (SFO),,2,0,2,3
+Chicago (ORD),,2,1,3,4
+Frankfurt (FRA),,1,0,1,4
+Toronto (YYZ),,2,1,3,1
+Mumbai (BOM),,0,1,1,10
+Delhi (DEL),,0,1,1,0
+Bangkok (BKK),,1,2,3,1
+Melbourne (MEL),,1,0,1,1
+Istanbul (IST),,0,1,1,9
+Shanghai (PVG),,0,1,1,4
+Madrid (MAD),,2,1,3,5
+Miami (MIA),,1,0,1,5
+Seoul (ICN),,1,1,2,1
+Johannesburg (JNB),,0,1,1,6
+Amsterdam (AMS),,1,0,1,6
+Rio de Janeiro (GIG),,0,1,1,2
+Lisbon (LIS),,1,1,2,2
+Mexico City (MEX),,0,1,1,5
+Beijing (PEK),,1,1,2,10
+Cape Town (CPT),,0,1,1,1
+Jakarta (CGK),,0,1,1,7
+Doha (DOH),,1,0,1,7
+Berlin (BER),,0,1,1,0
+Kuala Lumpur (KUL),,0,1,1,10
+Zurich (ZRH),,0,1,1,3
+Sao Paulo (GRU),,0,1,1,0
+Athens (ATH),,0,1,1,1
+Cairo (CAI),,0,1,1,1
+Manila (MNL),,0,1,1,3
+Hanoi (HAN),,0,1,1,1
+Moscow (SVO),,0,1,1,1
+Buenos Aires (EZE),,0,1,1,5
+Warsaw (WAW),,0,1,1,0
+Oslo (OSL),,0,1,1,1
+Lima (LIM),,0,1,1,9
+Stockholm (ARN),,0,1,1,10
+Brussels (BRU),,0,1,1,4
+Rome (FCO),,0,1,1,0
+Boston (BOS),,0,1,1,8
+Dublin (DUB),,1,0,1,8
+Vienna (VIE),,0,1,1,9

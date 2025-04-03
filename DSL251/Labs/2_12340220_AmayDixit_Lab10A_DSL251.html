@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        .question {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Q1: Selecting & Modifying Elements -->
+    <div class="question" id="q1">
+        <h2>Q1: Selecting & Modifying Elements</h2>
+        <p id="modify-text">This text will be changed using D3.js</p>
+    </div>
+    <script>
+
+        d3.select("#modify-text")
+            .text("New Text");
+    </script>
+
+    <!-- Q2: Appending Elements -->
+    <div class="question" id="q2">
+        <h2>Q2: Appending Elements</h2>
+        <div id="append-container"></div>
+    </div>
+    <script>
+        
+        d3.select("#append-container")
+            .append("h1")
+            .text("Hello, D3.js!");
+    </script>
+
+    <!-- Q3: Styling Elements -->
+    <div class="question" id="q3">
+        <h2>Q3: Styling Elements</h2>
+        <p class="style">Paragraph 1</p>
+        <p class="style">Paragraph 2</p>
+        <p class="style">Paragraph 3</p>
+    </div>  
+    <script>
+        
+        d3.selectAll(".style")
+            .style("color", "blue")
+            .style("font-size", "20px");
+    </script>
+
+    <!-- Q4: Data Binding -->
+    <div class="question" id="q4">
+        <h2>Q4: Data Binding</h2>
+        <ul id="fruit-list"></ul>
+    </div>
+    <script>
+        
+        const fruits = ["Apple", "Banana", "Cherry", "Pineapple", "Mango"];
+        
+        d3.select("#fruit-list")
+            .selectAll("li")
+            .data(fruits)
+            .enter()
+            .append("li")
+            .text(d => d);
+    </script>
+
+    <!-- Q5: Creating an SVG Circle -->
+    <div class="question" id="q5">
+        <h2>Q5: Creating an SVG Circle</h2>
+        <div id="circle-container"></div>
+    </div>
+    <script>
+        
+        d3.select("#circle-container")
+            .append("svg")
+            .attr("width", 200)
+            .attr("height", 200)
+            .append("circle")
+            .attr("cx", 100)
+            .attr("cy", 100)
+            .attr("r", 50)
+            .attr("fill", "red");
+    </script>
+
+    <!-- Q6: Using Scales -->
+    <div class="question" id="q6">
+        <h2>Q6: Using Scales</h2>
+        <div id="scale-container"></div>
+    </div>
+    <script>
+        
+        const scale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([0, 500]);
+        
+        const scaledValue = scale(50);
+        
+        d3.select("#scale-container")
+            .append("p")
+            .text(`The scaled value of 50 is: ${scaledValue}`);
+    </script>
+
+    <!-- Q7: Adding an Axis -->
+    <div class="question" id="q7">
+        <h2>Q7: Adding an Axis</h2>
+        <div id="axis-container"></div>
+    </div>
+    <script>
+        
+        const svg = d3.select("#axis-container")
+            .append("svg")
+            .attr("width", 450)
+            .attr("height", 100);
+        
+        const xScale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([0, 400]);
+        
+        svg.append("g")
+            .attr("transform", "translate(30, 50)")
+            .call(d3.axisBottom(xScale));
+    </script>
+
+    <!-- Q8: Creating a Bar Chart -->
+    <div class="question" id="q8">
+        <h2>Q8: Creating a Bar Chart</h2>
+        <div id="bar-chart-container"></div>
+    </div>
+    <script>
+        
+        const barData = [10, 20, 30, 40, 50, 60, 70, 80];
+        
+        const barSvg = d3.select("#bar-chart-container")
+            .append("svg")
+            .attr("width", 500)
+            .attr("height", 300);
+        
+        barSvg.selectAll("rect")
+            .data(barData)
+            .enter()
+            .append("rect")
+            .attr("x", (d, i) => i * 50 + 30)
+            .attr("y", d => 250 - d * 2)
+            .attr("width", 40)
+            .attr("height", d => d * 2)
+            .attr("fill", "steelblue");
+        
+        
+        const barXScale = d3.scaleLinear()
+            .domain([0, barData.length])
+            .range([30, 430]);
+        
+        barSvg.append("g")
+            .attr("transform", "translate(0, 250)")
+            .call(d3.axisBottom(barXScale));
+    </script>
+
+    <!-- Q9: Implementing Transitions -->
+    <div class="question" id="q9">
+        <h2>Q9: Implementing Transitions</h2>
+        <div id="transition-container"></div>
+        <button id="animate-circle">Animate Circle</button>
+    </div>
+    <script>
+        
+        const transitionSvg = d3.select("#transition-container")
+            .append("svg")
+            .attr("width", 200)
+            .attr("height", 200);
+        
+        const circle = transitionSvg.append("circle")
+            .attr("cx", 100)
+            .attr("cy", 100)
+            .attr("r", 20)
+            .attr("fill", "green");
+        
+        
+        d3.select("#animate-circle")
+            .on("click", function() {
+                circle.transition()
+                    .duration(2000)
+                    .attr("r", 50)
+                    .transition()
+                    .duration(2000)
+                    .attr("r", 20);
+            });
+        
+        
+        circle.transition()
+            .duration(2000)
+            .attr("r", 50)
+            .transition()
+            .duration(2000)
+            .attr("r", 20);
+    </script>
+
+    <!-- Q10: Creating a Line Chart -->
+    <div class="question" id="q10">
+        <h2>Q10: Creating a Line Chart</h2>
+        <div id="line-chart-container"></div>
+    </div>
+    <script>
+        
+        const lineData = [
+            {x: 10, y: 30},
+            {x: 20, y: 80},
+            {x: 30, y: 50},
+            {x: 40, y: 100}
+        ];
+        
+        
+        const lineSvg = d3.select("#line-chart-container")
+            .append("svg")
+            .attr("width", 500)
+            .attr("height", 300);
+        
+        
+        const xScale_q10 = d3.scaleLinear()
+            .domain([0, 50])  
+            .range([50, 450]);  
+        
+        const yScale = d3.scaleLinear()
+            .domain([0, 120])  
+            .range([250, 50]);  
+        
+        
+        lineSvg.append("g")
+            .attr("transform", "translate(0, 250)")
+            .call(d3.axisBottom(xScale_q10));
+        
+        
+        lineSvg.append("g")
+            .attr("transform", "translate(50, 0)")
+            .call(d3.axisLeft(yScale));
+        
+        
+        const lineGenerator = d3.line()
+            .x(d => xScale_q10(d.x))
+            .y(d => yScale(d.y));
+        
+        
+        lineSvg.append("path")
+            .datum(lineData)  
+            .attr("d", lineGenerator)  
+            .attr("stroke", "red")  
+            .attr("stroke-width", 2)
+            .attr("fill", "none");  
+        
+        
+        lineSvg.selectAll("circle")
+            .data(lineData)
+            .enter()
+            .append("circle")
+            .attr("cx", d => xScale_q10(d.x))
+            .attr("cy", d => yScale(d.y))
+            .attr("r", 5)
+            .attr("fill", "red");
+    </script>
+</body>
+</html>
