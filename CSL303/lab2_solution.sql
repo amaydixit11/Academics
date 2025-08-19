@@ -1,47 +1,55 @@
--- CREATE FACULTY TABLE
-CREATE TABLE faculty (
-facultyID int primary key,
-firstName text not null,
-lastName text not null,
-department text);
+-- Part 1
+-- a
+select sname, gpa from students where discipline='Physics';
 
--- CREATE STUDENTS TABLE
-CREATE TABLE student (
-studentID int primary key,
-firstName text not null,
-lastName text not null,
-discipline text);
+-- b
+select cname, credits from courses where credits=4;
 
---INSERTING VALUES INTO STUDENTS TABLES
-INSERT INTO student VALUES(1,'saurav','dixit','cse');
-INSERT INTO student VALUES(2,'amay','dixit','dsai');
-INSERT INTO student VALUES(3,'amay','amazing','dsai');
+-- c
+select sid, cid from enrolled where grade='F';
 
---INSERTING VALUES INTO FACULTY TABLES
-INSERT INTO faculty VALUES(1,'rohit','raghu','cse');
-INSERT INTO faculty VALUES(2,'chetan','raghu','dsai');
-INSERT INTO faculty VALUES(3,'chetan','rathod','dsai');
+-- d
+select sname, discipline from students order by discipline ASC, sname ASC;
 
---LISTING ALL STUDENTS OF CSE DISCIPLINE
-select * from student where discipline="cse";
 
---LISTING ALL FACULTIES OF CSE DEPARTMENT
-select * from faculty where department="cse";
+-- Part 2
+-- a
+select sname from enrolled natural join students where cid='CSL303';
 
---LIST THE FIRST AND LAST NAMES OF ALL THE STUDENTS
-select firstName, lastName from student;
+-- b
+select cname from students natural join enrolled natural join courses where sname='Ben Taylor';
 
---LIST LAST NAME AND DEPARTMENT OF ALL THE FACULTIES
-select lastName, department from faculty;
+-- c
+select sname, cname, grade from students natural join enrolled natural join courses;
 
---LIST ALL UNIQUE FIRST NAME OF BOTH STUDENTS AND FACULTY
-select firstName from student union select firstName from faculty;
+-- d
+select sname from students s left join enrolled e on s.sid=e.sid where e.cid is null;
 
---LIST ALL UNIQUE LAST NAMES OF BOTH STUDENTS AND FACULTY
-select lastName from student union select lastName from faculty;
+-- e
+select sname from students natural join enrolled natural join courses where grade='B' and credits=3;
 
---LIST ALL FIRST NAME COMMON TO BOTH STUDENTS AND FACULTY
-select firstName from student intersect select firstName from faculty;
 
---LIST ALL LAST NAME COMMON TO BOTH STUDENTS AND FACULTY
-select lastName from student intersect select lastName from faculty;
+-- Part 3
+-- a
+select discipline, count(*) from students group by discipline;
+
+-- b
+select credits, count(*) from courses group by credits;
+
+-- c
+select cname, count(*) from courses natural join enrolled group by cid;
+
+-- d
+select cid from enrolled where grade = 'A' group by cid having count(*)>2;
+
+
+-- Challenge
+-- a
+select sname from students where sid in (select sid from enrolled where cid='CSL211');
+
+-- b
+select distinct cname from courses natural join enrolled where grade='F';
+
+-- c
+select sname from students where sid in (select sid from enrolled where cid = 'CSL100') intersect select sname from students where sid in (select sid from enrolled where cid = 'CSL303');
+
