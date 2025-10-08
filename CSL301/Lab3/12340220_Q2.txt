@@ -1,0 +1,13 @@
+reasoning:
+
+Same workload as Question 1, but I/O completions immediately place the process back on CPU if possible.
+Expect fewer idle gaps, CPU should start working as soon as I/O finishes.
+Might slightly reduce total time, but here because CPU bursts are the bottleneck and I/O times are huge, the total time may not change much.
+
+result:
+
+Total Time: 15, no improvement over Question 1.
+CPU Busy: still 10/15 (66.67%)
+IO Busy: 12/15 (80%) — more overlap between CPU and I/O.
+no reduction in total time: Because long I/O bursts were already dominating, CPU couldn’t be kept busy beyond 10 units no matter the scheduling.
+

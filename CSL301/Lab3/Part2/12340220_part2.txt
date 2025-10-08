@@ -1,0 +1,48 @@
+// Question 1 
+
+int
+getcmd(char *buf, int nbuf)
+{
+  // changes here
+  printf(2, "12340220$ ");
+  memset(buf, 0, nbuf);
+  gets(buf, nbuf);
+  if(buf[0] == 0) // EOF
+    return -1;
+  return 0;
+}
+
+
+// Following has Q2, Q3 and Q4
+case EXEC:
+  ecmd = (struct execcmd*)cmd;
+  if(ecmd->argv[0] == 0)
+    exit();
+
+  // Question 2 changes here
+  if(strcmp(ecmd->argv[0], "touch") == 0) {
+    if(ecmd->argv[1] == 0) {
+        printf(2, "touch: missing filename\n");
+        exit();
+    }
+    int fd = open(ecmd->argv[1], O_CREATE | O_WRONLY);
+    if(fd < 0)
+        printf(2, "touch: cannot create %s\n", ecmd->argv[1]);
+    else
+        close(fd);
+    exit();
+  }
+
+  // Question 4 Changes here 
+  if(strcmp(ecmd->argv[0], "help") == 0) {
+    printf(1, "help - show this help\n");
+    printf(1, "touch <file> - create new file\n");
+    printf(1, "press ctrl+A then X - exit xv6 shell\n");
+    printf(1, "teststrrev - Prints your name in reverse\n");
+    exit();
+  }
+  
+  // Question 3 Changes here
+  exec(ecmd->argv[0], ecmd->argv);
+  printf(2, "Unknown command or exec failed: %s\n", ecmd->argv[0]);
+  break;

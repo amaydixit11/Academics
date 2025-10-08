@@ -1,0 +1,22 @@
+  case EXEC:
+    ecmd = (struct execcmd*)cmd;
+    if(ecmd->argv[0] == 0)
+      exit();
+      
+    // my code - AMAY DIXIT
+    if(strcmp(ecmd->argv[0], "touch") == 0) {
+      if(ecmd->argv[1] == 0) {
+          printf(2, "touch: missing filename\n");
+          exit();
+      }
+      int fd = open(ecmd->argv[1], O_CREATE | O_WRONLY);
+      if(fd < 0)
+          printf(2, "touch: cannot create %s\n", ecmd->argv[1]);
+      else
+          close(fd);
+      exit();
+    }
+    
+    exec(ecmd->argv[0], ecmd->argv);
+    printf(2, "exec %s failed\n", ecmd->argv[0]);
+    break;
