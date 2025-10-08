@@ -1,0 +1,12 @@
+reasoning:
+
+SWITCH_ON_END means CPU only switches when a process finishes or blocks (completes CPU burst entirely), not immediately on I/O start.
+This can waste CPU cycles, if a process starts I/O, CPU sits idle until it finishes that CPU time quantum, even if other processes are ready.
+Expect more idle CPU time and much longer total runtime.
+
+Actual result:
+
+Total Time: 23 which is much higher.
+CPU Busy: 10/23 (43.48%) which is a big drop in utilization.
+IO Busy: 12/23 (52.17%)
+inefficiency: In an OS with long I/O waits, this policy delays scheduling ready processes, leaving CPU idle unnecessarily.

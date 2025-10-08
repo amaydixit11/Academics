@@ -1,0 +1,24 @@
+reasoning:
+
+Process list:
+
+  1. PID 0: 2:0 means runs CPU for 2 time quantum with a 0% probability of using CPU (only IO)
+  2. PID 1: 5:100 means runs CPU for 5 time quantum with a 100% probability of using CPU
+  3. PID 2: 3:50 means CPU for 3 time quantum with a 50% probability of using CPU
+
+SWITCH_ON_IO: CPU switches to another process immediately when the running process starts an I/O.
+
+IO_RUN_LATER: When I/O completes, the process is not scheduled immediately rather it waits until CPU is free.
+
+This should cause:
+
+  1. Some idle CPU time when no ready processes exist.
+  2. Longer total execution time compared to IO_RUN_IMMEDIATE because processes coming out of I/O may wait.
+
+result:
+
+1. Total Time: 15
+2. CPU Busy: 10/15 (66.67%)
+3. IO Busy: 9/15 (60%)
+4. Idle periods: time 11–14 CPU idle because both remaining processes were in I/O.
+5. IO completion didn’t trigger instant scheduling, so idle gaps existed.
