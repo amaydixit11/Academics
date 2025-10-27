@@ -1,0 +1,261 @@
+Physics
+PHL101 Physics for Engineers
+4 Credits (3-1-0)
+Prerequisite(s): None
+Overlap with: NA
+Mechanics -generalized coordinates, Lagrangian and Hamiltonian formulation, simple, damped, forced
+–oscillations; Optics -interference, diffraction, polarization, LASER; Electromagnetism -Maxwell
+equation, dielectrics, metals, theory of radiation; Modern physics –atomic structure, quantum
+mechanics, photoelectric effect, relativity, nuclear physics; Astrophysics -Kepler’s problem, stars,
+white-dwarfs, neutron stars, black holes, geometry of the universe, Materials property -electrical,
+thermal, magnetic, mechanical properties.
+
+PHP102 Physics Lab
+1.5 Credits (0-0-3)
+Prerequisite(s): None
+Overlap with: NA
+Error Analysis, Newton rings, Bandgap of a semiconductor, Characteristics of a n-p-n transistor, Hall
+effect, Diffraction, Stefan’s law and Zener diode, Cathode Ray Oscilloscope, Gouy’s method:
+Measurement of the magnetic susceptibility.
+
+PHL403 Mathematical Physics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Vector space, orthogonality, matrices, Cayley-Hamilton Theorem, eigenvalues, eigenvectors. Complex
+variable, Singularities, Taylor and Laurent series, residue theorem, contour integration; Fourier series,
+Fourier transformation, Laplace transformation. Special function: Gamma, Hermite, Bessel, Legendre,
+Laguerre and Green functions; Introduction of tensor and group theory, representation of O(N), SU(N).
+
+PHL404 Electronics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Network theorems and related theories of electronic circuits/devices; application to simple circuits; p-n
+junction devices, diode, transistors; biasing schemes; small signal amplifiers; feedback; oscillators.
+Power supply; wave shaping circuits; Bipolar junction transistor: configurations, small signal amplifier,
+oscillators; JFET and MOSFET: characteristics, small signal amplifier. OP-AMP: Differential amplifiers;
+Op-Amp (741) circuits (amplifiers; scalar; adder; subtractors; comparator; logarithmic amplifiers; etc.);
+Number systems and their inter-conversion; Boolean algebra; Logic gates; De-Morgan's theorem.
+Logic Families: TTL, MOS and CMOS; Combinational Circuits: Adders, subtractors, Encoder, etc.;
+Sequential Circuits: Flip-flops, Registers, Counters, Memories; A/D and D/A conversion
+Microprocessor and microcontroller basics.
+
+PHL501 Classical Mechanics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Review of Newtonian mechanics, Lagrangian mechanics, generalized coordinates, constraints,
+principle of virtual work. Lagrange’s equation, calculus of variations, central forces, collisions,
+scattering small oscillations, anharmonic oscillators. perturbation theory, forced oscillators. Hamilton’s
+equations, phase space & phase trajectories, canonical transformations, Poisson brackets. HamiltonJacobi theory, rigid body dynamics, nonlinear dynamics; Special Theory of Relativity: Relativistic
+Kinematics, Mass Energy equivalence, Continuous System.
+
+PHL502 Quantum Mechanics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: PHLXXX, Physics for engineer (5%)
+Origins of quantum theory, Schrödinger equation, wave mechanics, one and three-dimensional
+problems, Harmonic and other potentials; hydrogen atom, general treatment of angular momentum;
+spin. Time Independent Perturbation Theory, Variational Methods, WKB Approximation Method, Time
+Dependent Perturbation Theory, Fermi’s Golden Rule. Scattering Theory: Scattering Amplitude and
+Cross Section. Born Approximation, Partial Wave Analysis, Optical Theorem, Hard-Sphere Scattering,
+Resonance Scattering from a Square Well Potential.
+
+PHL505 Electrodynamics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Vector Analysis, Electrostatics: Coulomb’s law, Electric Field, Gauss’s law, Electric Potential, Poisson’s
+and Laplace equations, Boundary conditions, Work and Energy in Electrostatics, Conductors, Multipole
+expansion. Electric field in matter: Dielectrics, Polarization and Bound charge, Electric Susceptibility
+and Permittivity. Magnetostatics: Lorentz force, Biot-Savart law, Ampere’s law, Magnetic Vector
+potential, Boundary conditions, Multipole expansion. Magnetic field in matter: Magnetic materials,
+Magnetization and Bound currents, Ampere law in magnetized materials, Magnetic Susceptibility and
+Permeability. Electrodynamics: Faraday’s law, Self and mutual inductance. Maxwell's equations.
+Conservation laws: Continuity equation, Poynting theorem. Electromagnetic waves: Wave equations,
+Energy and momentum of Electromagnetic waves, Propagation in linear media, Reflection and
+transmission of Electromagnetic waves, Electromagnetic waves in conductor. Potentials and Field:
+Scalar and vector potential, Gauge transformations, Coulomb and Lorentz gauges.
+
+PHP506 Electronics Laboratory
+3 Credits (0-0-6)
+Prerequisite(s): None
+Overlap with: NA
+
+P-N junction diode characteristics, Study of diode circuit and power supply, Special diode (SCR and
+TRIAC) characteristics. Bipolar junction transistor (BJT) - characteristics, JFET characteristics,
+MOSFET characteristics, Study of Logic gates, Study of De Morgan’s Laws. Applications of Operational
+Amplifier.
+
+PHL507 Statistical Mechanics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Classical Statistical Mechanics: Postulate of classical statistical mechanics, Liouville’s theorem, micro
+canonical ensemble, Derivation of equipartition theorem, classical ideal gas, Gibb’s Paradox.
+Canonical ensemble and energy fluctuation, grand canonical ensemble and density fluctuation,
+Equivalence of canonical and grand canonical ensemble. Quantum Statistical Mechanics: The density
+matrix, ensembles in quantum statistical mechanics; Ideal gas in micro-canonical and grand canonical
+ensembles; Equation of state for ideal Fermi gas, Theory of white dwarf stars. Ideal Bose Gas, Photons
+and Planck’s law, Phonons, Bose-Einstein condensation; Phase Transition: Thermodynamic
+description of phase transitions, phase transitions of second kind, Discontinuity of specific heat, change
+in symmetry in a phase transition of second kind. Ising model: Definition of Ising model, One
+Dimensional Ising model; Ideal Bose Gas, Photons and Planck’s law Phonons, Bose- Einstein
+condensation; Thermodynamics description of phase transitions, phase transitions of second kind,
+Discontinuity of specific heat, change in symmetry in a phase transition of second kind.
+
+PHL508 Solid State Physics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Crystal structure: Miller indices and reciprocal lattice, Bragg and von Laue diffraction, structure factor;
+Lattice vibration and thermal properties: harmonic approximation, monatomic and diatomic lattices,
+Brillouin zone, density of states, acoustic and optical modes, phonons, crystal momentum, Debye
+model of specific heat, thermal expansion, thermal conductivity. Free electron theory: Fermi gas,
+specific heat, Ohm’s law, magnetoresistance, thermal conductivity; Band theory: Bloch theorem, nearly
+free electron model, motion of electron in energy bands, effective mass; Semiconductor: Intrinsic and
+extrinsic semiconductors, mobility and electrical conductivity, Fermi level, Hall effect. Magnetism:
+Diamagnetism, Hund’s rules, Lande g-factor, quantum theory of paramagnetism, Pauli paramagnetism,
+exchange interaction, ferromagnetism, hysteresis; Superconductivity: Meissner effect, London
+equations, type-I and type-II superconductors; Ginzburg-Landau theory, outlines of BCS theory.
+
+PHL509 Nuclear and Particle Physics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Ground state of Deuteron, Mesons and nuclear force field (Field theory of Nuclear forces); Liquid drop
+model and Weissacker’s mass formula, Shell model of the nucleus, Fermi gas model Single particle
+shell model, Collective model of nucleus, rotational motion of the nucleus, vibration of spherical Nuclei;
+Description of nuclear Reactions, Q-value, derivation of elastic and reaction cross section, description
+
+by partial wave analysis, Resonances, Breit-winger one level formula; Accelerators and Detectors. The
+Standard model of particle physics, particle classification, Spin and parity determination, Isospin,
+strangeness, hypercharge, and baryon number, lepton number, Gell-Mann-Nishijima Scheme, Quarks
+in hadrons: Meson and baryon octet, Elementary ideas of SU(3) symmetry, charmonium, charmed
+mesons and B mesons, Quark spin and colour.
+
+PHL510 Atomic and Molecular Physics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Review of one and two-electron atoms; Many electron atoms: central field approximation, ThomasFermi model, Hartree-Fock and self-consistent field methods, Hund's rule, L-S and j-j coupling,
+Equivalent and nonequivalent electrons, Spectroscopic terms, Lande interval rule. Interaction with
+Electromagnetic fields: Zeeman, Paschen Back and Stark effects; Hyperfine structure and isotope shift,
+selection rules; Lamb shift; Molecular spectra: rotational, vibrational, electronic, Raman and Infra-red
+spectra of diatomic molecules; Hund's rule, Frank–Condon principle. Molecular structure: molecular
+potential, Born-Oppenheimer approximation, diatomic molecules, electronic angular momenta; Modern
+developments: optical cooling and trapping of atoms, Bose- Einstein condensation, Introduction of
+LASER physics.
+
+PHP511 General Physics Laboratory
+3 Credits (0-0-6)
+Prerequisite(s): None
+Overlap with: NA
+Gamma Ray spectrometer, GM Counter, Frank Hertz Experiment. Optical Fiber characterization,
+Michelson Interferometer. Zeeman effect, Magnetic Hysterisis loop, Electron Spin resonance.
+Magnetoresistance using Four Probe Method. Confocal Raman Spectrometer-1, Confocal Raman
+Spectrometer-2.
+
+PHL601 Computational Physics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+C Programming language: Algorithms, flow charts, constants, expressions, conditional statements,
+loops, arrays, logical expressions, control statements, functions, structures, pointers, bit operation, files
+in C.
+Solving problems using C programming. Numerical Analysis: Interpolation by Lagrange method,
+Numerical solution of simple algebraic equation by Newton- Raphson method, Least Square fit using
+rational functions.
+Numerical integration: Trapezoidal method, Simpson's method, Romberg integration, Gauss
+quadrature method, Eigenvalues and eigenvectors of a matrix, Solution of linear homogeneous
+equations, Trace of a matrix, Matrix inversion, Solution of ordinary differential equation by Runge-Kutta
+Method, Introductory Monte Carlo techniques.
+
+PHL602 Astrophysics and Cosmology
+
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: PH660 (10%)
+Astrophysics: basics, spectra, radiative transfer, stars, end-states of stars (white dwarfs,
+Chandrasekhar's mass limit, neutron stars, supernovae, black holes), quasars, gamma ray bursts,
+astrophysical fluids& plasmas, applications to stars/galaxies and the Universe.
+Einstein’s relativity: special relativity, equivalence principle, basics of general relativity.
+Cosmology: redshift, FRLW models of the Universe, expansion, Hubble's law, the early Universe, bigbang model, inflation, nucleosynthesis, matter and radiation dominated era.
+Dark matter, dark energy, cosmic microwave background, baryon acoustic oscillations, formation of
+galaxies and stars, current forefront of research, supermassive black holes, first stars, epoch of
+reionization, 21 cm cosmology, N-body simulations.
+
+PHL604 Particle Physics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+The Standard model of particle physics, particle classification, fermions and bosons, lepton flavors,
+quark flavors, electromagnetic, weak and strong processes, Spin and parity determination, lsospin,
+strangeness, hypercharge, and baryon number, lepton number, Gell- Mann-Nishijima Scheme.
+Quarks in hadrons: Meson and baryon octet, Elementary ideas of SU(3) symmetry, charmonium,
+charmed mesons and B mesons, Quark spin and colour. Dirac equation, scattering processes of spin1/2 particles (Feynmans rules as thumb rule).
+Propagators Current-current interactions, weak interaction, Fermi theory Gauge symmetries,
+spontaneous symmetry breaking, Higgs mechanism Electroweak interaction, Glashow-SalamWeinberg model Introduction to QCD, structure of hadrons (form factors, structure functions), parton
+model, Deep inelastic scattering.
+
+PHL607 Experimental and Measurement Techniques
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Introduction to structure properties, basic crystallography, Normal and Reciprocal lattice, X-ray
+diffraction, Ewald Sphere; X-ray Characterization: X-ray diffraction (XRD) technique and analysis
+methods.
+Electron Microscopy: Scanning Electron Microscopy (SEM), Energy Dispersive X-ray Spectroscopy
+(EDS), Electron Backscattered Diffraction (EBSD), Electron Probe Microanalysis (EPMA),
+Transmission Electron Microscopy (TEM) and diffraction pattern analysis.
+Surface Probe Microscopy: Atomic Force Microscopy (AFM), Scanning Tunnelling Microscopy (STM);
+Electron Emission spectroscopies: X-ray Photoelectron Spectroscopy (XPS), Auger Electron
+Spectroscopy (AES), Ultraviolet Photoelectron Spectroscopy (UPS).
+Vibrational Spectroscopy: Raman Spectroscopy, Infra-red Spectroscopy, FTIR; Optical Techniques:
+Absorbance, Fluorescence, and Photoluminescence spectroscopy; Resonance techniques: Nuclear
+Magnetic Spectroscopy (NMR), Electron Paramagnetic Resonance (EPR); Chromatography: gas and
+liquid; Time of Flight (TOF) secondary ion mass spectroscopy.
+
+PHL609 Advanced Quantum Mechanics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: PH600 (15%)
+Unit-I: Klein-Gordon equation and its drawbacks, Dirac equation, Properties of Dirac matrices, nonrelativistic reduction of Dirac equation, magnetic moment, Darwins term, Spin-Orbit coupling, Poincare
+transformation, Lorentz group, Covariant form of Dirac equation, Bilinear covariants, Gordon
+decomposition.
+Unit-II: Free particle solution of Dirac equation, Projection operators for energy and spin, Physical
+interpretation of free particle solution, Zitter bewegung, Hole theory, Charge conjugation, space
+reflection and time reversal symmetries of Dirac equation. Continuous systems and fields. Transition
+from discrete to continuous systems, Lagrangian and Hamiltonian Formulations, Noether's theorem.
+Unit-III: Second quantization, Equal Time Commutators, Normal Ordering, covariant quantization of
+electromagnetic field, Quantization of scalar, electromagnetic, and Dirac fields, Propagators for scalar,
+spinor and vector fields.
+
+PHL610 Science and Technology of Thin Films
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Introduction to thin films and their relevance. Introduction to vacuum science and Technology, gas
+transport and pumping systems, pressure measurements.
+Physics of thin film deposition, adsorption, surface deposition, nucleation, growth and structure
+development, surface structure, role of surfaces, epitaxial growth, lattice mismatch, strain, and growth
+modes.
+Various thin film fabrication techniques: Thermal evaporation, Knudsen cell, Sputtering, E-beam
+evaporation, Atomic layer deposition, electrospinning, dry and wet etching, Chemical vapor deposition
+(CVD), sol-gel, Electrodeposition, Spray pyrolysis, spin-coating,
+and Langmuir-Blodgett technique, etc.
+Phase transformations in thin films, Overview of various properties of thin films and their relation to
+their microstructures.
+
+PHL611 Applied Optics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Brief history and basics of light: wave motion, electromagnetic waves, photons. Geometrical optics:
+Reflection, Refraction, Total internal reflection, lenses, prism. Physical optics: waves and wavefront,
+Coherence, Interference, Diffraction, Polarization, Scattering. Fourier optics: Fourier Transformation,
+Diffraction Theory, Propagation of light waves. Optical systems: Human Eye, Microscopes, Telescope,
+Laser, Light Emitting Diodes, Camera, Spectrometers, Spatial light modulators. Applications of optical
+techniques: Interferometers, Laser in industry, Optical imaging, Singular optics, Optical information
+processing, Fiber optics communication.

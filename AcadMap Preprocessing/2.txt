@@ -1,0 +1,390 @@
+Chemistry
+CYL100 Applied Chemistry
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Electrochemical Systems: Electrochemical cells and EMF, Applications of EMF measurements, Nernst
+Equation, Batteries, Fuel cell, corrosion and its control; Kinetics of Chemical Reactions and catalysis:
+Reversible, consecutive and parallel reactions, Steady state approximation, and Chain reactions.
+Physical adsorption, chemisorption, Freundlich’s expression, Langmuir adsorption isotherm, and
+heterogeneous catalysis; Bonding Models in inorganic Chemistry: Molecular orbital theory, Valencebond theory, LCAO, and Crystal field theory; Coordination Chemistry: Coordination numbers, Chelate
+effect, Coordination complexes and application, Bio-inorganic chemistry: Metal ions in Biological
+systems, environmental aspects of Metals, Organometallic chemistry, 18 electron rules, Industrially
+relevant chemical reactions and mechanism, Meallic-lithium, sodium and its compounds and their
+energy storage applications; Engineering materials and Polymer Chemistry: Glass, ceramics,
+refractory, composites, magnetic materials, Polymer, Properties, Polymer processing, Industrial
+polymers, conducting polymers;
+Natural Products and Biomolecules: Amino acids/nucleic
+acids/proteins/lipids, Enzymes, Vitamins, Biomacromolecules, and Solid phase synthesis; Fuels and
+Combustion: Properties of fuels, Calorific value, Petroleum and petrochemicals, biofuels.
+
+CYL101 Environmental Studies
+1 Credits (1-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Understanding our environment: atmosphere composition and behaviour, temperature and pressure
+profile of atmosphere, Atmospheric Photochemistry: Electromagnetic radiations, kinetics of thermal
+and photochemical processes, Reactions in the upper atmosphere, photo processes in the
+troposphere, photochemical smog, photosynthesis, Ozone chemistry, brief overviews of ozone
+depletion and atmospheric pollutants. Air pollution: Standards, effect of air pollutants, origin and fate
+of air pollutants, atmospheric dispersion. Global warming: greenhouse gases, results of global
+warming, Principle and applications, green chemical industrial process, sustainable fuel for
+automobiles and power generation. Water pollution: Chemistry in aqueous media; Chemical and
+physical reactions in the water environment; Major contaminant groups and their natural pathways for
+removal from lakes, rivers and oceans. Soil pollution: Groundwater and subsurface contamination, Soil
+profiles, Acid-base and ion exchange reactions in soils, Fertilizers, wastes and pollutants in soil.
+Organic and Inorganic chemicals in environment: Ecosystem, flow of energy and nutrient cycles,
+sustainability, toxicity, polychlorinated hydrocarbons like DDT, polymers, detergents. impact on
+environment.
+
+CYP102 Chemistry Lab
+1.5 Credits (0-0-3)
+Prerequisite(s): None
+Overlap with: NA
+
+Indicative Experiments; Synthesis of drugs (Paracetamol and Aspirin); Analysis of Organic Compound;
+Estimation of Phenol; Estimation of Copper in Brassy Determination of Hardness of Water by EDTA
+titration; Synthesis of potash alum from scrap aluminium (recycling of aluminium waste); Reaction
+Kinetics (Ester hydrolysis); Red-ox titration; Acid Strength in Citrus Fruit juice by using pH meter and
+conductivity meter; Estimation of Cu in brass by colourimetric method.
+
+CYL400 Chemical Kinetics and Surface Science
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: CYL100 - 10%
+Introduction to chemical Kinetics, Chain reactions (free radical reaction, polymerization), Enzyme
+reaction, Inhibition kinetics; Temperature dependence of reaction rate: Linear and non-linear Arrhenius
+equation, Interpretation of Arrhenius parameters Various theories of unimolecular reactions, Potential
+energy surfaces for bimolecular reactions; Collision theory. Transition state theory,
+Activation/thermodynamic parameters, Erying equation; Kinetics in the excited state: Jablonski
+diagram, Kinetics of Unimolecular and bimolecular photophysical and photochemical processes,
+Quantum yield calculation, Excited state lifetime-quenching constant, Resonance energy transfer rates
+(RET), Rate and efficiency of RET; Dynamics of electron transfer, Solvent reorganization energy,
+Marcus theory of electron transfer; Importance of interfaces (solid-solid, solid-gas), adsorption
+isotherms, surface charge and zeta potentials, surface tension; Surface of nanostructured materials,
+Organic solid state materials, fullerenes, carbon nanotubes and graphene, Surface reactions,
+Introduction to surface characterization techniques (SEM, XPS, UPS, LEED).
+
+CYL401 Coordination Chemistry
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Introduction to coordination chemistry: The central atom and the ligand, bonding, coordinate (dative)
+bond, historical background, coordination compounds in chemistry and beyond, basic nomenclature.
+Ligand types: Classification of ligands, denticity and hapticity, representative ligand families; Transition
+Metal Chemistry: Properties of transition metal ligand complexes - geometry, coordination number,
+isomerism, thermodynamic stability, chelate and macrocyclic effect, metal-metal bonds, clusters;
+Bonding in coordination compounds: Lewis acidity and basicity (donors and acceptors), Crystal Field
+Theory, Ligand Field Theory, Sigma and Pi Orbitals, limitations of bonding theories, d-orbital splitting,
+low spin and high spin complexes,Term Symbols, microstates, R-S coupling, Orgel and Tanabe
+Sugano Diagrams, CFSE for d0 to d10 systems, pairing energy, Applications of CFT and Spinels,
+Magnetic properties of complexes, J-T distortion, Spin Crossover; Selection rules of electronic
+transition: Laporte Forbidden Rule, Spin Selection Rule Charge Transfer Spectra (CT), different CT
+transitions, molecular orbital (MO) theory of small molecules; Reactivity of complexes: Substitution in
+Oh and Square Planner complexes, Thermodynamics and kinetics, stability and lability of complexes,
+trans-effect and trans-influence, conjugate base mechanism, racemization, oxidative addition and
+reductive elimination, steric and electronic factors, redox reactions; Electron transfer reaction: inner
+sphere and outer sphere mechanism, mechanism of redox reactions, Marcus theory; Photosubstitution
+and photo redox reactions of Cr, Co, and Ru compounds.
+
+CYL500 Quantum Chemistry
+
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Why and how quantum mechanics came into existence; Difficulties with classical theory; Black-body
+radiation, photoelectric effect, Bohr’s theory of hydrogen atom, wave-particle duality, de Broglie’s idea,
+double-slit experiment, concept of matter-wave, group and phase velocity, Heisenberg Uncertainty
+principle; Postulates of quantum mechanics – meaning of wavefunction, operators, eigenvalue
+problems, Time- dependent and time-independent Schrödinger equation; Model problems – the
+particle-in-a-box, the harmonic oscillator, and molecular vibration and normal modes, Angular
+momentum; Hydrogen atom, concept of atomic orbitals, probabilities and electron- density distribution,
+Born-Oppenheimer approximation – limitations and applications; Molecular orbitals from valence bond
+and molecular orbital theory; Concept of LCAO and introduction to basis- set; Concepts in
+computational chemistry; Hartree-Fock Self-Consistent Field (SCF) theory and concept of electron
+correlation and variational principle; Electron spin and the Pauli principle; Relativity in chemistry – Brief
+introduction to relativistic quantum mechanics.
+
+CYL501 Stereochemistry and Reaction Mechanism
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Stereochemistry: Introduction to molecular symmetry and point groups. Topicity and
+prostereoisomerism, nomenclature of stereotopic ligands and faces, stereoheterotopic ligands. Basic
+terminology: threo and erythro isomers, endo- and exo- compounds, atropisomerism. Centre of
+chirality, assignment of absolute stereochemistry, CIP rules. Axial chirality (biaryls, spiro compounds,
+adamentoids, allenes, hemispiranes/alkylidene cycloalkanes and catenanes), planar chirality
+(cyclophanes, metallocenes and transcycloalkene) and helicity, descriptors for absolute
+stereochemistry
+Conformational analysis: acyclic systems, cyclic systems, cyclohexane and decalins, conformation and
+reactivity with examples from molecular rearrangements, neighbouring group participation, elimination
+reactions, formation and cleavage of epoxides, quantitative correlation between conformation and
+reactivity.
+Stereoselectivity: Classification, terminology such as stereomutation, stereoablation, and
+stereodiscordance, principle of stereoselectivity, examples of diastereoselectivity and
+enantioselectivity. Stereoselectivity using chiral reagent, chiral catalysts, chiral auxiliary and chiral
+substrates. Kinetic resolution, parallel kinetic resolution, dynamic kinetic resolution. Circular dichroism,
+ORD, cotton effect, application of ORD and CD in steriods, examples illustrating the usefulness of
+Cotton effect.
+Reaction mechanisms: Nucleophilic substitution, various types, stability and reactivity of carbocations,
+nucleophilicity and basicity, neighbouring group participation and rearrangements, steric effects in
+substitution reactions, classical and non-classical carbocations. Umpolung chemistry with emphasis
+on thiamine, triazolium, cyanohydrins, metallophosphites and dithianes. Cyclization in organic
+chemistry, anionic and cationic cascades cyclization, radical induced cyclization, ring-closing
+metathesis, organocatalysts in cyclization.
+Rearrangements: neighboring group participation, ring expansion, carbocation, pinacol, dienonephenol, benzilic, Favorskii, Baeyer-Villiger and Beckmann rearrangements.
+
+CYP502 Organic and Inorganic Laboratory
+3 Credits (0-0-6)
+Prerequisite(s): None
+Overlap with: NA
+Inorganic Lab: Synthesis and characterization of coordination compounds (2 experiments); Study their
+magnetic moment. Synthesis and characterization of oraganometallic compounds (2 experiments).
+Catalytic reaction and techniques; Purification and separation techniques (1 experiment),
+Characterization through analytical techniques, Qualitative determination of compounds, molecules
+and elements, Quantitative estimation of compounds, molecules and elements.
+Organic Lab: Separation of an Unknown Mixture: Acid-Base Solvent Extraction. Nitration Reaction:
+Thin layer chromatography and column chromatography. Grignard Reaction: Preparation of a grignard
+reagent, synthesis of triphenylmethanol. Wittig Reaction: Synthesis of alkene from aldehyde. Synthesis
+of organic (bio)molecules via acid/amine coupling and other coupling strategies and their molecular
+characterization using different analytical tools, target oriented synthesis of (bio)macromolecules and
+their molecular characterization, investigation of the physicochemical properties of the synthesized
+(bio)(macro)molecules.
+
+CYP503 Physical and Computational Chemistry Lab
+3 Credits (0-0-6)
+Prerequisite(s): None
+Overlap with: NA
+Study of charge transfer complexes using colorimetric method; Study of fluorescence quenching;
+Phase behaviour studies; Reaction kinetics study (spectroscopic and polarometric); Study of
+intermolecular hydrogen bonding; Nanomaterial synthesis and characterizations; Denaturation Studies
+of biomolecules; Programming, computing platforms, computer simulations; electronic and molecular
+structure calculations.
+
+CYL504 Thermodynamics and Statistical Mechanics
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: MEL211 (15-20%); MML201 (15-20%)
+Why study statistical mechanics? Introduction to Thermodynamics; Equilibrium Thermodynamics:
+Thermodynamic Equilibrium state, properties of ideal gases and how they differ from real gases, laws
+of thermodynamics, thermodynamic potentials, concepts of state and path functions; work and heat as
+path functions and internal energy as state function, phase diagram, thermodynamic description of
+various types of processes; Maxwell’s relations; spontaneity and equilibria; Temperature and pressure
+dependence of thermodynamic quantities; Le Chatelier’s principle; Basic concepts and postulates of
+statistical mechanics; Ensembles: microcanonical, canonical and grand canonical ensembles,
+applications of ensembles, thermostat, Barostat, calculation of different thermodynamic quantities such
+as average pressure, average energy. Partition functions and distributions, canonical and grand
+canonical partition functions, phase space, fluctuations; Boltzmann, Fermi-Dirac and Bose-Einstein
+distributions. Canonical partition function in terms of molecular partition function of non-interacting
+particles, Translational, rotational and vibrational partition functions; Temperature dependence of the
+second virial coefficient. Thermodynamics of solids - Einstein and Debye models. T3 dependence of
+
+heat capacity of solids at low temperatures Fermi function, Fermi energy, free electron model and
+density of states, chemical potential of conduction electrons; Introduction to computer simulation
+methods in statistical mechanics. ergodicity, random numbers, Monte Carlo methods, Molecular
+Dynamics, constant temperature MD.
+
+CYL505 Organic Reactions and Reagents
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+A brief introduction to substitution, elimination, addition, oxidation, reduction, rearrangement and
+pericyclic reactions. Functional group transformations: alcohols to alkylating agents, Mitsunobu and
+related reactions, introduction of functional groups by nucleophilic substitution at saturated carbon,
+nucleophilic cleavage of C-O bonds in ethers and esters and interconversion of carboxylic acid
+derivatives.
+Oxidation: Metal based oxidizing reagents: A review and detailed discussion of chromium, manganese,
+ruthenium, silver and other metal based reagents. Non-metal based oxidizing reagents: DMSO,
+peroxide, peracid and oxygen based oxidation. Miscellaneous oxidizing reagents like IBX, DMP, CAN,
+DDQ, periodate etc.
+Reduction: Homogeneous and heterogeneous; Discussion on borane based racemic and chiral
+reagents, hydrogenations aluminium, tin, silicon based reducing agents. Dissolving metal reductions.
+Selectivity and protecting groups: Illustration of chemoselectivity, regioselectivity and stereoselectivity
+with examples; protecting groups for alcohols, amines, acids, ketones and aldehydes.
+
+CYL506 Bioinorganic Chemistry
+3 Credits (3-0-0)
+Prerequisite(s): CYL503
+Overlap with: CYL100 (5%)
+Metal ions in biology: occurrence and function, active-site structure and function of metalloproteins and
+metalloenzymes with various transition metal ions and ligand systems; oxygen binding properties of
+heme and non-heme proteins, their coordination geometry and electronic structure.
+Electron Transfer Proteins: Types of copper proteins and enzymes, mechanism of electron transport,
+structure and bonding of plastocyanin, azurin. - Fe-S proteins and Rieske iron-sulfur proteins [2Fe-2S],
+cytochromes and their comparisons.
+Electron transport and energy metabolism: Photosynthesis (Photosystem I and II), Mn-cluster for
+electron release.
+Mobilization of iron: Siderophores; transport of iron: transferrin, storage of iron: Ferritin – hemosiderine.
+Oxygen transport and storage: Hemoglobin - myoglobin - co-operativity effect, Hill coefficient and Bohr
+Effect; hemerythrine - hemocyanine. characterization of O bound species by Raman and infrared
+spectroscopic methods.
+Small molecule activation: Nitrogen fixation and mechanism, hydrogenases. Oxygen activation: Cu and
+Fe containing enzymes - representative synthetic models of heme and non-heme systems and
+cytochrome P450, Cu-Zn-superoxide dismutase - Zn-containing enzymes - types of Mo-enzymes.
+Metals in medicine: Vitamin B12 and its mechanisms of action, MRI contrast agents, radio-isotopes
+(e.g., Tc & I) and therapeutic applications of cis-platin and Au complex. Toxicity of metals: Cd, Hg and
+Cr toxic effects with specific examples.
+
+CYL507 Chemistry of Main Group Elements
+3 Credits (3-0-0)
+Prerequisite(s): CYL401
+Overlap with: NA
+Basic introduction, physical properties of the main group elements, shapes and sizes of the main group
+elements, structure and bonding in main group compounds including hypervalency and multiple bond.
+Hydrogen and classical hydrogen bond, water, hydrates, hydrogen ions, metal hydrides, activation of
+hydrogen complexes; alkali metals in liquid ammonia; boron, boranes, carboranes, borazines and
+borates; allotropy of carbon; silane and polysilanes, silicones.
+Polymers, silicates; compounds of nitrogen, activation of nitrogen, nitrogen fixation, hydrogen, halogen,
+oxygen and nitrogen compounds of phosphorous; oxygen and singlet oxygen, ozone, complexes of
+molecular oxygen; N-S compounds; sulphides, oxides and oxoacids of sulphur, chalcogenides and
+polychalcogenides; halogens, polyhalides, interhalogen compounds, charge-transfer complexes of
+Halogens; compounds of Xenon and other noble gases; Zintl compounds and homometallic
+clusters.
+Recent advances and their properties of various main group compounds, such as Group 1, Group 2,
+and Group 13-18.
+
+CYL508 Organic Photochemistry and Pericyclic reactions
+3 Credits (3-0-0)
+Prerequisite(s): CYL505
+Overlap with: NA
+Photochemistry: Basics principles of organic photochemistry - Reactivity of simple chromophores –
+photochemistry of carbon centered radicals.
+Photochemistry of Alkenes: Excited States of alkenes - photochemistry of alkene - geometrical
+isomerisation - photosensitised geometrical isomerisation – photocycloaddition reactions of alkene-dipi-methane rearrangement - electron transfer mediated reactions of alkene.
+Photochemistry of carbonyl compounds: Norrish type I and type II reactions – photochemical
+cycloadditions- photochemistry of aromatic systems- electron transfer and nucleophile.
+Introduction to Pericyclic Reaction. Cycloaddition reactions: Diels-Alder reaction; general features,
+dienes, dienophiles, selectivity, intramolecular and intermolecular reactions, hetero-Diels Alder
+reaction. 1,3-dipoIar GycIoaddition reactions; general features, dipoles, dipolarophiles. Cycloaddition
+reactions; general features, selected examples.
+Molecular rearrangements: Illustration of electron deficient and electron rich skeletal rearrangements
+with examples; Sigmatropic rearrangements-Claisen and related rearrangements, CopeandoxyCoperearrangements;2,3-sigmatropicrearrangements and ene reaction.
+
+CYL509 Molecular Spectroscopy and Computational Chemistry
+3 Credits (3-0-0)
+Prerequisite(s): CYL500
+Overlap with: PHL509 (10%)
+Rotational Spectroscopy: Rigid roto model for diatomic molecules, selection rules, intensity of rotational
+transitions, role of nuclear spin, Isotopic substitution. Vibrational spectroscopy: Harmonic and anharmonic oscillators, Morse potential, mechanical and
+electrical anharmonicity, selection rules. The determination of anharmonicity constant and equilibrium
+vibrational frequency from fundamental and overtones.
+Electronic transitions: Franck-Condon principle. Vertical transitions. Selection rules, parity, symmetry
+and spin selection rules. Polarization of transitions. Fluorescence and phosphorescence.
+Raman spectroscopy: Polarizability and selection rules for rotation and vibrational Raman spectra.
+Perturbation theory: Time-dependent and time-independent perturbation theory with simple application
+Atomic term symbols for atoms.
+Conjugated pi-systems and Hückel theory.
+Group Theory: Concept of groups, symmetry operations, and symmetry elements in different
+molecules, matrix representations of symmetry operations, point groups, Great orthogonality theorem
+and Character table.
+Application of group theory to molecular orbital theory, molecular vibrations and vibrational
+spectroscopy.
+
+CYL510 Physical Organic Chemistry
+3 Credits (3-0-0)
+Prerequisite(s): CYL501
+Overlap with: NA
+Symmetry-adapted orbitals. Mixing rules and buildup approach to molecules and molecular complexes.
+Energy surface for bond breaking and making, pre-reacting complex, transition state, activation-strain
+analysis, Gibbs free energy profile for C-H activation using Pd-catalyst and also using Iodine(III).
+Kinetic vs thermodynamic control of products, Curtin-Hammett principle, Hammond Postulate, isotope
+effects. Examples of Curtin—Hammett paradigm for stereo control in organocatalysis, and
+intramolecular cyclization.
+Reactive intermediates: Carbocations, carbanions, carbenes, benzyne. Empirical scales for electronic,
+steric, and solvent effects (dielectric constant), salt effects, ion pairs in solvolysis reaction,
+stereoelectronic effects such as effect of anchimeric assistance on rate of the reaction.
+Mechanism according to free-energy correlation and correspondence with theory of orbital interaction.
+Linear free energy relationship, Yukawa-tsuno equation, Hammett and Taft equations with Illustrative
+examples: hydrolysis of aryl ester, acetolysis substituted aryl brosylate.
+
+CYL600 Advanced Organic Chemistry
+3 Credits (3-0-0)
+Prerequisite(s): CY504 and CY508
+Overlap with: NA
+Retrosynthesis: Basic principles and terminology of retrosynthesis, concepts of latent polarity,
+umpolung, and synthetic equivalents, important functional group transposition and functional group
+interconversions, important strategies of retrosysnthesis, synthesis of monofunctional, difunctional and
+multifunctional group target molecules, synthesis of aromatic target molecules, concept of enzymatic
+retrosynthsis.
+Protecting groups: Protection and deprotection of hydroxy, carboxyl, carbonyl, carboxy amino groups
+and carbon-carbon multiple bonds; chemo- and regioselective protection and deprotection, illustration
+of protection and deprotection in organic synthesis. Construction of ring systems: Baldwin’s rules, methodolgies for the construction of three, four, five, six
+and seven membered rings, medium and large rings, methods for ring contration, application in total
+synthesis.
+Target oriented synthesis: Scope and brief history of total synthesis, tactics, strategy and control in
+organic synthesis, concept of semi-synthesis, linear, convergent, cascasde and diversity-oriented
+synthesis, total synthesis of biologically active representative molecules.
+
+CYL601 Organometallic Chemistry: Principles and Applications
+3 Credits (3-0-0)
+Prerequisite(s): CYL503
+Overlap with: CYL100 (5%)
+Definition, the first few organometallic complexes, thermodynamics and kinetics of organometallic
+compounds, the 18-electron rule; Different types organometallic bonding: Metal- alkyls, aryls, hydrides,
+organometallic bonding with multiple bonds, complexes of pi-bound ligands such as carbonyls,
+phosphine complexes, carbenes, MO theory of organometallic complexes, isolobal analogy;
+Fundamental reaction process: oxidative addition and reductive elimination; insertion and elimination;
+ligand substitution processes, transmetallation, nucleophilic and electrophilic addition and abstraction;
+Preparative and characterization methods: general methods for the preparation of organometallic
+compounds and spectroscopic and analytical techniques for the elucidation of structure, properties and
+reactivates; Synthetic Applications: Coupling reactions, cyclization reactions, addition reactions,
+carbonylation, olefin oxidation, carbenes and activation reactions, hydrogenation, hydroformylation,
+isomerization, metathesis and polymerization reactions. CO2 activation, C-H activation, C-C activation,
+click catalysis, oxidation reaction.
+
+CYL602 Interpretative Molecular Spectroscopy
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Mass spectrometry: the production and analysis of positive ions, molecular ions, application of isotopic
+abundance measurements, fragmentation modes and rearrangement of ions. Mass spectra of certain
+chemical classes.
+Electronic spectroscopy (UV-visible, fluorescence and phosphorescence): Simple chromophoric
+groups, conjugated and aromatic systems. Characteristic absorption of organic and inorganic
+compounds.
+Infrared spectroscopy: Characteristic group frequencies of organic and inorganic molecules.
+Nuclear magnetic resonance spectroscopy of compounds containing 1H,13C,19F and 31P nuclei.
+Identification of organic and inorganic compounds using combination of spectral data.
+
+CYL603 Chemistry of Heterocyclic Compounds and Natural Products
+3 Credits (3-0-0)
+Prerequisite(s): CYL501
+Overlap with: NA
+Heterocyclic Compounds: Introduction to heterocyclic compounds, importance of heterocycles in
+medicine and materials, systematic nomenclature of heterocyclic compounds. Preparation, reactions
+and chemical properties of three membered heterocyclic compounds with one and two hetero atom, four membered heterocyclic compounds with one hetero atom. Structure, synthesis and reactivity of
+five and six membered heterocyclic compounds.
+Aromatic heterocyclic compounds: Pyrrole, furan, thiophene, pyridine, quinoline, isoquinoline, indole,
+etc. Named reactions of heterocyclic compound synthesis such as Fiest Benary furan synthesis, Knorr
+and Paal-Knorr pyrrole synthesis, Barton-Zard reaction, Robinson-Gabriel synthesis, Hofmann-LofflerFreytag reaction, Hantzsch pyridine synthesis, Biginelli and Chichibabin reations.
+Natural Products: Role of natural products in drug discovery, structure and chemical properties of
+alkaloids, terpinoids, and steroids. Physio-chemical properties of amino acids, chemical synthesis of
+peptides, properties of mono-and di-saccharides.
+
+CYL605 Electron Paramagnetic Resonance (EPR) Spectroscopy and its Applications
+3 Credits (2-0-0)
+Prerequisite(s): None
+Overlap with: CYL508 (5%); CYL602 (5%)
+Principles of EPR - Presentation of the spectrum-EPR spectrum of hydrogen atom (first-order
+treatment), g factors, Hyperfine splitting: nuclear spin (I = 1/2, 1, 3/2, 5/2) interaction with electron
+spin, hyperfine coupling constants, EPR spectra of organic radicals (AA and AB type), EPR spectra
+of heteronuclear compounds, McConnell's relation, Introduction to multi-electron systems: zero-field
+splitting, multi-electron systems, Kramer’s degeneracy.
+Applications of EPR spectra for inorganic compounds (Cu2+, Ni2+, Fe3+, V4+, Mn2+ and Cr3+and etc),
+structure and geometry predictions, anisotropy in the hyperfine coupling constant. Characterization of
+Metalloproteins. EPR Imaging.
+
+CYL610 Solar Energy Harvesting Materials
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: NA
+Light harvesting materials, Light mater interaction, the concept of diffusion length, exciton binding
+energy, transport gap, mobility, lifetime and metal-semiconductor junction. Excited state electron
+transfer kinetics.
+Conjugated polymer-based systems and their synthesis and properties, donor-acceptor systems,
+electron transfer mechanism, in organic systems, doping and band-gap engineering inorganic
+semiconductors.
+Dye, Quantum dot, and perovskite-based systems. Solar to value-added product generation using
+such systems. Artificial photosynthesis, Hybrid semiconductors and composite semiconductors,
+introduction to light to energy storage using hybrid and composite semiconductors. A comparison of
+various classes of semiconductors-based solar cells with their working principle.
