@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "memlayout.h": "c",
+        "functional": "c",
+        "user.h": "c"
     }
 }
