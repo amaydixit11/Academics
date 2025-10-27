@@ -1,0 +1,14 @@
+I dont have a software installed for creating a word document / pdf on my system, the TAs have instructed me to submit a txt file with screenshots instead
+
+==================
+Q1 - Q5
+
+Screenshot given
+
+==================
+Q6
+
+Belady's anomaly has been shown in the screenshots, upon increasing the number of pages from 3 to 4, 
+the misses actually increased instead of decreasing in FIFO, this is due to the absense of stack property in FIFO
+
+Screenshot has been attached
