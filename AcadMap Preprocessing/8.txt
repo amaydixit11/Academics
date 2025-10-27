@@ -1,0 +1,299 @@
+Mathematics
+MAL100 Mathematics-I
+4 Credits (3-1-0)
+Prerequisite(s): None
+Overlap with: NA
+Real number system: Sequences: Convergence of a sequence-Sandwich theorem- Cauchy
+sequences- subsequence-monotone sequences-monotone convergence theorem; Series:
+Convergence of infinite series-comparison test-Cauchy condensation test-ratio test-root test-Leibnitz
+test; Functions of one variable: Limits and continuity of functions- intermediate value propertydifferentiability of a function-local maxima and minima-Rolle's theorem-mean value theorem and
+applications; Integration: Definite integrals as a limit of sums-fundamental theorems of calculusapplications of definite integrals to area, volume, surface area-improper integrals; Functions of two
+variables: Limit-Continuity-partial derivatives- directional derivatives-gradient-differentiability-chain
+rule- tangent planes and normal – maxima and minima-Lagrange multiplier method; Multiple integrals:
+Double and triple integrals with applications to volume - surface area-change of variables-vector fieldsline integrals-Green's theorem and its applications-path independence- surface integrals evaluationGauss's divergence theorem and its applications-Stokes Theorem.
+
+MAL101 Mathematics-II
+4 Credits (3-1-0)
+Prerequisite(s): None
+Overlap with: NA
+Systems of linear equations: Elementary operations-row-reduced echelon matrices-Gauss eliminationLU factorization-linear independence-rank of a matrix-solutions of linear systems-existence and
+uniqueness; Vector spaces: Vector space-subspaces-spanning space-bases and dimensions; Linear
+transformations: Linear transformation-matrix representations of linear transformations-range space
+and rank-null space and nullity-the rank and nullity theorem-invertibility; Eigenvalues and eigenvectors:
+Eigne values-eigenvectors and some applications of eigenvalue problems-Hermitian, skew-Hermitian,
+unitary matrices and their eigenvalues-eigen bases; Diagonalization: Annihilating polynomial-the
+minimal polynomial and the characteristic polynomial-Cayley-Hamilton theorem-real quadratic form;
+Inner product spaces: Inner product spaces-orthonormal bases- Gram-Schmidt process; Differential
+Equations: Review of First Order ODE- Lipschitz condition-Picard`s theorem; Linear differential
+equations: Linear dependence and Wronskian-linear ODE with constant coefficients of higher ordercharacteristic equations- Cauchy-Euler equations-method of undetermined coefficients-method of
+variation of parameters- solutions methods using Laplace Transform.
+
+MAL400 Introduction to Programming
+4.5 Credits (2-1-3)
+Prerequisite(s): None
+Overlap with: NA
+Content of this course is exactly overlapping with CSL100 and the same will be offered by the discipline
+of Computer Science and Engineering.
+
+MAL401 Linear Algebra
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: MAL101 (25%)
+Matrix: Systems of linear equations-matrices and elementary operations-row-reduced echelon
+matrices-solutions of linear systems: existence and uniqueness; Vector space: Vector spacessubspaces-spanning space-bases and dimensions-ordered basis and coordinates; Linear
+Transformation: Linear transformations-matrix representations of linear transformations-range space
+and rank-null space and nullity-the rank and nullity theorem-invertibility; Inner product spaces: CauchySchwarz's inequality-Gram-Schmidt orthonormalization-orthonormal basis-orthogonal projectionprojection theorem-four fundamental subspaces and their relations (relation between null space and
+row space; relation between null space of the transpose and the column space); Eigen space:
+Eigenvalues and eigenvectors-the characteristic polynomial-the Cayley- Hamilton theorem-the minimal
+polynomial-algebraic and geometric multiplicities-diagonalization-Invariant subspaces-adjoint of an
+operator-normal-unitary and self-adjoint operators-Schur's Lemma, diagonalization of normal matricesspectral decompositions and spectral theorem-applications of spectral theorem; Primary
+decomposition theorem-Jordon canonical form-Introduction to bilinear and Quadratic forms: Bilinear
+and quadratic forms-Sylvester's law of inertia.
+
+MAL402 Real Analysis
+3.5 Credits (3-0.5-0)
+Prerequisite(s): MAL100 or Equivalent
+Overlap with: MAL100 (20%)
+Overview of Real Number system: Completeness property-Density property-Countable and
+Uncountable; Metric Spaces: Metric spaces-Open sets-Closed sets-sequence-series-Limit-Continuity;
+Completeness: Complete metric space-Nested set theorem-Baire category theorem-Applications;
+Compactness: Basic properties of compact set-Totally bounded-Finite intersection propertyContinuous functions on compact sets-Uniform continuity; Connectedness: Basic properties of
+connected set-Continuous functions on connected sets-Path connected; Riemann integration:
+Definition and existence of integral-Fundamental theorem of calculus; Convergence of sequence and
+series of functions: Pointwise and uniform convergence of functions-Series of functions-Power seriesDini's theorem-Ascoli's theorem-Continuous function which is nowhere differentiable-Weierstrass
+approximation theorem.
+
+MAL403 Probability and Statistics
+4 Credits (3-1-0)
+Prerequisite(s): MAL100 or Equivalent
+Overlap with: NA
+Introduction to set algebra-sigma algebra-Borel sigma algebra-sequence of sets and its limits-limsup
+and liminf of sequence of sets; Axiomatic definition of probability-probability space-properties of
+probability functions-conditional probability-Bayes’ rule-independence of events-continuity of
+probability functions-Borel Cantelli lemmas; Random variables-distribution function and its propertyprobability mass and density functions-symmetric distribution and its properties-expectation-momentsmoment generating function-Markov inequality- Chebyshev’s inequality; Joint distributions-marginal
+and conditional distributions-moments-independence of random variables-covariance, and correlation-
+
+joint moment generating functions-additive properties of random variables-functions of random
+variables-ordered Statistics; Special distributions: Discrete uniform-Bernoulli-binomial-geometricnegative binomial-hypergeometric-Poisson-exponential-gamma-normal-bivariate normal distribution;
+Population-sample-parameters-distributions of the sample mean and the sample variance for a normal
+population-Chi-Square-t and F distributions-law of large numbers–central limit theorem-point
+estimation-method of moments-maximum likelihood estimator-unbiasedness; Testing of hypothesis:
+Null and alternate hypothesis-Neyman Pearson fundamental lemma and its applications-tests for one
+sample and two sample problems for normal populations-tests for proportions-confidence interval
+estimation-confidence interval for parameters of normal population.
+
+MAL404 Modern Algebra
+3 Credits (3-0-0)
+Prerequisite(s): MAL101 or Equivalent
+Overlap with: NA
+Groups: Basic notion of groups - subgroups - cosets of a subgroup - Lagrange's theorem- cyclic groups
+- permutation groups - normal subgroups - quotient groups - group homomorphisms, isomorphisms
+and automorphisms - group actions - Cayley’s theorem - Sylow's theorem - direct products of groupsfinite abelian groups; Rings: definition and examples of rings - subrings - Ideals - maximal and prime
+ideals - quotient rings- ring homomorphisms and isomorphisms. Integral domains: division rings and
+fields - field of quotients of an integral domain - Euclidean domains - principal ideal domains, unique
+factorization domains - Polynomial ring- Irreducibility of polynomials; Fields: Subfields - extension fields
+- algebraic extensions- roots of a polynomial - splitting fields- algebraically closed field - normal and
+separable extensions - Ruler and compass constructions. Galois theory: Fundamental theorem of
+Galois theory - polynomials solvable by radicals.
+
+MAL405 Differential Equations
+4 Credits (3-1-0)
+Prerequisite(s): (MAL100 and MAL101) or Equivalent
+Overlap with: MAL101 (20%)
+First order linear differential equations: Introduction to ODE, review of solution methods for linear first
+order differential equations; First order nonlinear differential equations: Cauchy-Picard theoremcontinuation of solutions; Second order linear differential equations: Solution methods by variation of
+parameters and Wronskian- order reduction methods-undetermined coefficients; Series solutionsSeries solutions of second order differential equations-Legendre and Bessel’s equations and
+properties-two point boundary value problem-Sturm-Liouville theory; Linear systems: Linear system
+with constant coefficients-fundamental solutions; First order linear and quasi-linear partial differential
+equations: Cauchy problem-method of characteristics; Second order partial differential equations:
+Classification of second order PDEs- physical motivation- Laplace, heat and wave equations- solutions
+using separation of variables, similarity methods, transform methods and power series method.
+
+MAL406 Numerical Analysis
+4 Credits (3-1-0)
+Prerequisite(s): MAL100 or Equivalent
+Overlap with: MEL304 (60%)
+
+Linear systems of equations: direct and iterative schemes- computational costs of each scheme- ill
+conditioning and convergence analysis- sources of errors; Nonlinear equations: Solutions of nonlinear
+equations- Numerical Schemes for non-linear systems- bisection method-Newton's method and its
+variants- fixed point iterations- convergence analysis; Interpolation: Finite differences- polynomial
+interpolation- Hermite interpolation- spline interpolation; Numerical integration: Trapezoidal and
+Simpson's rules - Gaussian quadrature - Richardson extrapolation; Initial value problems: Taylor series
+method - Euler and modified Euler methods - Runge-Kutta methods - single step - multistep methods
+– order – consistency - stability and convergence analysis; Boundary value problems: Shooting and
+finite difference methods.
+
+MAL500 Topology
+3 Credits (3-0-0)
+Prerequisite(s): MAL402 or Equivalent
+Overlap with: NA
+Definition of topological spaces and examples-bases-subbases; Product topology-subspace topologymetric topology-quotient topology; Closed sets-limit points-continuous functions-homeomorphisms;
+Connectedness-connected sets in R-path connectedness-components and path components-local
+connectedness; Compactness-compactness in metric spaces-local compactness-limit point
+compactness-sequential compactness-compactification; The separation and countability axioms;
+Urysohn lemma-Urysohn's metrization theorem; Tietze extension theorem-Tychonoff theorem;
+Completely regular spaces-Stone-Čech compactification.
+
+MAL501 Complex Analysis
+3 Credits (3-0-0)
+Prerequisite(s): MAL402 or Equivalent
+Overlap with: NA
+Complex numbers: Basic properties of complex numbers - complex planes - topology of the complex
+plane; Functions of a complex variable: Limits, continuity and complex differentiability - holomorphic
+functions - Cauchy Riemann equations - harmonic functions - elementary functions - some application
+of harmonic functions; Integration in complex plane: Contour integrals- antiderivatives - path
+independence - Cauchy-Goursat theorem - Cauchy's integral formula - consequences of Cauchy’s
+integral formulas- Liouville's theorem and the fundamental theorem of algebra - Morera’s theorem open mapping theorem - maximum modulus principle; Sequences and series: Power series -Taylor
+and Laurent series - isolated singularities - zeros and poles - residues - residue theorems - the
+argument principle - Rouche’s theorem - evaluation of real integrals via contour integration; Conformal
+mappings: Mobius transformations - Schwarz lemma - automorphisms of the disc and upper half plane
+- Riemann mapping theorem.
+
+MAL502 Functional Analysis
+4 Credits (3-1-0)
+Prerequisite(s): MAL402 or Equivalent
+Overlap with: NA
+Normed spaces: Normed space-Banach spaces-linear maps-boundedness-non-compactness of the
+unit ball in infinite dimensional normed linear spaces-Banach-Steinhaus theorem-open mapping
+theorem- closed graph theorem- Hahn-Banach Theorem-Introduction to compact linear maps; Hilbert
+
+Spaces: Bessel's inequality-complete systems-Gram-Schmidt orthogonalization- Parseval's identityprojections-orthogonal decomposition-Bounded Operators and Adjoints-Normal, Unitary and SelfAdjoint Operators; Dual spaces-Riesz representation theorem-reflexivity-weak topologies-weak
+convergence-weak compactness-Banach-Alaoglu theorem.
+
+MAL503 Discrete Mathematics
+4 Credits (3-1-0)
+Prerequisite(s): None
+Overlap with: NA
+The content of this course is exactly overlapping with CSL201 and the same will be offered by the
+discipline of Computer Science and Engineering.
+
+MAL504 Data Structure
+4 Credits (2-1-2)
+Prerequisite(s): MAL400
+Overlap with: NA
+The content of this course is exactly overlapping with CSL202 and the same will be offered by the
+discipline of Computer Science and Engineering.
+
+MAL505 Database Management Systems
+4 Credits (3-0-2)
+Prerequisite(s): None
+Overlap with: NA
+The content of this course is exactly overlapping with CSL303 and the same will be offered by the
+discipline of Computer Science and Engineering.
+
+MAL510 Elementary Number Theory
+3 Credits (3-0-0)
+Prerequisite(s): None
+Overlap with: CSL201 (10%), MA519 (100%)
+Preliminaries: Well-Ordering Principle - Mathematical induction - Binomial theorem.
+Divisibility theory: Division algorithm - The greatest common divisor and the least common multiple Euclidean Algorithm - Prime numbers- Prime number theorem (statement only), Fundamental theorem
+of arithmetic. The linear Diophantine equation in two unknowns.
+The theory of congruences: Fermat's theorem, Pseudoprimes, Wilson's Theorem, Euler's
+generalization of Fermat's theorem; Number Theoretic functions. Primitive roots. The quadratic
+reciprocity law; Brief introduction to public key cryptography.
+Number of special forms: Perfect numbers - Mersenne primes - Fermat numbers - Fibonacci numbers.
+Some nonlinear Diophantine equations: The Pythagorean equations, A special case of Fermat's last
+theorem; Representation of integers as sums of squares; Continued fractions, Pell's equation.
+
+MAL511 Additive Number Theory
+3 Credits (3-0-0)
+
+Prerequisite(s): MAL404 or equivalent
+Overlap with: ME212 (20%), ME111 (10%)
+Sumsets: Introduction to sumsets – Direct and inverse problems for sumsets. Sumsets in torsion-free
+abelian groups: Freiman homomorphisms and Freiman isomorphisms, basic lower bounds and inverse
+theorems for sumsets.
+Sizes of Sumsets: Doubling constant – Ruzsa distance – additive energy – Ruzsa’s covering lemma,
+Green-Ruzsa covering lemma – Sidon sets – Frieman’s 3k-4 theorem – sum-product problems.
+Sumsets in groups: Cauchy-Davenport theorem – Pollard’s theorem – Erdӧs-Ginzburg-Ziv theorem –
+Chevalley-Warning theorem – Vosper’s theorem – Freiman-Vosper theorem – Kemperman’s theorem
+– Kneser’s addition theorem and its applications – Rectification principles.
+The Polynomial method: Alon’s combinatorial Nullstellensatz – restricted sumsets and the ErdӧsHeilbronn conjecture – Dias da Silva-Hamidoune theorem – Snevily’s conjecture – Kemnitz’s
+conjecture. Sumsets in higher dimensional Euclidean space. Geometry of nimbers: Lattices and
+determinants – Minkowski’s first theorem and Minkowski’s second theorem.
+Structure of sets with small sumsets: Plϋnnecke-Ruzsa theorem – review of Fourier analysis on groups
+– Bohr sets in sumsets – Bogolyubov’s Lemma – generalized arithmetic progression in Bohr sets –
+Freiman-Ruzsa Theorem.
+
+MAL512 Partial Differential Equations
+3 Credits (3-0-0)
+Prerequisite(s): MAL405 or equivalent.
+Overlap with: MA606 (90%)
+First order PDEs: Cauchy problems-linear, quasilinear and nonlinear partial differential equationsmethod of characteristics-existence of local solutions-weak solution-introduction to conservation lawsweak solutions-Rankine-Hugoniot condition- shocks-Lax-Oleinik formula-entropy condition and
+uniqueness of entropy solution.
+Second Order PDEs: Classification-Characteristics.
+Laplace and Poisson's Equation: Fundamental solutions-Mean value Property-Harmonic functionsHarnack inequality-Green’s function-Maximum principle-Hopf Lemma-Perron’s method-Duhamel's
+principle-energy methods-introduction to variational method.
+Heat Equation: Fundamental solution and initial-value problem-mean value formula-maximum
+principle, uniqueness and regularity
+Wave equation: One dimensional wave equation-solutions in odd and even dimensions.
+
+MAL514 Statistical Inference
+3 Credits (3-0-0)
+Prerequisite(s): MAL403 or equivalent.
+Overlap with: MAL403 (20%), MA509 (100%)
+Statistical inference problem: Parametric inference-Data collection- Statistics- Estimator-Sampling
+distribution. Order Statistics: Distribution of r-th order statistics-distribution of r-th and s-th order
+statistics, sample median- sample range-mid-range.
+Sufficiency and Completeness: Sufficiency and minimal sufficient statistics-Neyman Fisher
+factorization theorem-Ancillary statistics- completeness-Basu’s Theorem and its applicationExponential family.
+Method of estimation: Maximum likelihood estimator (MLE)-properties of MLE’s-Method of momentsLeast Square Estimator.
+
+Unbiased Estimation and Lower bound for variance: Unbiased estimation-uniformly minimum variance
+unbiased estimator (UMVUE)-Fisher information-Cramer-Rao lower bound (CRLB)- Bhattacharyya
+bound- Rao-Blackwell theorem-Lehman-Scheffe theorem.
+Statistical Hypotheses: Simple and composite-statistical tests-critical regions-Type I and Type II errorssize and power of a test-Neyman Pearson lemma and its different applications-Most powerful testuniformly most powerful test-unbiased test and uniformly most powerful unbiased test-Likelihood ratio
+test-Application to normal distribution, p-value.
+Interval estimation: Confidence intervals-construction of confidence intervals-shortest expected length
+confidence interval-most accurate one sided confidence interval and its relation to UMP test.
+
+MAL600 Introduction to Spectral Theory
+3 Credits (3-0-0)
+Prerequisite(s): MAL502 or equivalent
+Overlap with: None
+Introduction: Origin – spectrum and invertibility. Banach Algebra: Ideals & quotients – spectrum of an
+element of Banach algebra – spectral radius – Reisz functional calculus – dependence of the spectrum
+on the algebra. Spectral Representation: Spectrum and resolvent – various sub-divisions of spectrum
+– spectral projection – spectral measure – spectral representation theorem of compact operators and
+self-adjoint operators. Compact Perturbation & Fredholm theory: Calkin algebra – Fredholm operators
+– Fredholm index – Reisz theory of compact operators – Fredholm alternative – essential spectrum –
+further analysis of spectrum. Spectral Properties of unbounded linear operators: Unbounded linear
+operators and Hilbert adjoint – symmetric and self-adjoint linear operators – multiplication operator –
+differentiation operator.
+
+MAL602 Operator Theory II
+3 Credits (3-0-0)
+Prerequisite(s): MAL502 or equivalent
+Overlap with: MAL601 (15%)
+Overview of Gelfand theory-C*- algebras the GNS construction-Spectral theorem for normal operatorSchatten-p-class operators. Basic Von-Neumann Algebras- Trace class operator-Hilbert Schmidt
+Operator-Dual of trace class operators-Commutant. Operator spaces-Contractive and complete
+contractive homomorphism-Function Algebra-Dilation.
+
+MAL603 Martingale Theory
+3 Credits (3-0-0)
+Prerequisite(s): MAL403 or equivalent
+Overlap with: MAL402 (5%), MAL403 (10%), MAL608 (100%).
+Review of measure theory and conditional expectation: Sigma algebras-measurable functionsLebesgue integrals-conditional probability-conditional expectation-conditional independence. Discrete
+Time Martingales: Filtrations-martingales-submartingales and supermartingales-Doob decomposition
+theorem-discrete stopping times-stopped martingales-optional sampling theorem-maximal and
+upcrossing inequalities. Continuous time martingales: Continuous stopping times-local martingalesBrownian motion-semimartingales.
+
+MAL604 Stochastic Processes
+
+3 Credits (3-0-0)
+Prerequisite(s): MAL403 or equivalent.
+Overlap with: MAL403 (2.5%), MA611 (100%)
+Discrete-time Markov chains: Definition and basic properties, Markov property. class division, hitting
+time and absorption probabilities, strong Markov property, recurrence and transience, invariant
+distributions, convergence to equilibrium, time reversal. ergodic theorem.
+Random walk— in dimension one, two and three, The Reflection Principle, hitting probabilities of a
+finite sets, Last visits and Long leads, Maxima and first passages, Duality, position of maxima.
+Continuous time Markov chains: Definition and examples, Q-matrices, embedded Markov chain,
+Kolmogorov forward and backward equations, classification of states, limit theorems.
+Poisson Process: Definition and properties, inter arrival and waiting time distributions, conditional
+distribution of arrival times, its different characterizations.
+Markov chain mixing: Coupling and total variation distance, Mixing time, upper bound and lower bound
+on mixing time.
+
+
