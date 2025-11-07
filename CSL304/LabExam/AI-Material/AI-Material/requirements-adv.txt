@@ -1,0 +1,55 @@
+# Core scientific and numerical libraries
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+
+# Machine Learning & Deep Learning
+scikit-learn
+torch
+torchvision
+torchaudio
+torch-geometric
+xgboost
+lightgbm
+
+# Natural Language Processing
+nltk
+spacy
+gensim
+transformers
+sentencepiece
+
+# Data handling & visualization
+jupyter
+notebook
+ipython
+tqdm
+plotly
+networkx
+
+# Logic and Symbolic AI
+sympy
+prologparser
+pyswip    # SWI-Prolog Python interface
+python-constraint
+pulp      # Linear programming
+
+# Utility libraries
+requests
+beautifulsoup4
+regex
+joblib
+pathlib
+colorama
+
+# Optional but useful
+opencv-python
+pillow
+pyyaml
+jsonlines
+
+# For evaluation and metrics
+scikit-metrics
+
