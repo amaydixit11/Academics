@@ -1,0 +1,10 @@
+{
+    "pddl.planners": [
+        {
+            "kind": "PLANNING_AS_A_SERVICE",
+            "url": "https://solver.planning.domains:5001/package",
+            "title": "https://solver.planning.domains:5001/package - from session",
+            "canConfigure": true
+        }
+    ]
+}
