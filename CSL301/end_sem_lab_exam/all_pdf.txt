@@ -1,0 +1,643 @@
+Let’s Thread
+CSL301 - Operating Systems
+Class Assignment - 7
+Basic Thread Syntax Thread Function Arguments Questions
+Key Thread Functions and Types
+• #include <pthread.h> – Required for thread functions.
+• pthread t – Type for thread handles.
+• pthread create() – Starts a new thread.
+• pthread join() – Waits for a thread to finish.
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 2 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+pthread create()
+Function Syntax:
+1 int pthread_create ( pthread_t * thread , const pthread_attr_t
+* attr , void *(* start_routine ) ( void *) , void * arg ) ;
+Argument Purpose:
+• thread: Pointer to variable where thread ID will be stored.
+• attr: Thread attributes. Usually NULL (default).
+• start routine: Function thread will execute (must take void*
+argument, return void*).
+• arg: Pointer to data passed to thread function. (Can take any data
+type, pointer, struct variable etc.)
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 3 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+pthread join()
+Function Syntax:
+1 int pthread_join ( pthread_t thread , void ** retva ) ;
+Usage:
+• Use in main to wait until thread finishes.
+• retval can collect the returned value from thread function, if needed.
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 4 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+How to Create a Thread (C/pthreads)
+Example:
+1 # include < pthread .h >
+2 # include < stdio .h >
+3
+4 void * myfunc ( void * arg ) {
+5 printf ( " Hello from thread !\ n " ) ;
+6 return NULL ;
+7 }
+8
+9 int main () {
+10 pthread_t tid ;
+11 pthread_create (& tid , NULL , myfunc , NULL ) ;
+12 pthread_join ( tid , NULL ) ;
+13 printf ( " Thread finished !\ n " ) ;
+14 return 0;
+15 }
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 5 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+Passing Data to Threads
+• The thread function always takes a void* argument.
+• You can pass any pointer (e.g., to an int, struct, array) when creating
+the thread.
+Syntax Example:
+1 void * print_id ( void * arg ) {
+2 int id = *( int *) arg ;
+3 printf ( " Thread ID : % d \ n " , id ) ;
+4 return NULL ;
+5 }
+6
+7 int main () {
+8 pthread_t tid ;
+9 int myid = 42;
+10 pthread_create (& tid , NULL , print_id , & myid ) ;
+11 pthread_join ( tid , NULL ) ;
+12 }
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 6 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+Question 1
+Task: Write a program to create 2 threads and define two int as id1 and
+id2 for them. Define one global variable and one local variable in main and
+one local variable in thread function. Print the addresses of the global
+variable and the local variables in the main function and in both threads.
+Observe and explain which addresses are the same and which are different.
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 7 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+Helper Code
+1 void * thread_func ( void * arg ) {
+2 int thread_local ;
+3 printf ( " Thread % d : local address = %p , global address
+= % p \ n " ,
+4 *( int *) arg , ( void *) & thread_local , ( void *) & global_var ) ;
+5 return NULL ;
+6 }
+7
+8
+9 printf ( " Main : local address = %p , global address = % p \ n "
+,( void *) & main_local , ( void *) & global_var ) ;
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 8 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+Question 2
+Task: Write a program that creates 10 threads. Each thread prints its
+thread number (for example, "Thread 1 running"). The main process
+should wait for all threads to finish using pthread join, then print "All
+threads completed."
+• Does the order of thread messages (e.g., “Thread 1 running”,
+“Thread 2 running”, etc.) always stay the same on each run?
+• Why might the order vary between runs?
+Hint: Use a loop and an integer array to give each thread its own number
+argument.
+1 for ( int i = 0; i < N ; i ++) {
+2 pthread_join ( threads [ i ] , NULL ) ; }
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 9 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+Question 3
+Task: Write a program to create 10 threads. Each thread should
+increment a counter global variable 1000,000 times (no synchronization
+or locking).
+Question:
+• Why does the final value differ from the expected result?
+• What is a race condition, and how does it affect your program?
+Hint: Try running your program several times. Observe how the result
+changes. Think about what happens when two threads try to update the
+counter at the same time.
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 10 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+Question 4
+Task: Write a C program that creates a thread, it receives a number as
+input. The thread computes the square of this number and returns the
+result to the main function.
+1 void * result ;
+2 pthread_join ( tid , & result ) ;
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 11 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+Syntax:
+1 void * compute_square ( void * arg ) {
+2 int number = *( int *) arg ;
+3 int * result = malloc ( sizeof ( int ) ) ;
+4 * result = number * number ;
+5 return result ; // returned pointer must be freed
+6 }
+Use pthread join to collect results into the main function.
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 12 / 16
+Basic Thread Syntax Thread Function Arguments Questions
+Question 5
+Task:
+• Write a C program that creates N threads (e.g., N = 5).
+• Each thread receives its thread number as input.
+• Each thread computes the square of its number.
+• Each thread returns the result to the main function.
+• The main function waits for all threads, collects each result, prints
+results, and prints the sum of all returned values.
+Example Output:
+• Thread 1 returned 1
+• Thread 2 returned 4
+• Thread 3 returned 9
+• Thread 4 returned 16
+• Thread 5 returned 25
+• Sum of all thread results: 55
+CSL301 - Operating Systems Let’s Thread Class Assignment - 7 13 / 16
+
+
+Starting to Synchronize
+CSL301 - Operating Systems
+Class Assignment - 8
+Instructions
+• You are provided with reference C programs for today’s lab questions
+e.g ., semaphoresync.c, mutexdemo.c, etc.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 2 / 16
+Understanding Semaphores in C
+“Open The File semaphore sync.c”
+• sem t sem;
+Declares a semaphore object handle. The actual state is managed
+internally by the OS or library.
+• sem init(&sem, 0, 0);
+Initializes a semaphore for thread synchronization.
+• &sem: Pointer to the semaphore object to initialize.
+• 0 (second parameter): Scope flag. 0 means the semaphore is shared
+only between threads in the same process.
+• 0 (third parameter): Initial value of the semaphore. Here, it starts at 0,
+so threads waiting on it will block until another thread increments it.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 3 / 16
+Understanding Semaphores in C
+“Open The File semaphore sync.c”
+• sem post(&sem);
+Increments (signals) the semaphore, potentially unblocking waiting
+threads.
+• sem wait(&sem);
+Decrements (waits) on the semaphore; blocks if the value is zero until
+signaled.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 4 / 16
+Question 1: Thread Synchronization Using Semaphore
+Objective: To understand semaphores and control execution order.
+Given:
+• Use reference code semaphore sync.c from the provided ZIP file.
+• Use POSIX threads and semaphores to synchronize two threads.
+• Thread A prints “Hello from A”.
+• Thread B prints “Hello from B”.
+• The given code ensures Thread B executes only after Thread A
+finishes.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 5 / 16
+Question 1: Thread Synchronization Using Semaphore
+What to Do:
+1 Run the reference code and record the output.
+2 Modify it by removing semaphore logic and observe the output by
+running it multiple times.
+3 Explain why the order changes without synchronization.
+4 Add one more thread “threadC” which should execute only after
+threadB has done its execution. Note - You will need one more sem t
+variable
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 6 / 16
+Question 2: Rendezvous Between Two Threads
+Objective: Learn how two threads synchronize at a rendezvous point.
+Problem Statement:
+• Thread A prints: A1 (Starting task), A2 (Ending task)
+• Thread B prints: B1 (Starting task), B2 (Ending task)
+• Synchronization requirements:
+• A1 must happen before B2
+• B1 must happen before A2
+• The order of A1 and B1 does not matter
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 7 / 16
+Question 2: Rendezvous Between Two Threads
+• Use two semaphores: aArrived and bArrived
+• Thread A signals aArrived after printing A1 and waits on bArrived
+before printing A2
+• Thread B signals bArrived after printing B1 and waits on aArrived
+before printing B2
+• WAP to demonstrate this synchronization
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 8 / 16
+Mutex Declaration and Initialization
+Open - Reference code mutex demo.c
+Declaring a Mutex
+• pthread mutex t lock; declares a mutex variable named lock.
+• A mutex ensures only one thread can access a shared resource at a
+time.
+Initializing a Mutex
+• pthread mutex init(&lock, NULL); initializes the mutex before
+use.
+• &lock: Address of the mutex variable.
+• NULL: Uses default mutex attributes.
+• After initialization, the mutex is unlocked and ready for use.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 9 / 16
+Mutex Locking and Unlocking
+Locking a Mutex
+• pthread mutex lock(&lock); locks the mutex before accessing the
+shared resource.
+• If another thread holds the lock, this call blocks until the mutex is
+available.
+• Only one thread can hold the lock at a time.
+Unlocking a Mutex
+• pthread mutex unlock(&lock); unlocks the mutex after use.
+• Allows other threads waiting on the mutex to proceed.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 10 / 16
+Question 3: Thread Synchronization Using Mutex
+Objective: Prevent multiple threads from accessing a critical section
+simultaneously.
+Given:
+• Use reference code mutex demo.c from the ZIP file.
+• Compile and run the program.
+• Observe the counter values printed by both threads.
+• Observe how mutex ensures correct output.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 11 / 16
+Question 3: Thread Synchronization Using Mutex
+Objective: Understand race conditions and how mutex prevents
+inconsistent access.
+Task:
+• Implement a multithreaded counter upto 1000000 times with 10
+threads.
+• Part 1: Without mutex (observe race condition)
+• Part 2: With mutex (observe consistent count)
+• Record results and explain why race conditions occur without mutex.
+• WAP to accomplish the above tasks.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 12 / 16
+Question 4: Multiplex / Bounded Semaphore
+Objective: Limit threads simultaneously accessing a critical section.
+Task:
+• Use reference code multiplex semaphore.c from the ZIP file.
+• Compile and run the program.
+• Observe how many threads are in the critical section simultaneously.
+• Explain how the semaphore controls concurrent access and why it
+prevents more than the allowed number of threads from entering the
+critical section.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 13 / 16
+Question 5: Barrier Synchronization
+Objective: Understand barriers and their proper implementation.
+Task:
+• Create N threads (e.g., N = 5). Each prints:
+Thread X reached the barrier
+Thread X passed the barrier
+• Part A: Non-solution using mutex & semaphore (may deadlock)
+• Part B: Reusable barrier using mutex & 2 semaphores (correct)
+• Explain why Part A may fail and Part B succeeds.
+• Write C program for each part to accomplish the above tasks.
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 14 / 16
+Part A: Naive Barrier Implementation
+Naive Barrier Steps: barrier.c
+1 Given code -
+2 Each thread increments a shared count variable (protected by a
+mutex).
+3 If count == N, signal the barrier semaphore.
+4 All threads wait on the barrier semaphore before proceeding.
+Reference Pseudocode:
+rendezvous
+mutex.wait()
+count = count + 1
+mutex.signal()
+if count == n: barrier.signal()
+barrier.wait()
+critical point
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 15 / 16
+Part B: Reusable Barrier Solution
+Reusable Barrier Steps:
+1 Use a shared count variable, a mutex, and two semaphores
+(turnstile and turnstile2).
+2 Ensure no thread passes until all have arrived; barrier is reusable.
+Reference Pseudocode:
+rendezvous
+mutex.wait()
+count = count + 1
+mutex.signal()
+if count == n: turnstile.signal()
+turnstile.wait()
+turnstile.signal()
+critical point
+CSL301 - Operating Systems Starting to Synchronize Class Assignment - 8 16 / 16
+
+Dealing with Classical Problems
+CSL301 - Operating System Lab
+Class Assignment 9
+October 29, 2025
+Semaphore Reader-Writers Problem Dining Philosopher Submission
+Q1: Identify Race Condition and Fix with Mutex
+Problem Statement
+You are given the following producer-consumer code. This code has an
+issue that can cause data corruption when multiple threads access shared
+variables simultaneously. Run the code multiple times and observe the
+final counts. Identify the issue and fix it by adding a mutex for mutual
+exclusion.
+Given Code: pc bug.c
+CSL301 - Operating System Lab Class Assignment 9Dealing with Classical Problems October 29, 2025 2 / 9
+Semaphore Reader-Writers Problem Dining Philosopher Submission
+Q2: Add Finite Buffer Constraint
+Problem Statement
+The previous solution still has a limitation: the buffer is treated as
+unbounded, meaning producers can keep adding items and potentially
+overwrite unconsumed data when the buffer wraps around. Modify the
+code to handle a finite buffer where producers must wait when the buffer
+is full.
+Requirements
+• Buffer has a fixed capacity
+• Producers must block when all slots are full
+• Consumers must block when buffer is empty (Note: already ensured
+in previous solution)
+• Use two semaphores to track empty and full slots
+CSL301 - Operating System Lab Class Assignment 9Dealing with Classical Problems October 29, 2025 3 / 9
+Semaphore Reader-Writers Problem Dining Philosopher Submission
+Q3: Identify and Fix Deadlock
+Problem Statement
+The following code contains a deadlock scenario where threads can
+permanently block each other. Identify why the deadlock occurs and fix it.
+Given Code: pc deadlock.c
+CSL301 - Operating System Lab Class Assignment 9Dealing with Classical Problems October 29, 2025 4 / 9
+Semaphore Reader-Writers Problem Dining Philosopher Submission
+Q4: Identify Error in Basic Readers-Writers and Fix It
+Problem Statement
+You are given a readers-writers implementation where multiple readers can
+access shared data simultaneously, but writers need exclusive access. The
+code below has a critical bug that can cause data corruption. Identify the
+error and provide the correct solution.
+Given Code: rw bug.c
+CSL301 - Operating System Lab Class Assignment 9Dealing with Classical Problems October 29, 2025 5 / 9
+Semaphore Reader-Writers Problem Dining Philosopher Submission
+Q5: Implement Readers–Writers using Lightswitch Pattern
+Problem Statement
+The Lightswitch pattern allows multiple readers to access a shared
+resource simultaneously, while ensuring that writers have exclusive access
+when needed. Implement a solution using semaphores where:
+• Multiple readers can enter the critical section concurrently.
+• Only the first reader locks the writers out.
+• Only the last reader releases the writers.
+• Writers require exclusive access to the shared resource.
+• update void *reader(void *arg) and void *writer(void
+*arg) code
+Given Code: lightswitch.c
+CSL301 - Operating System Lab Class Assignment 9Dealing with Classical Problems October 29, 2025 6 / 9
+Semaphore Reader-Writers Problem Dining Philosopher Submission
+Q6: Identify and Fix Deadlock in Dining Philosophers
+Problem Statement
+Five philosophers sit at a round table with five forks (one between each
+pair of adjacent philosophers). Each philosopher alternates between
+thinking and eating. To eat, a philosopher needs both the left and right
+forks. The code below implements this but has a deadlock problem. Run
+the code, observe the deadlock, identify why it happens, and fix it using
+the Lower ID First strategy.
+Given Code: dp deadlock.c
+CSL301 - Operating System Lab Class Assignment 9Dealing with Classical Problems October 29, 2025 7 / 9
+Semaphore Reader-Writers Problem Dining Philosopher Submission
+Q7: Dining Philosophers with User-Defined N (Optional)
+Problem Statement
+Implement a deadlock-free dining philosophers solution where the user can
+specify the number of philosophers (n). The solution must work correctly
+for any n ≥ 2.
+CSL301 - Operating System Lab Class Assignment 9Dealing with Classical Problems October 29, 2025 8 / 9
+Semaphore Reader-Writers Problem Dining Philosopher Submission
+Submission Checklist
+• Ensure your code compiles without warnings or errors.
+• The program should run and produce correct output.
+• Submit all files in a single compressed folder.
+• Attach screenshots of your final output in the report.
+Good Luck!
+CSL301 - Operating System Lab Class Assignment 9Dealing with Classical Problems October 29, 2025 9 / 9
+
+Condition Variables
+CSL301 - Operating System Lab
+Class Assignment 10
+November 4, 2025
+Condition Variables Submission
+Q1: Identify and Implement Ordered Thread Execution
+Problem Description
+You are given an incomplete program that spawns three threads — A, B,
+and C — each responsible for printing its name. However, the threads
+print in random order (e.g., C A B A C B), leading to unpredictable
+output. Your task is to ensure that the threads print strictly in the order A
+ B  C, repeating this pattern for n cycles.
+Given Code: q1.c
+Reference Code: q1 help.c
+CSL301 - Operating System Lab Class Assignment 10 Condition Variables November 4, 2025 2 / 7
+Condition Variables Submission
+Q2: Identify Starvation in Reader–Writer Implementation
+and Fix
+Problem Description
+You are given a simplified Readers–Writers problem implementation where:
+Multiple readers can read simultaneously.
+Writers require exclusive access to the shared resource.
+However, upon execution, you will notice that writers are starved — if
+readers keep arriving, writers may never get a chance to write. Complete
+the given code by adding appropriate condition variable waits and signals
+to ensure fairness between readers and writers.
+Given Code: q2.c
+CSL301 - Operating System Lab Class Assignment 10 Condition Variables November 4, 2025 3 / 7
+Condition Variables Submission
+Q3: Identify and Fix Missing Synchronization in
+Thread-safe Logger
+Problem Description
+You are given a multi-threaded logging system in which several worker
+threads generate log messages, and a single logger thread writes these
+messages to a file. However, the provided implementation is missing
+proper synchronization between the workers and the logger. As a result:
+• The logger thread may busy-wait, consuming high CPU while
+checking for new messages, or
+• Some log messages may be lost if worker threads finish too quickly.
+Your task is to identify and fix this synchronization issue using proper
+condition variable mechanisms.
+Given Code: q3.c
+CSL301 - Operating System Lab Class Assignment 10 Condition Variables November 4, 2025 4 / 7
+Condition Variables Submission
+Q4: Identify and Implement Sleep/Wakeup Mechanism
+Problem Description
+You are given a program that simulates a simplified operating system
+scheduler, where multiple threads can go to sleep and later be woken up
+by another thread. However, the current implementation is incomplete —
+the sleep and wakeup behavior does not work correctly. When you run the
+program, you may observe that:
+• Some threads continuously spin, using CPU while “waiting,” or
+• Sleeping threads never wake up when the waker tries to signal them.
+Each thread in the program has its own structure. Implement the correct
+behavior using condition variables.
+Given Code: q4.c
+CSL301 - Operating System Lab Class Assignment 10 Condition Variables November 4, 2025 5 / 7
+Condition Variables Submission
+Q5: Identify Busy-wait and Fix Job Scheduler
+Problem Description
+You are given a job scheduling system with:
+• One dispatcher thread that assigns jobs.
+• Multiple worker threads that execute jobs.
+Currently, the implementation uses busy-waiting — both the dispatcher
+and the workers continuously check job counts, wasting CPU time.
+Identify that this issue is caused by missing condition variable waits, and
+fix the code.
+Given Code: q5.c
+CSL301 - Operating System Lab Class Assignment 10 Condition Variables November 4, 2025 6 / 7
+Condition Variables Submission
+Submission Checklist
+• Ensure your code compiles without warnings or errors.
+• The program should run and produce correct output.
+• Submit all files in a single compressed folder.
+• Attach screenshots of your final output in the report.
+Good Luck!
+CSL301 - Operating System Lab Class Assignment 10 Condition Variables November 4, 2025 7 / 7
+
+Operating System
+Lab Assignment
+[CSL301]
+File Systems and Process Control
+Time: 90 min
+Instructor: Dr. Dhiman Saha
+November 19, 2025
+Process Control (Q1) File System APIs File Metadata Submission
+Q1: The ”Double-Tap” Exit (Two-Strike Signal)
+Problem Description
+Implement a safety feature where a running user process (opted into this mode) is
+only terminated upon the second consecutive press of Ctrl+C. The first press
+should only issue a warning.
+Prerequisites: Wire up the twostrike system call.
+Kernel Logic: Implement the interrupt handling in console.c.
+User Test: Create a test program that enables the mode and spins.
+Add the System Call:Create a new system call int twostrike(int enabled),
+Update syscall.h, syscall.c, user.h, and usys.S.
+[CSL301] File Systems and Process Control Time: 90 min Instructor: Dr. DhiOperating System Lab Assignment November 19, 2025 2 / 8
+Process Control (Q1) File System APIs File Metadata Submission
+Q1: Task 1 & 2 Setup (proc.h / syscall / console.c)
+Task List: Prerequisites and Data Setup
+Process Metadata: Update kernel/proc.h by adding two integer fields to the
+struct proc to track the mode and the strike count.
+Initialization: Ensure these new fields are initialized to 0 in kernel/proc.c inside
+the allocproc function.
+System Call (Syscall) Setup: Implement the int twostrike(int enabled)
+system call in kernel/sysproc.c to set the current process’s twostrike mode flag.
+REPLACE FUNCTION: You must replace the existing consoleintr function
+in kernel/console.c with the incomplete code provided in kernel code q1.pdf.
+LOCATE: Find BLANK 1 through BLANK 5 in the new consoleintr
+function.
+COMPLETE: Fill the blanks to correctly handle the two-strike logic.
+[CSL301] File Systems and Process Control Time: 90 min Instructor: Dr. DhiOperating System Lab Assignment November 19, 2025 3 / 8
+Process Control (Q1) File System APIs File Metadata Submission
+Q1: Task 3 User Test Program (twostriketest.c)
+Task List: User Program
+Create File: Create a new user program file: user/twostriketest.c.
+Copy Code: Copy the incomplete code provided in user code q1.pdf into this
+new file.
+Complete Code: Fill in BLANK 6 and BLANK 7 to enable the mode and
+create a spinning loop.
+Makefile: Update Makefile to add twostriketest to the UPROGS list.
+Hints for twostriketest.c Blanks:
+(B6): Use the name of the system call you defined in Task 3.
+(B7): The condition for a spin loop is the simplest value that is always true (e.g.,
+1).
+[CSL301] File Systems and Process Control Time: 90 min Instructor: Dr. DhiOperating System Lab Assignment November 19, 2025 4 / 8
+Process Control (Q1) File System APIs File Metadata Submission
+Q2: Implement a Simplified ls Command
+Problem Description
+You are given an incomplete C program that mimics the basic behaviour of
+the Linux ls command.
+• List all files in a directory.
+• When called with the -l flag, print detailed information about each
+file, similar to ls -l.
+[CSL301] File Systems and Process Control Time: 90 min Instructor: Dr. DhiOperating System Lab Assignment November 19, 2025 5 / 8
+Process Control (Q1) File System APIs File Metadata Submission
+Q3: Combined Copy/Move File Utility
+Problem Description
+You are given an incomplete program that can behave as both a copy (cp)
+and move (mv) command depending on how it is executed.
+• Perform a copy operation if run as cp.
+• Perform a move operation if run as mv.
+• Work only using system calls — open(), read(), write(),
+close(), stat(), rename(), and unlink().
+• Preserve file permissions when creating the destination file.
+• Support two usage modes:
+1 By running the executable directly as cp or mv (e.g., ./cp file1
+file2).
+2 By passing cp or mv as the first argument (e.g., ./a.out cp file1
+file2).
+[CSL301] File Systems and Process Control Time: 90 min Instructor: Dr. DhiOperating System Lab Assignment November 19, 2025 6 / 8
+Process Control (Q1) File System APIs File Metadata Submission
+Q4: File Creation and Deletion with Metadata
+Problem Description
+You are given a simulation of a simple file system that uses inodes to
+represent files. Each inode contains metadata such as creator ID, creation
+time, and a short description.
+• Complete the functions to create and delete files.
+• Properly fill inode metadata when creating a file.
+• Free allocated resources (inode and data blocks) when deleting a file.
+• Display correct inode information (creator ID, timestamp,
+description).
+[CSL301] File Systems and Process Control Time: 90 min Instructor: Dr. DhiOperating System Lab Assignment November 19, 2025 7 / 8
+
+Let’s Thread
+CSL301 - Operating Systems
+Home Assignment - 4
+Question 1
+Task:
+• Write a C program that divides an array of 100 integers (values 1 to
+100) into 10 segments.
+• Create 11 threads:
+• The first 10 threads each compute the sum of a segment of 10
+elements and return the result.
+• The 11th thread collects the 10 results from the previous threads,
+computes their sum, and returns the final total to the main function,
+which prints it.
+• Use a single thread function for all threads, and avoid unnecessary
+variables in your implementation.
+CSL301 - Operating Systems Let’s Thread Home Assignment - 4 2 / 6
+Question 1
+Example Output:
+• Thread 1 partial sum: 55
+• Thread 2 partial sum: 155
+• Thread 3 partial sum: 255
+• Thread 4 partial sum: 355
+• Thread 5 partial sum: 455
+• Thread 6 partial sum: 555
+• Thread 7 partial sum: 655
+• Thread 8 partial sum: 755
+• Thread 9 partial sum: 855
+• Thread 10 partial sum: 955
+• Total sum: 5050
+CSL301 - Operating Systems Let’s Thread Home Assignment - 4 3 / 6
+Syntax Tip:
+1 void * partial_sum ( void * arg ) {
+2 args * a = ( args *) arg ;
+3 int sum = 0;
+4 for ( int i = a - > start ; i < a - > start + SEGMENT_SIZE ; ++
+i )
+5 sum += a - > arr [ i ];
+6 int * result = malloc ( sizeof ( int ) ) ;
+7 * result = sum ;
+8 return result ;
+9 }
+Give each thread a pointer to its array segment, and collect results using
+pthread join.
+CSL301 - Operating Systems Let’s Thread Home Assignment - 4 4 / 6
+Question 2
+Task:
+• Each thread sums its segment of an integer array and returns the
+partial sum.
+• The final (11th) thread sums all partial sums from the first 10 threads.
+• The main process waits for the final thread, then divides the total
+sum by the number of elements to compute the average.
+• Print the computed average in the main function.
+Example Output:
+• Thread 1 partial sum: 55
+• Thread 2 partial sum: 155
+• . . .
+• Thread 10 partial sum: 955
+• Total sum: 5050
+• Average: 50.5
+CSL301 - Operating Systems Let’s Thread Home Assignment - 4 5 / 6
+Question 3: Threaded Maximum in Array Segments
+Task:
+• Given an array of size in muliplte of N and N+1 threads, divide the
+array into N distinct segments.
+• Each thread finds the maximum value within its assigned segment.
+• One final thread collects all maxima from the previous threads and
+determines the overall maximum.
+• The final result is returned to the main function.
+Example Output:
+• Thread 1 max: 16
+• Thread 2 max: 32
+• . . .
+• Thread N max: 100
+• Overall max: 100
+CSL301 - Operating Systems Let’s Thread Home Assignment - 4 6 / 6
