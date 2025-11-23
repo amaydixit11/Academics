@@ -1,0 +1,987 @@
+/*
+================================================================================
+XV6 OPERATING SYSTEM - MEGA PRACTICE TEMPLATE
+Multiple Easy Questions Similar to Double-Tap Exit
+================================================================================
+Based on: File Systems and Process Control Assignment
+Contains: 15 Easy-to-Medium Practice Questions
+Time: 90 minutes each question
+================================================================================
+*/
+
+/*
+================================================================================
+QUESTION 1: Single-Strike Process Pause
+================================================================================
+Problem: Implement a feature where pressing Ctrl+P pauses a process. 
+Pressing Ctrl+P again resumes it.
+
+Tasks:
+1. Add 'paused' field to struct proc in kernel/proc.h
+2. Create system call: int pausemode(int enabled)
+3. Modify consoleintr() to handle Ctrl+P
+4. Create user test program: pausetest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+// Add to struct proc:
+struct proc {
+  // ... existing fields ...
+  int pause_enabled;     // BLANK 1: Add pause mode flag
+  int is_paused;         // BLANK 2: Add paused state flag
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_pausemode(void) {
+  int enabled;
+  
+  // BLANK 3: Get argument from user
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 4: Set pause_enabled field
+  p->pause_enabled = enabled;
+  p->is_paused = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+void consoleintr(int (*getc)(void)) {
+  int c;
+  struct proc *p = myproc();
+  
+  while ((c = getc()) >= 0) {
+    switch (c) {
+      case C('P'):  // Ctrl+P
+        if (p && p->pause_enabled) {
+          // BLANK 5: Toggle paused state
+          p->is_paused = !p->is_paused;
+          
+          if (p->is_paused)
+            cprintf("\n[PAUSED] Press Ctrl+P to resume\n");
+          else
+            cprintf("\n[RESUMED]\n");
+        }
+        break;
+      // ... other cases ...
+    }
+  }
+}
+
+// ============ USER/PAUSETEST.C ============
+int main(void) {
+  // BLANK 6: Enable pause mode
+  pausemode(1);
+  
+  printf(1, "Process running. Press Ctrl+P to pause/resume\n");
+  
+  // BLANK 7: Infinite loop
+  while (1) {
+    printf(1, "Working...\n");
+    sleep(100);
+  }
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 2: Triple-Tap Process Kill
+================================================================================
+Problem: Require THREE consecutive Ctrl+K presses to kill a process.
+
+Tasks:
+1. Add kill protection fields to struct proc
+2. Create system call: int killprotect(int enabled)
+3. Handle Ctrl+K in consoleintr()
+4. Create test program: killtest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int kill_protect_mode;    // BLANK 8: Kill protection enabled?
+  int kill_strike_count;    // BLANK 9: Number of Ctrl+K presses
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_killprotect(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 10: Enable kill protection and reset strikes
+  p->kill_protect_mode = enabled;
+  p->kill_strike_count = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+// In consoleintr():
+case C('K'):  // Ctrl+K
+  if (p && p->kill_protect_mode) {
+    // BLANK 11: Increment strike count
+    p->kill_strike_count++;
+    
+    // BLANK 12: Check if 3 strikes reached
+    if (p->kill_strike_count >= 3) {
+      cprintf("\n[KILL] Third strike - terminating\n");
+      p->killed = 1;
+      p->kill_strike_count = 0;
+    } else {
+      cprintf("\n[WARNING] Strike %d/3\n", p->kill_strike_count);
+    }
+  }
+  break;
+
+// ============ USER/KILLTEST.C ============
+int main(void) {
+  // BLANK 13: Enable kill protection
+  killprotect(1);
+  
+  printf(1, "Protected process. Press Ctrl+K three times to kill\n");
+  
+  // BLANK 14: Spin loop
+  while (1);
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 3: Double-Tap Process Priority Boost
+================================================================================
+Problem: Double-press Ctrl+B to boost process priority.
+
+Tasks:
+1. Add priority fields to struct proc
+2. Create system call: int priorityboost(int enabled)
+3. Handle double Ctrl+B in consoleintr()
+4. Create test: prioritytest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int boost_mode;           // BLANK 15: Boost mode enabled?
+  int boost_press_count;    // BLANK 16: Number of Ctrl+B presses
+  int priority_boosted;     // BLANK 17: Is priority currently boosted?
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_priorityboost(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 18: Set boost mode
+  p->boost_mode = enabled;
+  p->boost_press_count = 0;
+  p->priority_boosted = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('B'):  // Ctrl+B
+  if (p && p->boost_mode) {
+    // BLANK 19: Increment press count
+    p->boost_press_count++;
+    
+    // BLANK 20: Check for double press
+    if (p->boost_press_count >= 2) {
+      p->priority_boosted = !p->priority_boosted;
+      cprintf("\n[PRIORITY] %s\n", 
+              p->priority_boosted ? "BOOSTED" : "NORMAL");
+      p->boost_press_count = 0;
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 4: Single-Tap Debug Mode Toggle
+================================================================================
+Problem: Press Ctrl+D once to toggle debug output for a process.
+
+Tasks:
+1. Add debug_mode field to struct proc
+2. Create system call: int debugmode(int enabled)
+3. Handle Ctrl+D in consoleintr()
+4. Create test: debugtest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int debug_enabled;        // BLANK 21: Can toggle debug mode?
+  int debug_active;         // BLANK 22: Is debug mode currently on?
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_debugmode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 23: Enable debug capability
+  p->debug_enabled = enabled;
+  p->debug_active = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('D'):  // Ctrl+D
+  if (p && p->debug_enabled) {
+    // BLANK 24: Toggle debug mode
+    p->debug_active = !p->debug_active;
+    
+    cprintf("\n[DEBUG] Mode %s\n", p->debug_active ? "ON" : "OFF");
+  }
+  break;
+
+// ============ USER/DEBUGTEST.C ============
+int main(void) {
+  // BLANK 25: Enable debug mode capability
+  debugmode(1);
+  
+  printf(1, "Press Ctrl+D to toggle debug mode\n");
+  
+  int counter = 0;
+  while (1) {
+    // BLANK 26: Add condition to print when debug is on
+    // if (debug_is_active()) { ... }
+    
+    counter++;
+    sleep(50);
+  }
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 5: Double-Strike Process Snapshot
+================================================================================
+Problem: Two Ctrl+S presses to save process state snapshot.
+
+Tasks:
+1. Add snapshot fields to struct proc
+2. Create system call: int snapshotmode(int enabled)
+3. Handle Ctrl+S in consoleintr()
+4. Create test: snapshottest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int snapshot_enabled;     // BLANK 27: Snapshot mode enabled?
+  int snapshot_strikes;     // BLANK 28: Ctrl+S press count
+  int snapshot_saved;       // BLANK 29: Has snapshot been saved?
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_snapshotmode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 30: Enable snapshot mode
+  p->snapshot_enabled = enabled;
+  p->snapshot_strikes = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('S'):  // Ctrl+S
+  if (p && p->snapshot_enabled) {
+    // BLANK 31: Increment strikes
+    p->snapshot_strikes++;
+    
+    // BLANK 32: Check for double press
+    if (p->snapshot_strikes >= 2) {
+      cprintf("\n[SNAPSHOT] State saved!\n");
+      p->snapshot_saved = 1;
+      p->snapshot_strikes = 0;
+      
+      // Save process state here
+    } else {
+      cprintf("\n[SNAPSHOT] Press again to confirm\n");
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 6: Triple-Tap Resource Release
+================================================================================
+Problem: Require three Ctrl+R presses to release all resources.
+
+Tasks:
+1. Add resource release fields to struct proc
+2. Create system call: int resourcemode(int enabled)
+3. Handle Ctrl+R in consoleintr()
+4. Create test: resourcetest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int resource_protect;     // BLANK 33: Resource protection on?
+  int resource_strikes;     // BLANK 34: Ctrl+R press count
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_resourcemode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 35: Enable resource protection
+  p->resource_protect = enabled;
+  p->resource_strikes = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('R'):  // Ctrl+R
+  if (p && p->resource_protect) {
+    // BLANK 36: Increment strikes
+    p->resource_strikes++;
+    
+    // BLANK 37: Check for triple press
+    if (p->resource_strikes >= 3) {
+      cprintf("\n[RESOURCE] Releasing all resources\n");
+      // Release resources here
+      p->resource_strikes = 0;
+    } else {
+      cprintf("\n[RESOURCE] Strike %d/3\n", p->resource_strikes);
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 7: Single-Press Timer Start/Stop
+================================================================================
+Problem: Press Ctrl+T to start/stop a process timer.
+
+Tasks:
+1. Add timer fields to struct proc
+2. Create system call: int timermode(int enabled)
+3. Handle Ctrl+T in consoleintr()
+4. Create test: timertest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int timer_enabled;        // BLANK 38: Timer mode enabled?
+  int timer_running;        // BLANK 39: Is timer currently running?
+  uint timer_start;         // BLANK 40: Timer start tick count
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_timermode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 41: Enable timer mode
+  p->timer_enabled = enabled;
+  p->timer_running = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('T'):  // Ctrl+T
+  if (p && p->timer_enabled) {
+    // BLANK 42: Toggle timer
+    p->timer_running = !p->timer_running;
+    
+    if (p->timer_running) {
+      // BLANK 43: Record start time
+      p->timer_start = ticks;
+      cprintf("\n[TIMER] Started\n");
+    } else {
+      uint elapsed = ticks - p->timer_start;
+      cprintf("\n[TIMER] Stopped - Elapsed: %d ticks\n", elapsed);
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 8: Double-Tap Memory Info Display
+================================================================================
+Problem: Two Ctrl+M presses to display memory information.
+
+Tasks:
+1. Add memory info fields to struct proc
+2. Create system call: int meminfo(int enabled)
+3. Handle Ctrl+M in consoleintr()
+4. Create test: meminfotest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int meminfo_enabled;      // BLANK 44: Memory info mode enabled?
+  int meminfo_strikes;      // BLANK 45: Ctrl+M press count
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_meminfo(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 46: Enable memory info mode
+  p->meminfo_enabled = enabled;
+  p->meminfo_strikes = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('M'):  // Ctrl+M
+  if (p && p->meminfo_enabled) {
+    // BLANK 47: Increment strikes
+    p->meminfo_strikes++;
+    
+    // BLANK 48: Check for double press
+    if (p->meminfo_strikes >= 2) {
+      cprintf("\n[MEMORY] PID: %d, Size: %d\n", p->pid, p->sz);
+      p->meminfo_strikes = 0;
+    } else {
+      cprintf("\n[MEMORY] Press again to confirm\n");
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 9: Triple-Strike File Close Protection
+================================================================================
+Problem: Require three Ctrl+F presses before closing all open files.
+
+Tasks:
+1. Add file close fields to struct proc
+2. Create system call: int fileprotect(int enabled)
+3. Handle Ctrl+F in consoleintr()
+4. Create test: fileprotecttest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int file_protect_mode;    // BLANK 49: File protection enabled?
+  int file_close_strikes;   // BLANK 50: Ctrl+F press count
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_fileprotect(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 51: Enable file protection
+  p->file_protect_mode = enabled;
+  p->file_close_strikes = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('F'):  // Ctrl+F
+  if (p && p->file_protect_mode) {
+    // BLANK 52: Increment strikes
+    p->file_close_strikes++;
+    
+    // BLANK 53: Check for triple press
+    if (p->file_close_strikes >= 3) {
+      cprintf("\n[FILES] Closing all files\n");
+      // Close all open files
+      p->file_close_strikes = 0;
+    } else {
+      cprintf("\n[FILES] Strike %d/3\n", p->file_close_strikes);
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 10: Single-Press Logging Toggle
+================================================================================
+Problem: Press Ctrl+L once to enable/disable process logging.
+
+Tasks:
+1. Add logging fields to struct proc
+2. Create system call: int logmode(int enabled)
+3. Handle Ctrl+L in consoleintr()
+4. Create test: logtest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int log_capability;       // BLANK 54: Can toggle logging?
+  int log_active;           // BLANK 55: Is logging currently on?
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_logmode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 56: Enable logging capability
+  p->log_capability = enabled;
+  p->log_active = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('L'):  // Ctrl+L
+  if (p && p->log_capability) {
+    // BLANK 57: Toggle logging
+    p->log_active = !p->log_active;
+    
+    cprintf("\n[LOG] %s\n", p->log_active ? "ENABLED" : "DISABLED");
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 11: Double-Strike Network Disconnect
+================================================================================
+Problem: Two Ctrl+N presses to disconnect network connections.
+
+Tasks:
+1. Add network fields to struct proc
+2. Create system call: int netprotect(int enabled)
+3. Handle Ctrl+N in consoleintr()
+4. Create test: nettest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int net_protect_mode;     // BLANK 58: Network protection on?
+  int net_disconnect_count; // BLANK 59: Ctrl+N press count
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_netprotect(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 60: Enable network protection
+  p->net_protect_mode = enabled;
+  p->net_disconnect_count = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('N'):  // Ctrl+N
+  if (p && p->net_protect_mode) {
+    // BLANK 61: Increment count
+    p->net_disconnect_count++;
+    
+    // BLANK 62: Check for double press
+    if (p->net_disconnect_count >= 2) {
+      cprintf("\n[NETWORK] Disconnecting\n");
+      p->net_disconnect_count = 0;
+    } else {
+      cprintf("\n[NETWORK] Press again to disconnect\n");
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 12: Triple-Tap Checkpoint Save
+================================================================================
+Problem: Three Ctrl+H presses to save process checkpoint.
+
+Tasks:
+1. Add checkpoint fields to struct proc
+2. Create system call: int checkpointmode(int enabled)
+3. Handle Ctrl+H in consoleintr()
+4. Create test: checkpointtest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int checkpoint_enabled;   // BLANK 63: Checkpoint mode on?
+  int checkpoint_strikes;   // BLANK 64: Ctrl+H press count
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_checkpointmode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 65: Enable checkpoint mode
+  p->checkpoint_enabled = enabled;
+  p->checkpoint_strikes = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('H'):  // Ctrl+H
+  if (p && p->checkpoint_enabled) {
+    // BLANK 66: Increment strikes
+    p->checkpoint_strikes++;
+    
+    // BLANK 67: Check for triple press
+    if (p->checkpoint_strikes >= 3) {
+      cprintf("\n[CHECKPOINT] Saved\n");
+      p->checkpoint_strikes = 0;
+    } else {
+      cprintf("\n[CHECKPOINT] Strike %d/3\n", p->checkpoint_strikes);
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 13: Single-Press Performance Stats
+================================================================================
+Problem: Press Ctrl+Q once to display performance statistics.
+
+Tasks:
+1. Add stats fields to struct proc
+2. Create system call: int statsmode(int enabled)
+3. Handle Ctrl+Q in consoleintr()
+4. Create test: statstest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int stats_enabled;        // BLANK 68: Stats mode enabled?
+  int context_switches;     // BLANK 69: Count of context switches
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_statsmode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 70: Enable stats mode
+  p->stats_enabled = enabled;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('Q'):  // Ctrl+Q
+  if (p && p->stats_enabled) {
+    // BLANK 71: Display statistics
+    cprintf("\n[STATS] PID: %d, Switches: %d\n", 
+            p->pid, p->context_switches);
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 14: Double-Strike Background Mode
+================================================================================
+Problem: Two Ctrl+G presses to move process to background.
+
+Tasks:
+1. Add background fields to struct proc
+2. Create system call: int bgmode(int enabled)
+3. Handle Ctrl+G in consoleintr()
+4. Create test: bgtest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int bg_mode_enabled;      // BLANK 72: Background mode capability?
+  int bg_strikes;           // BLANK 73: Ctrl+G press count
+  int is_background;        // BLANK 74: Currently in background?
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_bgmode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 75: Enable background mode capability
+  p->bg_mode_enabled = enabled;
+  p->bg_strikes = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('G'):  // Ctrl+G
+  if (p && p->bg_mode_enabled) {
+    // BLANK 76: Increment strikes
+    p->bg_strikes++;
+    
+    // BLANK 77: Check for double press
+    if (p->bg_strikes >= 2) {
+      p->is_background = !p->is_background;
+      cprintf("\n[MODE] %s\n", 
+              p->is_background ? "BACKGROUND" : "FOREGROUND");
+      p->bg_strikes = 0;
+    } else {
+      cprintf("\n[MODE] Press again to toggle\n");
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+QUESTION 15: Triple-Strike Force Cleanup
+================================================================================
+Problem: Three Ctrl+E presses to force cleanup all process resources.
+
+Tasks:
+1. Add cleanup fields to struct proc
+2. Create system call: int cleanupmode(int enabled)
+3. Handle Ctrl+E in consoleintr()
+4. Create test: cleanuptest.c
+*/
+
+// ============ KERNEL/PROC.H ============
+struct proc {
+  // ... existing fields ...
+  int cleanup_protect;      // BLANK 78: Cleanup protection on?
+  int cleanup_strikes;      // BLANK 79: Ctrl+E press count
+};
+
+// ============ KERNEL/SYSPROC.C ============
+int sys_cleanupmode(void) {
+  int enabled;
+  
+  if (argint(0, &enabled) < 0)
+    return -1;
+  
+  struct proc *p = myproc();
+  
+  // BLANK 80: Enable cleanup protection
+  p->cleanup_protect = enabled;
+  p->cleanup_strikes = 0;
+  
+  return 0;
+}
+
+// ============ KERNEL/CONSOLE.C ============
+case C('E'):  // Ctrl+E
+  if (p && p->cleanup_protect) {
+    // BLANK 81: Increment strikes
+    p->cleanup_strikes++;
+    
+    // BLANK 82: Check for triple press
+    if (p->cleanup_strikes >= 3) {
+      cprintf("\n[CLEANUP] Force cleanup initiated\n");
+      // Cleanup code here
+      p->cleanup_strikes = 0;
+    } else {
+      cprintf("\n[CLEANUP] Strike %d/3\n", p->cleanup_strikes);
+    }
+  }
+  break;
+
+
+/*
+================================================================================
+COMMON SETUP FOR ALL QUESTIONS
+================================================================================
+*/
+
+// ============ KERNEL/SYSCALL.H ============
+// Add these system call numbers (adjust based on which questions you implement):
+/*
+#define SYS_pausemode      22
+#define SYS_killprotect    23
+#define SYS_priorityboost  24
+#define SYS_debugmode      25
+#define SYS_snapshotmode   26
+#define SYS_resourcemode   27
+#define SYS_timermode      28
+#define SYS_meminfo        29
+#define SYS_fileprotect    30
+#define SYS_logmode        31
+#define SYS_netprotect     32
+#define SYS_checkpointmode 33
+#define SYS_statsmode      34
+#define SYS_bgmode         35
+#define SYS_cleanupmode    36
+*/
+
+// ============ KERNEL/SYSCALL.C ============
+// Add to syscalls array:
+/*
+extern int sys_pausemode(void);
+extern int sys_killprotect(void);
+extern int sys_priorityboost(void);
+// ... etc for all implemented system calls
+
+static int (*syscalls[])(void) = {
+  // ... existing entries ...
+  [SYS_pausemode]      sys_pausemode,
+  [SYS_killprotect]    sys_killprotect,
+  [SYS_priorityboost]  sys_priorityboost,
+  // ... etc
+};
+*/
+
+// ============ USER/USER.H ============
+// Add function declarations:
+/*
+int pausemode(int);
+int killprotect(int);
+int priorityboost(int);
+int debugmode(int);
+int snapshotmode(int);
+int resourcemode(int);
+int timermode(int);
+int meminfo(int);
+int fileprotect(int);
+int logmode(int);
+int netprotect(int);
+int checkpointmode(int);
+int statsmode(int);
+int bgmode(int);
+int cleanupmode(int);
+*/
+
+// ============ USER/USYS.S ============
+// Add entries:
+/*
+SYSCALL(pausemode)
+SYSCALL(killprotect)
+SYSCALL(priorityboost)
+SYSCALL(debugmode)
+SYSCALL(snapshotmode)
+SYSCALL(resourcemode)
+SYSCALL(timermode)
+SYSCALL(meminfo)
+SYSCALL(fileprotect)
+SYSCALL(logmode)
+SYSCALL(netprotect)
+SYSCALL(checkpointmode)
+SYSCALL(statsmode)
+SYSCALL(bgmode)
+SYSCALL(cleanupmode)
+*/
+
+// ============ MAKEFILE ============
+// Add to UPROGS:
+/*
+_pausetest\
+_killtest\
+_prioritytest\
+_debugtest\
+_snapshottest\
+_resourcetest\
+_timertest\
+_meminfotest\
+_fileprotecttest\
+_logtest\
+_nettest\
+_checkpointtest\
+_statstest\
+_bgtest\
+_cleanuptest\
+*/
+
+/*
+================================================================================
+TESTING NOTES
+================================================================================
+
+For each question:
+1. Compile and run: make qemu
+2. Run the test program: testname (e.g., pausetest)
+3. Press the appropriate Ctrl+key combination
+4. Verify the behavior matches the requirements
+
+Example testing sequence for Question 1 (Pause Mode):
+$ pausetest
+Process running. Press Ctrl+P to pause/resume
+Working...
+Working...
+^P
+[PAUSED] Press Ctrl+P to resume
+^P
+[RESUMED]
+Working...
+
+================================================================================
+*/

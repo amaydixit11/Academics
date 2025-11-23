@@ -1,0 +1,3656 @@
+Directory structure:
+└── end_sem_lab_exam/
+    ├── CA10/
+    │   ├── CA10_12340220.zip
+    │   ├── lab10(1).zip
+    │   ├── CA10_12340220/
+    │   │   ├── q1_12340220.c
+    │   │   ├── q2_12340220.c
+    │   │   ├── q3_12340220.c
+    │   │   ├── q4_12340220.c
+    │   │   └── q5_12340220.c
+    │   └── OS codes/
+    │       ├── q1.c
+    │       ├── q1_help.c
+    │       ├── q2.c
+    │       ├── q3.c
+    │       ├── q4.c
+    │       └── q5.c
+    ├── CA11/
+    │   ├── CA11_12340220.zip
+    │   ├── classAssignment11.zip
+    │   ├── CA11_12340220/
+    │   │   ├── q2_12340220
+    │   │   ├── q2_12340220.c
+    │   │   ├── q3_12340220
+    │   │   ├── q3_12340220.c
+    │   │   ├── q4_12340220
+    │   │   ├── q4_12340220.c
+    │   └── codes/
+    │       ├── q2.c
+    │       ├── q3.c
+    │       └── q4.c
+    ├── CA7/
+    │   ├── CA7_12340220.zip
+    │   ├── code.zip
+    │   ├── CA7_12340220/
+    │   │   ├── Q1_12340220.c
+    │   │   ├── Q2_12340220.c
+    │   │   ├── Q3_12340220.c
+    │   │   ├── Q4_12340220.c
+    │   │   └── Q5_12340220.c
+    │   └── code/
+    │       ├── barrier.c
+    │       ├── multiplex_semaphore.c
+    │       ├── mutex_demo.c
+    │       └── semaphore_sync.c
+    ├── CA8/
+    │   ├── CA8_12340220.zip
+    │   └── CA8_12340220/
+    │       ├── Q1_12340220.c
+    │       ├── Q2_12340220.c
+    │       ├── Q3_12340220.c
+    │       ├── Q4_12340220.c
+    │       ├── Q5_12340220_part1.c
+    │       └── Q5_12340220_part2.c
+    ├── CA9/
+    │   ├── CA9_12340220.zip
+    │   ├── code-1(1).zip
+    │   ├── code-1.zip
+    │   ├── CA9_12340220/
+    │   │   ├── q1_12340220.c
+    │   │   ├── q2_12340220.c
+    │   │   ├── q3_12340220.c
+    │   │   ├── q4_12340220.c
+    │   │   ├── q5_12340220.c
+    │   │   └── q6_12340220.c
+    │   └── code/
+    │       └── Given/
+    │           ├── dp_deadlock.c
+    │           ├── lightswitch.c
+    │           ├── pc_bug.c
+    │           ├── pc_deadlock.c
+    │           └── rw_bug.c
+    └── HA4/
+        ├── HA4_12340220.zip
+        └── HA4_12340220/
+            ├── HA4_Q1_12340220.c
+            ├── HA4_Q2_12340220.c
+            └── HA4_Q3_12340220.c
+
+================================================
+FILE: CA10/CA10_12340220.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA10/lab10(1).zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA10/CA10_12340220/q1_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define N 102  // number of cycles
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+int turn = 0; // 0 -> A, 1 -> B, 2 -> C
+
+void *printA(void *arg) {
+    for (int i = 0; i < N; i++) {
+        pthread_mutex_lock(&lock);
+
+        while (turn != 0)
+            pthread_cond_wait(&cond, &lock);
+
+        printf("A ");
+        fflush(stdout);
+
+        turn = 1;
+        pthread_cond_broadcast(&cond);
+
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+void *printB(void *arg) {
+    for (int i = 0; i < N; i++) {
+        pthread_mutex_lock(&lock);
+
+        while (turn != 1)
+            pthread_cond_wait(&cond, &lock);
+
+        printf("B ");
+        fflush(stdout);
+
+        turn = 2;
+        pthread_cond_broadcast(&cond);
+
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+void *printC(void *arg) {
+    for (int i = 0; i < N; i++) {
+        pthread_mutex_lock(&lock);
+
+        while (turn != 2)
+            pthread_cond_wait(&cond, &lock);
+
+        printf("C\n");
+        fflush(stdout);
+
+        turn = 0;
+        pthread_cond_broadcast(&cond);
+
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t tA, tB, tC;
+
+    pthread_create(&tA, NULL, printA, NULL);
+    pthread_create(&tB, NULL, printB, NULL);
+    pthread_create(&tC, NULL, printC, NULL);
+
+    pthread_join(tA, NULL);
+    pthread_join(tB, NULL);
+    pthread_join(tC, NULL);
+    return 0;
+}
+
+
+
+================================================
+FILE: CA10/CA10_12340220/q2_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t can_read = PTHREAD_COND_INITIALIZER;
+pthread_cond_t can_write = PTHREAD_COND_INITIALIZER;
+
+int read_count = 0;
+int write_count = 0;
+int waiting_writers = 0;
+
+void start_read() {
+    pthread_mutex_lock(&lock);
+    while (write_count == 1 || waiting_writers > 0) {
+        pthread_cond_wait(&can_read, &lock);
+    }
+    read_count++;
+    pthread_mutex_unlock(&lock);
+}
+
+void end_read() {
+    pthread_mutex_lock(&lock);
+    read_count--;
+    if (read_count == 0)
+        pthread_cond_signal(&can_write);
+    pthread_mutex_unlock(&lock);
+}
+
+void start_write() {
+    pthread_mutex_lock(&lock);
+    waiting_writers++;
+    while (read_count > 0 || write_count == 1) {
+        pthread_cond_wait(&can_write, &lock);
+    }
+    waiting_writers--;
+    write_count = 1;
+    pthread_mutex_unlock(&lock);
+}
+
+void end_write() {
+    pthread_mutex_lock(&lock);
+    write_count = 0;
+
+    if (waiting_writers > 0)
+        pthread_cond_signal(&can_write);  // give priority to writers
+    else
+        pthread_cond_broadcast(&can_read); // allow all readers if no writer waiting
+    pthread_mutex_unlock(&lock);
+}
+
+
+
+void *reader(void *id) {
+    for (int i = 0; i < 5; i++) {
+        start_read();
+        printf("Reader %ld reading\n", (long)id);
+        usleep(100000);
+        end_read();
+    }
+    return NULL;
+}
+
+void *writer(void *id) {
+    for (int i = 0; i < 3; i++) {
+        start_write();
+        printf("Writer %ld writing\n", (long)id);
+        usleep(150000);
+        end_write();
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t r[3], w[2];
+    for (long i = 0; i < 3; i++) pthread_create(&r[i], NULL, reader, (void *)i);
+    for (long i = 0; i < 2; i++) pthread_create(&w[i], NULL, writer, (void *)i);
+    for (int i = 0; i < 3; i++) pthread_join(r[i], NULL);
+    for (int i = 0; i < 2; i++) pthread_join(w[i], NULL);
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA10/CA10_12340220/q3_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#define MAX_LOGS 10
+
+char *log_buffer[MAX_LOGS];
+int count = 0;
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t can_log = PTHREAD_COND_INITIALIZER;
+pthread_cond_t can_add = PTHREAD_COND_INITIALIZER;
+
+void *worker(void *id) {
+    for (int i = 0; i < 3; i++) {
+        char msg[64];
+        sprintf(msg, "Worker %ld message %d", (long)id, i);
+
+        pthread_mutex_lock(&lock);
+        while (count == MAX_LOGS)  // buffer full
+            pthread_cond_wait(&can_add, &lock);
+
+        log_buffer[count++] = strdup(msg);
+        printf("Worker %ld queued log. (count=%d)\n", (long)id, count);
+
+        pthread_cond_signal(&can_log);  // notify logger
+        pthread_mutex_unlock(&lock);
+
+        usleep(100000);
+    }
+    return NULL;
+}
+
+void *logger(void *arg) {
+    FILE *f = fopen("log.txt", "w");
+    if (!f) {
+        perror("fopen");
+        return NULL;
+    }
+
+    while (1) {
+        pthread_mutex_lock(&lock);
+        while (count == 0)  // nothing to log
+            pthread_cond_wait(&can_log, &lock);
+
+        char *msg = log_buffer[--count];
+        pthread_cond_signal(&can_add);  // space available
+        pthread_mutex_unlock(&lock);
+
+        fprintf(f, "%s\n", msg);
+        fflush(f);
+        printf("Logger wrote: %s\n", msg);
+
+        free(msg);
+        usleep(50000);
+    }
+
+    fclose(f);
+    return NULL;
+}
+
+
+int main() {
+    pthread_t log_thread, workers[3];
+    pthread_create(&log_thread, NULL, logger, NULL);
+    for (long i = 0; i < 3; i++)
+        pthread_create(&workers[i], NULL, worker, (void *)i);
+
+    for (int i = 0; i < 3; i++)
+        pthread_join(workers[i], NULL);
+
+    sleep(1);
+
+    pthread_cancel(log_thread);
+    pthread_join(log_thread, NULL);
+
+    printf("\nAll workers finished. Check 'log.txt' for output.\n");
+    return 0;
+}
+
+
+
+================================================
+FILE: CA10/CA10_12340220/q4_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define NTHREADS 3
+
+struct thread_event {
+    pthread_mutex_t m;
+    pthread_cond_t c;
+    int awake;
+};
+
+struct thread_event events[NTHREADS];
+
+void *sleeper(void *id) {
+    long tid = (long)id;
+    pthread_mutex_lock(&events[tid].m);
+
+    while (!events[tid].awake) {
+        printf("Thread %ld sleeping...\n", tid);
+        pthread_cond_wait(&events[tid].c, &events[tid].m);
+    }
+
+    printf("Thread %ld woke up!\n", tid);
+
+    pthread_mutex_unlock(&events[tid].m);
+    return NULL;
+}
+
+void *waker(void *arg) {
+    sleep(2);
+
+    printf("Waker: waking all threads...\n");
+
+    for (int i = 0; i < NTHREADS; i++) {
+        pthread_mutex_lock(&events[i].m);
+        events[i].awake = 1;
+        pthread_cond_signal(&events[i].c);  // wake each thread
+        pthread_mutex_unlock(&events[i].m);
+    }
+
+    return NULL;
+}
+
+
+int main() {
+    pthread_t t[NTHREADS], w;
+
+    for (int i = 0; i < NTHREADS; i++) {
+        events[i].awake = 0;
+        pthread_mutex_init(&events[i].m, NULL);
+        pthread_cond_init(&events[i].c, NULL);
+        pthread_create(&t[i], NULL, sleeper, (void *)(long)i);
+    }
+
+    pthread_create(&w, NULL, waker, NULL);
+    pthread_join(w, NULL);
+
+    for (int i = 0; i < NTHREADS; i++)
+        pthread_join(t[i], NULL);
+
+    printf("All threads finished.\n");
+    return 0;
+}
+
+
+================================================
+FILE: CA10/CA10_12340220/q5_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define MAX_JOBS 5
+#define NUM_WORKERS 3
+
+int jobs[MAX_JOBS];
+int count = 0;
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t not_full = PTHREAD_COND_INITIALIZER;
+pthread_cond_t not_empty = PTHREAD_COND_INITIALIZER;
+
+void *dispatcher(void *arg) {
+    int job_id = 1;
+    while (job_id <= 10) {
+        pthread_mutex_lock(&lock);
+
+        // Wait if job queue is full
+        while (count == MAX_JOBS)
+            pthread_cond_wait(&not_full, &lock);
+
+        jobs[count++] = job_id;
+        printf("Dispatcher added job %d (count=%d)\n", job_id, count);
+
+        // Signal workers that a job is available
+        pthread_cond_signal(&not_empty);
+        pthread_mutex_unlock(&lock);
+
+        job_id++;
+        usleep(100000);
+    }
+    return NULL;
+}
+
+void *worker(void *arg) {
+    long id = (long)arg;
+
+    while (1) {
+        pthread_mutex_lock(&lock);
+
+        // Wait if no job available
+        while (count == 0)
+            pthread_cond_wait(&not_empty, &lock);
+
+        int job = jobs[--count];
+        printf("Worker %ld processing job %d (remaining=%d)\n", id, job, count);
+
+        // Signal dispatcher that space is now free
+        pthread_cond_signal(&not_full);
+        pthread_mutex_unlock(&lock);
+
+        usleep(200000);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t disp, workers[NUM_WORKERS];
+
+    pthread_create(&disp, NULL, dispatcher, NULL);
+    for (long i = 0; i < NUM_WORKERS; i++)
+        pthread_create(&workers[i], NULL, worker, (void *)i);
+
+    pthread_join(disp, NULL);
+    sleep(2);
+
+    printf("All jobs dispatched. Exiting...\n");
+    return 0;
+}
+
+
+
+================================================
+FILE: CA10/OS codes/q1.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define N 102  // number of cycles
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+int turn = 0; // 0 -> A, 1 -> B, 2 -> C
+
+void *printA(void *arg) {
+    for (int i = 0; i < N; i++) {
+        pthread_mutex_lock(&lock);
+        while (turn != 0) {
+            //ADD YOUR CODE HERE
+        }
+        printf("A ");
+        fflush(stdout);
+       //ADD YOUR CODE HERE
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+void *printB(void *arg) {
+    for (int i = 0; i < N; i++) {
+        pthread_mutex_lock(&lock);
+        //ADD YOUR CODE HERE
+        printf("B ");
+        fflush(stdout);
+        //ADD YOUR CODE HERE
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+void *printC(void *arg) {
+    for (int i = 0; i < N; i++) {
+        pthread_mutex_lock(&lock);
+        //ADD YOUR CODE HERE
+        printf("C\n");
+        fflush(stdout);
+        //ADD YOUR CODE HERE
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t tA, tB, tC;
+    pthread_create(&tA, NULL, printA, NULL);
+    pthread_create(&tB, NULL, printB, NULL);
+    pthread_create(&tC, NULL, printC, NULL);
+
+    pthread_join(tA, NULL);
+    pthread_join(tB, NULL);
+    pthread_join(tC, NULL);
+    return 0;
+}
+
+
+
+================================================
+FILE: CA10/OS codes/q1_help.c
+================================================
+/*Running two threads alternately
+  pthread_cond_signal- for awaking one thread
+  pthread_cond_broadcast -for awaking all threads
+*/
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+int turn = 0;  // 0 = A's turn, 1 = B's turn
+int cycles = 100; // number of times to print A-B
+
+void *printA(void *arg) {
+    for (int i = 0; i < cycles; i++) {
+        pthread_mutex_lock(&lock);
+
+        // Wait until it's A's turn
+        while (turn != 0)
+            pthread_cond_wait(&cond, &lock);
+
+        printf("A ");
+        fflush(stdout);
+
+        // Switch to B's turn
+        turn = 1;
+        pthread_cond_signal(&cond);
+
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+void *printB(void *arg) {
+    for (int i = 0; i < cycles; i++) {
+        pthread_mutex_lock(&lock);
+
+        // Wait until it's B's turn
+        while (turn != 1)
+            pthread_cond_wait(&cond, &lock);
+
+        printf("B ");
+        fflush(stdout);
+
+        // Switch to A's turn
+        turn = 0;
+        pthread_cond_signal(&cond);
+
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t tA, tB;
+
+    pthread_create(&tA, NULL, printA, NULL);
+    pthread_create(&tB, NULL, printB, NULL);
+
+    pthread_join(tA, NULL);
+    pthread_join(tB, NULL);
+
+    printf("\nDone!\n");
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA10/OS codes/q2.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t can_read = PTHREAD_COND_INITIALIZER;
+pthread_cond_t can_write = PTHREAD_COND_INITIALIZER;
+
+int read_count = 0;
+int write_count = 0;
+int waiting_writers = 0;
+
+void start_read() {
+    pthread_mutex_lock(&lock);
+    while (/* ADD YOUR CODE HERE */) {
+        pthread_cond_wait(&can_read, &lock);
+    }
+    read_count++;
+    pthread_mutex_unlock(&lock);
+}
+
+void end_read() {
+    pthread_mutex_lock(&lock);
+    read_count--;
+    if (read_count == 0)
+        pthread_cond_signal(&can_write);
+    pthread_mutex_unlock(&lock);
+}
+
+void start_write() {
+    pthread_mutex_lock(&lock);
+    waiting_writers++;
+    while (/* ADD YOUR CODE HERE */) {
+        pthread_cond_wait(&can_write, &lock);
+    }
+    waiting_writers--;
+    write_count = 1;
+    pthread_mutex_unlock(&lock);
+}
+
+void end_write() {
+    pthread_mutex_lock(&lock);
+    write_count = 0;
+    // ADD YOUR CODE HERE
+    pthread_mutex_unlock(&lock);
+}
+
+void *reader(void *id) {
+    for (int i = 0; i < 5; i++) {
+        start_read();
+        printf("Reader %ld reading\n", (long)id);
+        usleep(100000);
+        end_read();
+    }
+    return NULL;
+}
+
+void *writer(void *id) {
+    for (int i = 0; i < 3; i++) {
+        start_write();
+        printf("Writer %ld writing\n", (long)id);
+        usleep(150000);
+        end_write();
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t r[3], w[2];
+    for (long i = 0; i < 3; i++) pthread_create(&r[i], NULL, reader, (void *)i);
+    for (long i = 0; i < 2; i++) pthread_create(&w[i], NULL, writer, (void *)i);
+    for (int i = 0; i < 3; i++) pthread_join(r[i], NULL);
+    for (int i = 0; i < 2; i++) pthread_join(w[i], NULL);
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA10/OS codes/q3.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#define MAX_LOGS 10
+
+char *log_buffer[MAX_LOGS];
+int count = 0;
+
+// ADD YOUR CODE HERE
+
+void *worker(void *id) {
+    for (int i = 0; i < 3; i++) {
+        char msg[64];
+        sprintf(msg, "Worker %ld message %d", (long)id, i);
+        // ADD YOUR CODE HERE
+        log_buffer[count++] = strdup(msg);
+        printf("Worker %ld queued log. (count=%d)\n", (long)id, count);
+        // ADD YOUR CODE HERE
+        usleep(100000); 
+    }
+    return NULL;
+}
+
+void *logger(void *arg) {
+    FILE *f = fopen("log.txt", "w");
+    if (!f) {
+        perror("fopen");
+        return NULL;
+    }
+
+    while (1) {
+        // ADD YOUR CODE HERE
+        char *msg = log_buffer[--count];
+        // ADD YOUR CODE HERE
+        fprintf(f, "%s\n", msg);
+        fflush(f);
+        printf("Logger wrote: %s\n", msg);
+
+        free(msg);
+        usleep(50000); 
+    }
+
+    fclose(f);
+    return NULL;
+}
+
+int main() {
+    pthread_t log_thread, workers[3];
+    pthread_create(&log_thread, NULL, logger, NULL);
+    for (long i = 0; i < 3; i++)
+        pthread_create(&workers[i], NULL, worker, (void *)i);
+
+    for (int i = 0; i < 3; i++)
+        pthread_join(workers[i], NULL);
+
+    sleep(1);
+
+    pthread_cancel(log_thread);
+    pthread_join(log_thread, NULL);
+
+    printf("\nAll workers finished. Check 'log.txt' for output.\n");
+    return 0;
+}
+
+
+
+================================================
+FILE: CA10/OS codes/q4.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define NTHREADS 3
+
+struct thread_event {
+    pthread_mutex_t m;
+    pthread_cond_t c;
+    int awake;
+};
+
+struct thread_event events[NTHREADS];
+
+void *sleeper(void *id) {
+    long tid = (long)id;
+    pthread_mutex_lock(&events[tid].m);
+
+    while (!events[tid].awake) {
+        printf("Thread %ld sleeping...\n", tid);
+        //ADD YOUR CODE
+    }
+
+    printf("Thread %ld woke up!\n", tid);
+
+    pthread_mutex_unlock(&events[tid].m);
+    return NULL;
+}
+
+void *waker(void *arg) {
+    sleep(2);  
+
+    printf("Waker: waking all threads...\n");
+
+    
+    for (int i = 0; i < NTHREADS; i++) {
+        //ADD YOUR CODE
+    }
+
+    return NULL;
+}
+
+int main() {
+    pthread_t t[NTHREADS], w;
+
+    for (int i = 0; i < NTHREADS; i++) {
+        events[i].awake = 0;
+        pthread_mutex_init(&events[i].m, NULL);
+        pthread_cond_init(&events[i].c, NULL);
+        pthread_create(&t[i], NULL, sleeper, (void *)(long)i);
+    }
+
+    pthread_create(&w, NULL, waker, NULL);
+    pthread_join(w, NULL);
+
+    for (int i = 0; i < NTHREADS; i++)
+        pthread_join(t[i], NULL);
+
+    printf("All threads finished.\n");
+    return 0;
+}
+
+
+
+================================================
+FILE: CA10/OS codes/q5.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define MAX_JOBS 5
+#define NUM_WORKERS 3
+
+int jobs[MAX_JOBS];
+int count = 0; 
+// ADD YOUR CODE
+
+void *dispatcher(void *arg) {
+    int job_id = 1;
+    while (job_id <= 10) {
+        pthread_mutex_lock(&lock);
+
+        // ADD YOUR CODE
+
+        jobs[count++] = job_id;
+        printf("Dispatcher added job %d (count=%d)\n", job_id, count);
+
+        pthread_mutex_unlock(&lock);
+        job_id++;
+
+        usleep(100000); 
+    }
+    return NULL;
+}
+
+void *worker(void *arg) {
+    long id = (long)arg;
+
+    while (1) {
+        pthread_mutex_lock(&lock);
+
+       // ADD YOUR CODE
+
+        int job = jobs[--count];
+        printf("Worker %ld processing job %d (remaining=%d)\n", id, job, count);
+
+        // ADD YOUR CODE
+
+        pthread_mutex_unlock(&lock);
+
+        usleep(200000); 
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t disp, workers[NUM_WORKERS];
+
+    pthread_create(&disp, NULL, dispatcher, NULL);
+    for (long i = 0; i < NUM_WORKERS; i++)
+        pthread_create(&workers[i], NULL, worker, (void *)i);
+
+    pthread_join(disp, NULL);
+    sleep(2); 
+
+    printf("All jobs dispatched. Exiting...\n");
+    return 0;
+}
+
+
+
+================================================
+FILE: CA11/CA11_12340220.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA11/classAssignment11.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA11/CA11_12340220/q2_12340220
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA11/CA11_12340220/q2_12340220.c
+================================================
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <dirent.h>
+    #include <sys/stat.h>
+    #include <unistd.h>
+    #include <time.h>
+    #include <limits.h>
+
+    void print_permissions(mode_t m) {
+        char type = S_ISDIR(m) ? 'd' : '-';
+        printf("%c", type);
+        printf((m & S_IRUSR) ? "r" : "-");
+        printf((m & S_IWUSR) ? "w" : "-");
+        printf((m & S_IXUSR) ? "x" : "-");
+        printf((m & S_IRGRP) ? "r" : "-");
+        printf((m & S_IWGRP) ? "w" : "-");
+        printf((m & S_IXGRP) ? "x" : "-");
+        printf((m & S_IROTH) ? "r" : "-");
+        printf((m & S_IWOTH) ? "w" : "-");
+        printf((m & S_IXOTH) ? "x" : "-");
+    }
+
+    void print_long(const char *path, const char *name) {
+        char full[PATH_MAX];
+        snprintf(full, sizeof(full), "%s/%s", path, name);
+
+        struct stat st;
+        if (stat(full, &st) == -1) {
+            perror("stat");
+            return;
+        }
+
+        print_permissions(st.st_mode);
+        printf(" %ld %d %d %lld ",
+            (long)st.st_nlink,
+            st.st_uid, st.st_gid,
+            (long long)st.st_size);
+
+        char tbuf[64];
+        struct tm *tm = localtime(&st.st_mtime);
+        strftime(tbuf, sizeof(tbuf), "%b %d %H:%M", tm);
+
+        printf("%s %s\n", tbuf, name);
+    }
+
+    int main(int argc, char *argv[]) {
+        int long_flag = 0;
+        char *path = ".";
+
+        if (argc >= 2) {
+            if (strcmp(argv[1], "-l") == 0) {
+                long_flag = 1;
+                if (argc >= 3) path = argv[2];
+            } else {
+                path = argv[1];
+            }
+        }
+
+        DIR *dir = opendir(path);
+        if (!dir) {
+            perror("opendir");
+            return 1;
+        }
+
+        struct dirent *entry;
+        while ((entry = readdir(dir)) != NULL) {
+            if (!long_flag)
+                printf("%s\n", entry->d_name);
+            else
+                print_long(path, entry->d_name);
+        }
+
+        closedir(dir);
+        return 0;
+    }
+
+
+
+================================================
+FILE: CA11/CA11_12340220/q3_12340220
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA11/CA11_12340220/q3_12340220.c
+================================================
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <fcntl.h>
+    #include <unistd.h>
+    #include <sys/stat.h>
+    #include <errno.h>
+
+    int copy_file(const char *src, const char *dst) {
+        int in_fd, out_fd;
+        struct stat st;
+
+        if (stat(src, &st) == -1) {
+            perror("stat");
+            return -1;
+        }
+
+        in_fd = open(src, O_RDONLY);
+        if (in_fd < 0) {
+            perror("open src");
+            return -1;
+        }
+
+        out_fd = open(dst, O_WRONLY | O_CREAT | O_TRUNC, st.st_mode & 0777);
+        if (out_fd < 0) {
+            perror("open dst");
+            close(in_fd);
+            return -1;
+        }
+
+        char buf[4096];
+        ssize_t n;
+        while ((n = read(in_fd, buf, sizeof(buf))) > 0) {
+            if (write(out_fd, buf, n) != n) {
+                perror("write");
+                close(in_fd);
+                close(out_fd);
+                return -1;
+            }
+        }
+
+        close(in_fd);
+        close(out_fd);
+        return (n < 0) ? -1 : 0;
+    }
+
+    int do_mv(const char *src, const char *dst) {
+        if (rename(src, dst) == 0) return 0;
+
+        if (errno == EXDEV) {
+            if (copy_file(src, dst) == 0) {
+                if (unlink(src) == -1) perror("unlink");
+                return 0;
+            }
+        }
+        perror("mv");
+        return -1;
+    }
+
+    char *basename(char *path) {
+        char *b = strrchr(path, '/');
+        return b ? b + 1 : path;
+    }
+
+    int main(int argc, char *argv[]) {
+        if (argc < 3) {
+            fprintf(stderr,"Usage: ./cp file1 file2  OR  ./mv file1 file2  OR  ./a.out cp file1 file2\n");
+            return 1;
+        }
+
+        char *cmd;
+        int offset = 0;
+
+        char *prog = basename(argv[0]);
+        if (strcmp(prog, "cp") == 0 || strcmp(prog, "mv") == 0) {
+            cmd = prog;
+        } else {
+            cmd = argv[1];
+            offset = 1;
+        }
+
+        if (argc - offset != 3) {
+            fprintf(stderr,"Invalid args.\n");
+            return 1;
+        }
+
+        char *src = argv[1 + offset];
+        char *dst = argv[2 + offset];
+
+        if (strcmp(cmd, "cp") == 0) {
+            return copy_file(src,dst);
+        } else if (strcmp(cmd, "mv") == 0) {
+            return do_mv(src,dst);
+        } else {
+            fprintf(stderr,"Unknown command.\n");
+            return 1;
+        }
+    }
+
+
+
+================================================
+FILE: CA11/CA11_12340220/q4_12340220
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA11/CA11_12340220/q4_12340220.c
+================================================
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+#define MAX_INODES 10
+#define MAX_BLOCKS 10
+#define DESC_LEN 64
+
+struct inode {
+    int in_use;
+    int creator_id;
+    time_t created_at;
+    char description[DESC_LEN];
+    int block;
+};
+
+struct inode inode_table[MAX_INODES];
+int block_used[MAX_BLOCKS] = {0};
+char filenames[MAX_INODES][32];
+
+int allocate_inode() {
+    for (int i = 0; i < MAX_INODES; i++)
+        if (!inode_table[i].in_use) return i;
+    return -1;
+}
+
+int allocate_block() {
+    for (int i = 0; i < MAX_BLOCKS; i++)
+        if (!block_used[i]) return i;
+    return -1;
+}
+
+int find_inode(const char *name) {
+    for (int i = 0; i < MAX_INODES; i++)
+        if (inode_table[i].in_use && strcmp(filenames[i], name) == 0)
+            return i;
+    return -1;
+}
+
+int create_file(const char *name, int creator_id, const char *desc) {
+    int ino = allocate_inode();
+    int blk = allocate_block();
+    if (ino < 0 || blk < 0) return -1;
+
+    inode_table[ino].in_use = 1;
+    inode_table[ino].creator_id = creator_id;
+    inode_table[ino].block = blk;
+    time(&inode_table[ino].created_at);
+    strncpy(inode_table[ino].description, desc, DESC_LEN - 1);
+
+    block_used[blk] = 1;
+    strcpy(filenames[ino], name);
+
+    return 0;
+}
+
+int delete_file(const char *name) {
+    int ino = find_inode(name);
+    if (ino < 0) return -1;
+
+    block_used[inode_table[ino].block] = 0;
+    inode_table[ino].in_use = 0;
+    memset(filenames[ino], 0, 32);
+
+    return 0;
+}
+
+void show_inodes() {
+    for (int i = 0; i < MAX_INODES; i++) {
+        if (inode_table[i].in_use) {
+            char tbuf[64];
+            struct tm *tm = localtime(&inode_table[i].created_at);
+            strftime(tbuf, sizeof(tbuf), "%Y-%m-%d %H:%M:%S", tm);
+
+            printf("File: %s  | Creator: %d | Created: %s | Desc: %s\n",
+                filenames[i],
+                inode_table[i].creator_id,
+                tbuf,
+                inode_table[i].description);
+        }
+    }
+}
+
+int main() {
+    create_file("a.txt", 101, "Test file A");
+    create_file("b.txt", 102, "Another one");
+
+    printf("After creation:\n");
+    show_inodes();
+
+    delete_file("a.txt");
+
+    printf("\nAfter deletion:\n");
+    show_inodes();
+
+    return 0;
+}
+
+================================================
+FILE: CA11/codes/q2.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <grp.h>
+#include <unistd.h>
+#include <time.h>
+
+
+void print_permissions(mode_t mode) {
+    printf( (S_ISDIR(mode)) ? "d" : "-");
+    printf( (mode & S_IRUSR) ? "r" : "-");
+    printf( (mode & S_IWUSR) ? "w" : "-");
+    printf( (mode & S_IXUSR) ? "x" : "-");
+    printf( (mode & S_IRGRP) ? "r" : "-");
+    printf( (mode & S_IWGRP) ? "w" : "-");
+    printf( (mode & S_IXGRP) ? "x" : "-");
+    printf( (mode & S_IROTH) ? "r" : "-");
+    printf( (mode & S_IWOTH) ? "w" : "-");
+    printf( (mode & S_IXOTH) ? "x" : "-");
+}
+
+
+void print_file_details(const char *path, const char *name) {
+    char fullpath[1024];
+    snprintf(fullpath, sizeof(fullpath), "%s/%s", path, name);
+
+    struct stat sb;
+    if (stat(fullpath, &sb) == -1) {
+        perror("stat");
+        return;
+    }
+    //Add your code 
+    //print in format -rwxrwxr-x 1 ramesh ramesh Nov 10 11:36 test.c
+
+}
+
+int main(int argc, char *argv[]) {
+    int long_format = 0;
+    char *dirpath = NULL;
+
+   
+    if (argc == 1) {
+        dirpath = ".";
+    } else if (argc == 2) {
+        if (strcmp(argv[1], "-l") == 0)
+            dirpath = ".";
+        else
+            dirpath = argv[1];
+    } else if (argc == 3 && strcmp(argv[1], "-l") == 0) {
+        long_format = 1;
+        dirpath = argv[2];
+    } else {
+        fprintf(stderr, "Usage: %s [-l] [directory]\n", argv[0]);
+        exit(1);
+    }
+
+    if (argc >= 2 && strcmp(argv[1], "-l") == 0)
+        long_format = 1;
+
+    DIR *dir = opendir(dirpath);
+    if (!dir) {
+        perror("opendir");
+        return 1;
+    }
+
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != NULL) {
+          if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+            continue;
+
+        if (long_format)
+            print_file_details(dirpath, entry->d_name);
+        else
+            printf("%s\n", entry->d_name);
+    }
+
+    closedir(dir);
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA11/codes/q3.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <errno.h>
+
+#define BUF_SIZE 4096
+
+int copy_file(const char *src, const char *dest) {
+    int src_fd, dest_fd;
+    struct stat src_stat;
+    char buffer[BUF_SIZE];
+    ssize_t bytes_read, bytes_written;
+
+    src_fd = open(src, O_RDONLY);
+    if (src_fd < 0) { perror("open source"); return -1; }
+
+    if (stat(src, &src_stat) < 0) {
+        perror("stat");
+        close(src_fd);
+        return -1;
+    }
+
+    dest_fd = open(dest, O_WRONLY | O_CREAT | O_TRUNC, src_stat.st_mode);
+    if (dest_fd < 0) {
+        perror("open destination");
+        close(src_fd);
+        return -1;
+    }
+
+     //ADD YOUR CODE HERE
+
+    if (bytes_read < 0) perror("read");
+
+    close(src_fd);
+    close(dest_fd);
+    return 0;
+}
+
+int move_file(const char *src, const char *dest) {
+     //ADD YOUR CODE HERE
+    return 0;
+}
+
+int main(int argc, char *argv[]) {
+    const char *prog;
+    const char *src;
+    const char *dest;
+
+   
+    if (argc == 3) {
+         // ln -s a.out cp
+         // ln -s a.out mv
+         // ./cp src dest  or ./mv src dest
+        prog = strrchr(argv[0], '/');
+        prog = (prog == NULL) ? argv[0] : prog + 1;
+        src = argv[1];
+        dest = argv[2];
+    } else if (argc == 4) {
+        // ./a.out cp src dest  or ./a.out mv src dest
+        prog = argv[1];
+        src = argv[2];
+        dest = argv[3];
+    } else {
+        fprintf(stderr, "Usage:\n");
+        fprintf(stderr, "  %s <source> <destination>\n", argv[0]);
+        fprintf(stderr, "  %s <cp|mv> <source> <destination>\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    if (strcmp(prog, "cp") == 0) {
+        if (copy_file(src, dest) == 0)
+            printf("File copied successfully from '%s' to '%s'\n", src, dest);
+        else
+            fprintf(stderr, "Copy failed.\n");
+    } 
+    else if (strcmp(prog, "mv") == 0) {
+        if (move_file(src, dest) == 0)
+            printf("File moved successfully from '%s' to '%s'\n", src, dest);
+        else
+            fprintf(stderr, "Move failed.\n");
+    } 
+    else {
+        fprintf(stderr, "Error: Invalid command name '%s'. Use cp or mv.\n", prog);
+        exit(EXIT_FAILURE);
+    }
+
+    return 0;
+}
+
+
+
+================================================
+FILE: CA11/codes/q4.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+#define MAX_INODES 8
+#define MAX_BLOCKS 64
+#define MAX_FILENAME 32
+#define MAX_DESC 64
+#define DIRECT_PTRS 4
+#define MAX_DIR_ENTRIES 16
+
+struct inode {
+    int used;                      // 0 = free, 1 = allocated
+    int size;                      // file size in bytes
+    int type;                      // 0 = file, 1 = directory
+    int creator_id;                // user ID who created file
+    time_t created_at;             // creation timestamp
+    char description[MAX_DESC];    // short file description
+    int direct[DIRECT_PTRS];       // direct data block pointers
+};
+
+struct dir_entry {
+    char name[MAX_FILENAME];
+    int inum;
+};
+ 
+struct inode inode_table[MAX_INODES];
+int data_block_bitmap[MAX_BLOCKS];   // 0 = free, 1 = used
+struct dir_entry directory[MAX_DIR_ENTRIES];
+int dir_count = 0;
+
+
+int alloc_inode() {
+    for (int i = 0; i < MAX_INODES; i++) {
+        if (!inode_table[i].used) {
+            inode_table[i].used = 1;
+            inode_table[i].size = 0;
+            inode_table[i].type = 0; 
+            inode_table[i].creator_id = 0;
+            inode_table[i].created_at = time(NULL);
+            strcpy(inode_table[i].description, "No description");
+            for (int j = 0; j < DIRECT_PTRS; j++)
+                inode_table[i].direct[j] = -1;
+            return i;
+        }
+    }
+    return -1;  
+}
+
+void free_inode(int inum) {
+    inode_table[inum].used = 0;
+    inode_table[inum].size = 0;
+    inode_table[inum].creator_id = 0;
+    inode_table[inum].created_at = 0;
+    strcpy(inode_table[inum].description, "");
+    for (int j = 0; j < DIRECT_PTRS; j++)
+        inode_table[inum].direct[j] = -1;
+}
+
+int alloc_block() {
+    for (int i = 0; i < MAX_BLOCKS; i++) {
+        if (data_block_bitmap[i] == 0) {
+            data_block_bitmap[i] = 1;
+            return i;
+        }
+    }
+    return -1;
+}
+
+void free_block(int blocknum) {
+    if (blocknum >= 0 && blocknum < MAX_BLOCKS)
+        data_block_bitmap[blocknum] = 0;
+}
+
+int fs_create(const char *name, int creator_id, const char *desc) {
+    for (int i = 0; i < dir_count; i++) {
+        if (strcmp(directory[i].name, name) == 0) {
+            printf("Error: File '%s' already exists\n", name);
+            return -1;
+        }
+    }
+
+    int inum = alloc_inode();
+    if (inum < 0) {
+        printf("Error: No free inode available\n");
+        return -1;
+    }
+
+    // ADD YOUR CODE
+   
+
+    
+    int block = alloc_block();
+    if (block < 0) {
+        printf("Error: No free data block available\n");
+        free_inode(inum);
+        return -1;
+    }
+
+    inode_table[inum].direct[0] = block;
+    inode_table[inum].size = 0;
+
+    strcpy(directory[dir_count].name, name);
+    directory[dir_count].inum = inum;
+    dir_count++;
+
+    printf("File '%s' created (inode %d, block %d)\n", name, inum, block);
+    return inum;
+}
+
+int fs_delete(const char *name) {
+    int found = -1;
+    for (int i = 0; i < dir_count; i++) {
+        if (strcmp(directory[i].name, name) == 0) {
+            found = i;
+            break;
+        }
+    }
+
+    if (found < 0) {
+        printf("Error: File '%s' not found\n", name);
+        return -1;
+    }
+
+    int inum = directory[found].inum;
+
+    for (int j = 0; j < DIRECT_PTRS; j++) {
+         //ADD YOUR CODE HERE
+    }
+
+    free_inode(inum);
+
+    for (int i = found; i < dir_count - 1; i++)
+        directory[i] = directory[i + 1];
+    dir_count--;
+
+    printf("File '%s' deleted (inode %d freed)\n", name, inum);
+    return 0;
+}
+
+void fs_show_state() {
+    printf("\n--- File System State ---\n");
+    printf("Directory entries (%d):\n", dir_count);
+    for (int i = 0; i < dir_count; i++)
+        printf("  %s → inode %d\n", directory[i].name, directory[i].inum);
+
+    printf("\nInode table:\n");
+    for (int i = 0; i < MAX_INODES; i++) {
+        if (inode_table[i].used) {
+            printf("  inode %d: creator=%d, size=%d, desc='%s'\n",
+                   i, inode_table[i].creator_id, inode_table[i].size, inode_table[i].description);
+            printf("             created: %s", ctime(&inode_table[i].created_at));
+            printf("             blocks: ");
+            for (int j = 0; j < DIRECT_PTRS; j++)
+                if (inode_table[i].direct[j] != -1)
+                    printf("%d ", inode_table[i].direct[j]);
+            printf("\n");
+        }
+    }
+    printf("--------------------------\n\n");
+}
+
+
+int main() {
+    printf("File Creation and Deletion with Metadata Simulation\n");
+
+    fs_create("file1.txt", 101, "User text document");
+    fs_create("report.pdf", 102, "PDF project report");
+    fs_create("data.bin", 103, "Binary data log");
+    fs_show_state();
+
+    fs_delete("report.pdf");
+    fs_show_state();
+
+    fs_create("notes.txt", 104, "Important notes");
+    fs_show_state();
+
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA7/CA7_12340220.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA7/code.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA7/CA7_12340220/Q1_12340220.c
+================================================
+    #include <stdio.h>
+    #include <pthread.h>
+
+    int global = 10;
+
+    void* threadFunction(void* arg) {
+        int id = *(int*)arg;     
+        int local_thread = id * 100;
+
+        printf("Thread %d:\n", id);
+        printf("    global address: %p\n", (void*)&global);
+        printf("    local_thread  address: %p\n\n", (void*)&local_thread);
+
+        return NULL;
+    }
+
+    int main() {
+        pthread_t t1, t2;
+        int id1 = 1, id2 = 2;
+        int local_main = 20;
+
+        printf("Main thread:\n");
+        printf("    global address: %p\n", (void*)&global);
+        printf("    local_main address: %p\n\n", (void*)&local_main);
+
+        pthread_create(&t1, NULL, threadFunction, &id1);
+        pthread_create(&t2, NULL, threadFunction, &id2);
+
+        pthread_join(t1, NULL);
+        pthread_join(t2, NULL);
+
+        return 0;
+    }
+
+
+
+================================================
+FILE: CA7/CA7_12340220/Q2_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+
+void* thread_function(void* arg) {
+    int thread_num = *(int*)arg;
+    printf("Thread %d running\n", thread_num);
+    return NULL;
+}
+
+int main() {
+    int NUM_THREADS = 10;
+    pthread_t threads[NUM_THREADS];
+    int thread_nums[NUM_THREADS];
+
+    for (int i = 0; i < NUM_THREADS; i++) {
+        thread_nums[i] = i;
+        if (pthread_create(&threads[i], NULL, thread_function, &thread_nums[i]) != 0) {
+            perror("Failed to create thread");
+            exit(1);
+        }
+    }
+
+    for (int i = 0; i < NUM_THREADS; i++) {
+        pthread_join(threads[i], NULL);
+    }
+
+    printf("All threads completed\n");
+    return 0;
+}
+
+
+
+================================================
+FILE: CA7/CA7_12340220/Q3_12340220.c
+================================================
+    #include <stdio.h>
+    #include <pthread.h>
+
+    long long counter = 0;
+
+    void* increment_counter(void* arg) {
+        for (int i = 0; i < 10000000; i++) {
+            counter++;
+        }
+        return NULL;
+    }
+
+    int main() {
+        int NUM_THREADS = 10;
+        pthread_t threads[NUM_THREADS];
+
+        for (int i = 0; i < NUM_THREADS; i++) {
+            pthread_create(&threads[i], NULL, increment_counter, NULL);
+        }
+
+        for (int i = 0; i < NUM_THREADS; i++) {
+            pthread_join(threads[i], NULL);
+        }
+
+        printf("Final counter value: %lld\n", counter);
+        printf("Expected value: %lld\n", (long long)NUM_THREADS * 10000000);
+
+        return 0;
+    }
+
+
+
+================================================
+FILE: CA7/CA7_12340220/Q4_12340220.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+void* compute_square(void* arg) {
+    int n = *(int*)arg;
+    int* result = malloc(sizeof(int));
+    *result = n * n;
+    return result;
+}
+
+int main() {
+    pthread_t tid;
+    int n;
+
+    printf("Enter a number: ");
+    scanf("%d", &n);
+    if (pthread_create(&tid, NULL, compute_square, &n) != 0) {
+        perror("Failed to create thread");
+        return 1;
+    }
+    void* result;
+    pthread_join(tid, &result);
+    printf("Square of %d is %d\n", n, *(int*)result);
+    free(result);
+
+    return 0;
+}
+
+
+
+================================================
+FILE: CA7/CA7_12340220/Q5_12340220.c
+================================================
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <pthread.h>
+
+    void* compute_square(void* arg) {
+        int n = *(int*)arg;
+        int* result = malloc(sizeof(int));
+        *result = n * n;
+        return result;
+    }
+
+    int main() {
+        int n;
+        printf("Enter number of threads: ");
+        scanf("%d", &n);
+
+        pthread_t threads[n];
+        int thread_nums[n];
+        void* result;
+        int sum = 0;
+
+        for (int i = 0; i < n; i++) {
+            thread_nums[i] = i + 1;
+            if (pthread_create(&threads[i], NULL, compute_square, &thread_nums[i]) != 0) {
+                perror("Failed to create thread");
+                return 1;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            pthread_join(threads[i], &result);
+            int value = *(int*)result;
+            printf("Thread %d returned %d\n", i + 1, value);
+            sum += value;
+            free(result);
+        }
+
+        printf("Sum of all threads: %d\n", sum);
+        return 0;
+    }
+
+
+
+================================================
+FILE: CA7/code/barrier.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+#define N 5
+
+int count = 0;
+pthread_mutex_t mutex;
+sem_t barrier;
+
+void* thread_func(void* arg)
+{
+    int id = *(int*)arg;
+    printf("Thread %d reached the barrier\n", id);
+    pthread_mutex_lock(&mutex);
+    count++;
+    if (count == N) 
+    {
+        sem_post(&barrier); // Only one thread is signaled!
+    }
+    pthread_mutex_unlock(&mutex);
+    sem_wait(&barrier); // All threads wait, but only one is signaled
+    printf("Thread %d passed the barrier\n", id);
+    return NULL;
+}
+
+int main() {
+    pthread_t threads[N];
+    int ids[N];
+    pthread_mutex_init(&mutex, NULL);
+    sem_init(&barrier, 0, 0);
+    for (int i = 0; i < N; i++) {
+        ids[i] = i + 1;
+        pthread_create(&threads[i], NULL, thread_func, &ids[i]);
+    }
+    for (int i = 0; i < N; i++) {
+        pthread_join(threads[i], NULL);
+    }
+    pthread_mutex_destroy(&mutex);
+    sem_destroy(&barrier);
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA7/code/multiplex_semaphore.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+
+#define NUM_THREADS 8
+#define MAX_CONCURRENT 3     // maximum threads allowed in critical section
+
+
+sem_t multiplex;
+
+
+void* worker(void* arg) 
+{
+  int id = *(int*)arg;
+  // Request to enter
+  sem_wait(&multiplex); // take one token
+  printf("Thread %d ENTERED critical section.\n", id);
+  // Critical section (simulate some work)
+  sleep(1); // simulate processing
+  printf("Thread %d LEAVING critical section.\n", id);
+  sem_post(&multiplex); // release token
+  return NULL;
+}
+
+
+int main() 
+{
+  pthread_t threads[NUM_THREADS];
+  int ids[NUM_THREADS];
+  
+  // Initialize semaphore to MAX_CONCURRENT
+  sem_init(&multiplex, 0, MAX_CONCURRENT);
+  
+  // Create threads
+  for (int i = 0; i < NUM_THREADS; i++) 
+  {
+    ids[i] = i + 1;
+    pthread_create(&threads[i], NULL, worker, &ids[i]);
+  }
+  
+  // Join threads
+  for (int i = 0; i < NUM_THREADS; i++) 
+  {
+    pthread_join(threads[i], NULL);
+  }
+  
+  sem_destroy(&multiplex);
+  printf("All threads finished.\n");
+  return 0;
+}
+
+
+
+================================================
+FILE: CA7/code/mutex_demo.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+
+int counter = 0;
+pthread_mutex_t lock;
+
+void* increment(void* arg) 
+{
+  for(int i = 0; i < 5; i++) 
+  {
+    pthread_mutex_lock(&lock);
+    counter = counter + 1;
+    printf("Thread %ld: Counter = %d\n", (long)arg, counter);
+    pthread_mutex_unlock(&lock);
+  }
+  return NULL;
+}
+
+int main() 
+{
+  pthread_t t1, t2;
+  
+  pthread_mutex_init(&lock, NULL);
+  
+  pthread_create(&t1, NULL, increment, (void*)1);
+  pthread_create(&t2, NULL, increment, (void*)2);
+  
+  pthread_join(t1, NULL);
+  pthread_join(t2, NULL);
+  
+  return 0;
+}
+
+
+
+================================================
+FILE: CA7/code/semaphore_sync.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+sem_t sem;
+
+void* threadA(void* arg) 
+{
+  printf("Hello from A\n");
+  sem_post(&sem);
+  return NULL;
+}
+void* threadB(void* arg) 
+{
+  sem_wait(&sem);
+  printf("Hello from B\n");
+  return NULL;
+}
+int main()
+{
+  pthread_t tA, tB;
+  
+  sem_init(&sem, 0, 0);
+  
+  pthread_create(&tA, NULL, threadA, NULL);
+  pthread_create(&tB, NULL, threadB, NULL);
+  
+  pthread_join(tA, NULL);
+  pthread_join(tB, NULL);
+  
+  sem_destroy(&sem);
+  return 0;
+}
+
+
+
+================================================
+FILE: CA8/CA8_12340220.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA8/CA8_12340220/Q1_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+sem_t semA, semB;
+
+void* threadA(void* arg) {
+  printf("Hello from A\n");
+  sem_post(&semA);
+  return NULL;
+}
+
+void* threadB(void* arg) {
+  sem_wait(&semA);
+  printf("Hello from B\n");
+  sem_post(&semB);
+  return NULL;
+}
+
+void* threadC(void* arg) {
+  sem_wait(&semB);
+  printf("Hello from C\n");
+  return NULL;
+}
+
+int main() {
+  pthread_t tA, tB, tC;
+
+  sem_init(&semA, 0, 0);
+  sem_init(&semB, 0, 0);
+
+  pthread_create(&tA, NULL, threadA, NULL);
+  pthread_create(&tB, NULL, threadB, NULL);
+  pthread_create(&tC, NULL, threadC, NULL);
+
+  pthread_join(tA, NULL);
+  pthread_join(tB, NULL);
+  pthread_join(tC, NULL);
+
+  sem_destroy(&semA);
+  sem_destroy(&semB);
+
+  return 0;
+}
+
+
+
+================================================
+FILE: CA8/CA8_12340220/Q2_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+sem_t aArrived, bArrived;
+
+void* threadA(void* arg) {
+    printf("A1 (Starting task)\n");
+    sem_post(&aArrived);
+    sem_wait(&bArrived);
+    printf("A2 (Ending task)\n");
+    return NULL;
+}
+
+void* threadB(void* arg) {
+    printf("B1 (Starting task)\n");
+    sem_post(&bArrived);
+    sem_wait(&aArrived);
+    printf("B2 (Ending task)\n");
+    return NULL;
+}
+
+int main() {
+    pthread_t tA, tB;
+    sem_init(&aArrived, 0, 0);
+    sem_init(&bArrived, 0, 0);
+
+    pthread_create(&tA, NULL, threadA, NULL);
+    pthread_create(&tB, NULL, threadB, NULL);
+
+    pthread_join(tA, NULL);
+    pthread_join(tB, NULL);
+
+    sem_destroy(&aArrived);
+    sem_destroy(&bArrived);
+
+    return 0;
+}
+
+
+
+================================================
+FILE: CA8/CA8_12340220/Q3_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+
+#define NUM_THREADS 10
+#define INCREMENTS 1000000
+
+long counter = 0;
+pthread_mutex_t lock;
+
+void *increment_without_mutex(void *arg)
+{
+    for (int i = 0; i < INCREMENTS / NUM_THREADS; i++)
+        counter++;
+    return NULL;
+}
+
+void *increment_with_mutex(void *arg)
+{
+    for (int i = 0; i < INCREMENTS / NUM_THREADS; i++)
+    {
+        pthread_mutex_lock(&lock);
+        counter++;
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+
+int main()
+{
+    pthread_t threads[NUM_THREADS];
+
+    // Part 1: Without Mutex
+    counter = 0;
+    for (int i = 0; i < NUM_THREADS; i++)
+        pthread_create(&threads[i], NULL, increment_without_mutex, NULL);
+
+    for (int i = 0; i < NUM_THREADS; i++)
+        pthread_join(threads[i], NULL);
+
+    printf("Final Counter (without mutex): %ld\n", counter);
+
+    // Part 2: With Mutex
+    counter = 0;
+    pthread_mutex_init(&lock, NULL);
+
+    for (int i = 0; i < NUM_THREADS; i++)
+        pthread_create(&threads[i], NULL, increment_with_mutex, NULL);
+
+    for (int i = 0; i < NUM_THREADS; i++)
+        pthread_join(threads[i], NULL);
+
+    printf("Final Counter (with mutex): %ld\n", counter);
+
+    pthread_mutex_destroy(&lock);
+    return 0;
+}
+
+
+
+================================================
+FILE: CA8/CA8_12340220/Q4_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+
+#define NUM_THREADS 8
+#define MAX_CONCURRENT 3     // maximum threads allowed in critical section
+
+
+sem_t multiplex;
+
+
+void* worker(void* arg) 
+{
+  int id = *(int*)arg;
+  // Request to enter
+  sem_wait(&multiplex); // take one token
+  printf("Thread %d ENTERED critical section.\n", id);
+  // Critical section (simulate some work)
+  sleep(1); // simulate processing
+  printf("Thread %d LEAVING critical section.\n", id);
+  sem_post(&multiplex); // release token
+  return NULL;
+}
+
+
+int main() 
+{
+  pthread_t threads[NUM_THREADS];
+  int ids[NUM_THREADS];
+  
+  // Initialize semaphore to MAX_CONCURRENT
+  sem_init(&multiplex, 0, MAX_CONCURRENT);
+  
+  // Create threads
+  for (int i = 0; i < NUM_THREADS; i++) 
+  {
+    ids[i] = i + 1;
+    pthread_create(&threads[i], NULL, worker, &ids[i]);
+  }
+  
+  // Join threads
+  for (int i = 0; i < NUM_THREADS; i++) 
+  {
+    pthread_join(threads[i], NULL);
+  }
+  
+  sem_destroy(&multiplex);
+  printf("All threads finished.\n");
+  return 0;
+}
+
+
+
+================================================
+FILE: CA8/CA8_12340220/Q5_12340220_part1.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+#define N 5
+
+int count = 0;
+pthread_mutex_t mutex;
+sem_t barrier;
+
+void *thread_func(void *arg)
+{
+    int id = *(int *)arg;
+
+    printf("Thread %d reached the barrier\n", id);
+
+    pthread_mutex_lock(&mutex);
+    count++;
+    if (count == N)
+        sem_post(&barrier);
+    pthread_mutex_unlock(&mutex);
+
+    sem_wait(&barrier);
+    sem_post(&barrier);
+
+    printf("Thread %d passed the barrier\n", id);
+    return NULL;
+}
+
+int main()
+{
+    pthread_t threads[N];
+    int ids[N];
+
+    pthread_mutex_init(&mutex, NULL);
+    sem_init(&barrier, 0, 0);
+
+    for (int i = 0; i < N; i++)
+    {
+        ids[i] = i + 1;
+        pthread_create(&threads[i], NULL, thread_func, &ids[i]);
+    }
+
+    for (int i = 0; i < N; i++)
+        pthread_join(threads[i], NULL);
+
+    pthread_mutex_destroy(&mutex);
+    sem_destroy(&barrier);
+
+    return 0;
+}
+
+
+
+================================================
+FILE: CA8/CA8_12340220/Q5_12340220_part2.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+#define N 5
+
+int count = 0;
+pthread_mutex_t mutex;
+sem_t turnstile1, turnstile2;
+
+void* thread_func(void* arg) {
+    int id = *(int*)arg;
+
+    // Arrive at the barrier
+    printf("Thread %d reached the barrier\n", id);
+
+    pthread_mutex_lock(&mutex);
+    count++;
+    if (count == N) {
+        sem_wait(&turnstile2);
+        sem_post(&turnstile1);
+    }
+    pthread_mutex_unlock(&mutex);
+
+    sem_wait(&turnstile1);
+    sem_post(&turnstile1);
+
+    // Passed barrier
+    printf("Thread %d passed the barrier\n", id);
+
+    pthread_mutex_lock(&mutex);
+    count--;
+    if (count == 0) {
+        sem_wait(&turnstile1);
+        sem_post(&turnstile2);
+    }
+    pthread_mutex_unlock(&mutex);
+
+    sem_wait(&turnstile2);
+    sem_post(&turnstile2);
+
+    return NULL;
+}
+
+int main() {
+    pthread_t threads[N];
+    int ids[N];
+
+    pthread_mutex_init(&mutex, NULL);
+    sem_init(&turnstile1, 0, 0);
+    sem_init(&turnstile2, 0, 1);
+
+    for (int i = 0; i < N; i++) {
+        ids[i] = i + 1;
+        pthread_create(&threads[i], NULL, thread_func, &ids[i]);
+    }
+
+    for (int i = 0; i < N; i++)
+        pthread_join(threads[i], NULL);
+
+    pthread_mutex_destroy(&mutex);
+    sem_destroy(&turnstile1);
+    sem_destroy(&turnstile2);
+
+    return 0;
+}
+
+
+
+================================================
+FILE: CA9/CA9_12340220.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA9/code-1(1).zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA9/code-1.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: CA9/CA9_12340220/q1_12340220.c
+================================================
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <pthread.h>
+    #include <semaphore.h>
+    #include <unistd.h>
+
+    #define BUFFER_SIZE 100
+
+    sem_t items;
+    pthread_mutex_t mutex;  // Mutex for shared data
+
+    int buffer[BUFFER_SIZE];
+    int fill_ptr = 0;
+    int use_ptr = 0;
+    int item_counter = 0;
+    int items_produced = 0;
+    int items_consumed = 0;
+
+    int produce_item() {
+        return item_counter++;
+    }
+
+    void* producer(void* arg) {
+        int id = *(int*)arg;
+        for(int i = 0; i < 100000; i++) {
+            int item = produce_item();
+            
+            pthread_mutex_lock(&mutex);
+            buffer[fill_ptr] = item;
+            fill_ptr = (fill_ptr + 1) % BUFFER_SIZE;
+            items_produced++;
+            pthread_mutex_unlock(&mutex);
+
+            sem_post(&items);
+            printf("Producer %d produced: %d\n", id, item);
+        }
+        return NULL;
+    }
+
+    void* consumer(void* arg) {
+        int id = *(int*)arg;
+        for(int i = 0; i < 100000; i++) {
+            sem_wait(&items);
+
+            pthread_mutex_lock(&mutex);
+            int item = buffer[use_ptr];
+            use_ptr = (use_ptr + 1) % BUFFER_SIZE;
+            items_consumed++;
+            pthread_mutex_unlock(&mutex);
+
+            printf("Consumer %d consumed: %d\n", id, item);
+        }
+        return NULL;
+    }
+
+    int main() {
+        pthread_t prod_threads[2], cons_threads[2];
+        int prod_ids[2] = {1, 2};
+        int cons_ids[2] = {1, 2};
+
+        sem_init(&items, 0, 0);
+        pthread_mutex_init(&mutex, NULL);
+
+        printf("Starting Producer-Consumer (FIXED VERSION)\n");
+
+        for(int i = 0; i < 2; i++) {
+            pthread_create(&prod_threads[i], NULL, producer, &prod_ids[i]);
+            pthread_create(&cons_threads[i], NULL, consumer, &cons_ids[i]);
+        }
+
+        for(int i = 0; i < 2; i++) {
+            pthread_join(prod_threads[i], NULL);
+            pthread_join(cons_threads[i], NULL);
+        }
+
+        sem_destroy(&items);
+        pthread_mutex_destroy(&mutex);
+
+        printf("\n========== FINAL RESULTS ==========\n");
+        printf("Total items produced: %d\n", items_produced);
+        printf("Total items consumed: %d\n", items_consumed);
+        printf("Final fill_ptr: %d\n", fill_ptr);
+        printf("Final use_ptr: %d\n", use_ptr);
+
+        return 0;
+    }
+
+
+
+================================================
+FILE: CA9/CA9_12340220/q2_12340220.c
+================================================
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <pthread.h>
+    #include <semaphore.h>
+    #include <unistd.h>
+
+    #define BUFFER_SIZE 100
+
+    sem_t empty, full;
+    pthread_mutex_t mutex;
+
+    int buffer[BUFFER_SIZE];
+    int fill_ptr = 0;
+    int use_ptr = 0;
+    int item_counter = 0;
+    int items_produced = 0;
+    int items_consumed = 0;
+
+    int produce_item() {
+        return item_counter++;
+    }
+
+    void put(int item) {
+        buffer[fill_ptr] = item;
+        fill_ptr = (fill_ptr + 1) % BUFFER_SIZE;
+        items_produced++;
+    }
+
+    int get() {
+        int item = buffer[use_ptr];
+        use_ptr = (use_ptr + 1) % BUFFER_SIZE;
+        items_consumed++;
+        return item;
+    }
+
+    void* producer(void* arg) {
+        int id = *(int*)arg;
+        for(int i = 0; i < 100000; i++) {
+            int item = produce_item();
+
+            sem_wait(&empty);      // wait for an empty slot
+
+            pthread_mutex_lock(&mutex);
+            put(item);
+            pthread_mutex_unlock(&mutex);
+
+            sem_post(&full);       // signal one more full slot
+        }
+        return NULL;
+    }
+
+    void* consumer(void* arg) {
+        int id = *(int*)arg;
+        for(int i = 0; i < 100000; i++) {
+            sem_wait(&full);       // wait until an item exists
+
+            pthread_mutex_lock(&mutex);
+            int item = get();
+            pthread_mutex_unlock(&mutex);
+
+            sem_post(&empty);      // signal one more empty slot
+        }
+        return NULL;
+    }
+
+    int main() {
+        pthread_t prod_threads[2], cons_threads[2];
+        int prod_ids[2] = {1, 2};
+        int cons_ids[2] = {1, 2};
+
+        pthread_mutex_init(&mutex, NULL);
+        sem_init(&empty, 0, BUFFER_SIZE); // initially all slots empty
+        sem_init(&full, 0, 0);            // initially no items
+
+        printf("Starting Producer-Consumer (BOUNDED BUFFER VERSION)\n");
+
+        for(int i = 0; i < 2; i++) {
+            pthread_create(&prod_threads[i], NULL, producer, &prod_ids[i]);
+            pthread_create(&cons_threads[i], NULL, consumer, &cons_ids[i]);
+        }
+
+        for(int i = 0; i < 2; i++) {
+            pthread_join(prod_threads[i], NULL);
+            pthread_join(cons_threads[i], NULL);
+        }
+
+        pthread_mutex_destroy(&mutex);
+        sem_destroy(&empty);
+        sem_destroy(&full);
+
+        printf("\n========== FINAL RESULTS ==========\n");
+        printf("Total items produced: %d\n", items_produced);
+        printf("Total items consumed: %d\n", items_consumed);
+        printf("Final fill_ptr: %d\n", fill_ptr);
+        printf("Final use_ptr: %d\n", use_ptr);
+
+        return 0;
+    }
+
+
+
+================================================
+FILE: CA9/CA9_12340220/q3_12340220.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE 5
+
+sem_t full, empty;
+pthread_mutex_t mutex;
+
+int buffer[BUFFER_SIZE];
+int fill_ptr = 0;
+int use_ptr = 0;
+int item_counter = 0;
+
+int produce_item() {
+    return item_counter++;
+}
+
+void* producer(void* arg) {
+    int id = *(int*)arg;
+    for(int i = 0; i < 10; i++) {
+        int item = produce_item();
+
+        sem_wait(&empty);           // Wait for empty space
+        pthread_mutex_lock(&mutex);
+
+        buffer[fill_ptr] = item;
+        fill_ptr = (fill_ptr + 1) % BUFFER_SIZE;
+        printf("Producer %d produced: %d\n", id, item);
+
+        pthread_mutex_unlock(&mutex);
+        sem_post(&full);            // Signal item available
+
+        usleep(100000);
+    }
+    return NULL;
+}
+
+void* consumer(void* arg) {
+    int id = *(int*)arg;
+    for(int i = 0; i < 10; i++) {
+
+        sem_wait(&full);            // Wait for item
+        pthread_mutex_lock(&mutex);
+
+        int item = buffer[use_ptr];
+        use_ptr = (use_ptr + 1) % BUFFER_SIZE;
+        printf("Consumer %d consumed: %d\n", id, item);
+
+        pthread_mutex_unlock(&mutex);
+        sem_post(&empty);           // Signal space available
+
+        usleep(150000);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t prod1, cons1;
+    int prod_id = 1, cons_id = 1;
+
+    sem_init(&full, 0, 0);
+    sem_init(&empty, 0, BUFFER_SIZE);
+    pthread_mutex_init(&mutex, NULL);
+
+    printf("Starting code - FIXED VERSION!\n");
+
+    pthread_create(&prod1, NULL, producer, &prod_id);
+    pthread_create(&cons1, NULL, consumer, &cons_id);
+
+    pthread_join(prod1, NULL);
+    pthread_join(cons1, NULL);
+
+    sem_destroy(&full);
+    sem_destroy(&empty);
+    pthread_mutex_destroy(&mutex);
+
+    printf("Program completed successfully\n");
+    return 0;
+}
+
+
+
+================================================
+FILE: CA9/CA9_12340220/q4_12340220.c
+================================================
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <pthread.h>
+    #include <semaphore.h>
+    #include <unistd.h>
+
+    sem_t roomEmpty;
+    int readers = 0;
+    int shared_data = 0;
+    int read_count = 0;   
+    int write_count = 0;  
+    pthread_mutex_t readMutex;
+
+    void* reader(void* arg) {
+        int id = *(int*)arg;
+        for(int i = 0; i < 50; i++) {
+
+            pthread_mutex_lock(&readMutex);
+            readers++;
+            if(readers == 1)
+                sem_wait(&roomEmpty);  // block writers when first reader enters
+            pthread_mutex_unlock(&readMutex);
+
+            // Critical section — reading
+            int value = shared_data;
+            read_count++;
+            printf("Reader %d reads: %d (readers=%d)\n", id, value, readers);
+
+            pthread_mutex_lock(&readMutex);
+            readers--;
+            if(readers == 0)
+                sem_post(&roomEmpty);  // last reader leaves, allow writers
+            pthread_mutex_unlock(&readMutex);
+
+            usleep(10000);
+        }
+        return NULL;
+    }
+
+
+    void* writer(void* arg) {
+        int id = *(int*)arg;
+        for(int i = 0; i < 20; i++) {
+            sem_wait(&roomEmpty);
+            
+            // Writing
+            shared_data++;
+            write_count++;
+            printf("Writer %d writes: %d\n", id, shared_data);
+            usleep(50000);
+            
+            sem_post(&roomEmpty);
+            usleep(100000);
+        }
+        return NULL;
+    }
+
+    int main() {
+        pthread_t reader_threads[4], writer_threads[2];
+        int reader_ids[4] = {1, 2, 3, 4};
+        int writer_ids[2] = {1, 2};
+        
+        sem_init(&roomEmpty, 0, 1);
+        pthread_mutex_init(&readMutex, NULL);
+
+        printf("=== BUGGY VERSION - Watch for anomalies ===\n");
+        printf("Expected behavior: Writers should NEVER run while readers>0\n\n");
+        
+        for(int i = 0; i < 4; i++) {
+            pthread_create(&reader_threads[i], NULL, reader, &reader_ids[i]);
+        }
+        for(int i = 0; i < 2; i++) {
+            pthread_create(&writer_threads[i], NULL, writer, &writer_ids[i]);
+        }
+        
+        for(int i = 0; i < 4; i++) {
+            pthread_join(reader_threads[i], NULL);
+        }
+        for(int i = 0; i < 2; i++) {
+            pthread_join(writer_threads[i], NULL);
+        }
+        
+        sem_destroy(&roomEmpty);
+        pthread_mutex_destroy(&readMutex);
+
+        printf("\n========== RESULTS ==========\n");
+        printf("Final readers counter: %d (should be 0)\n", readers);
+        printf("Total reads: %d\n", read_count);
+        printf("Total writes: %d (expected: 40)\n", write_count);
+        printf("Final shared_data: %d (expected: 40)\n", shared_data);
+        
+        if(readers != 0) {
+            printf("\nBUG DETECTED: readers counter is corrupted!\n");
+        }
+        if(write_count != 40 || shared_data != 40) {
+            printf("BUG DETECTED: Data corruption occurred!\n");
+        }
+        
+        return 0;
+    }
+
+
+
+
+================================================
+FILE: CA9/CA9_12340220/q5_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+
+typedef struct {
+    int counter;
+    sem_t mutex;  
+} Lightswitch;
+
+Lightswitch readSwitch;
+sem_t roomEmpty;  
+
+
+void lightswitch_init(Lightswitch *ls) {
+    ls->counter = 0;
+    sem_init(&ls->mutex, 0, 1);
+}
+
+
+void lightswitch_lock(Lightswitch *ls, sem_t *semaphore) {
+    sem_wait(&ls->mutex);
+    ls->counter++;
+    if (ls->counter == 1) {
+        sem_wait(semaphore);
+    }
+    sem_post(&ls->mutex);
+}
+
+
+void lightswitch_unlock(Lightswitch *ls, sem_t *semaphore) {
+    sem_wait(&ls->mutex);
+    ls->counter--;
+    if (ls->counter == 0) {
+        sem_post(semaphore);
+    }
+    sem_post(&ls->mutex);
+}
+
+void *reader(void *arg) {
+    int id = *(int *)arg;
+
+    // Enter critical section for readers
+    lightswitch_lock(&readSwitch, &roomEmpty);
+
+    printf("Reader %d is reading...\n", id);
+    sleep(1);  // Simulate read operation
+    printf("Reader %d finished reading.\n", id);
+
+    // Exit critical section for readers
+    lightswitch_unlock(&readSwitch, &roomEmpty);
+
+    return NULL;
+}
+
+
+void *writer(void *arg) {
+    int id = *(int *)arg;
+
+    // Writer requires exclusive access
+    sem_wait(&roomEmpty);
+
+    printf("Writer %d is writing...\n", id);
+    sleep(2);  // Simulate write operation
+    printf("Writer %d finished writing.\n", id);
+
+    sem_post(&roomEmpty);
+
+    return NULL;
+}
+
+
+int main() {
+    pthread_t r1, r2, w1, w2;
+    int rID1 = 1, rID2 = 2;
+    int wID1 = 1, wID2 = 2;
+
+
+    lightswitch_init(&readSwitch);
+    sem_init(&roomEmpty, 0, 1);
+
+
+    pthread_create(&r1, NULL, reader, &rID1);
+    pthread_create(&r2, NULL, reader, &rID2);
+    pthread_create(&w1, NULL, writer, &wID1);
+    pthread_create(&w2, NULL, writer, &wID2);
+
+
+    pthread_join(r1, NULL);
+    pthread_join(r2, NULL);
+    pthread_join(w1, NULL);
+    pthread_join(w2, NULL);
+
+
+    sem_destroy(&roomEmpty);
+    sem_destroy(&readSwitch.mutex);
+
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA9/CA9_12340220/q6_12340220.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+#define N 5  
+
+sem_t forks[N];  
+int eat_count[N] = {0};  
+
+void* philosopher(void* arg) {
+    int id = *(int*)arg;
+    int left_fork = id;
+    int right_fork = (id + 1) % N;
+
+    for(int i = 0; i < 3; i++) {
+
+        printf("Philosopher %d is thinking...\n", id);
+        usleep(100000);
+
+        printf("Philosopher %d is hungry...\n", id);
+
+        // Lower ID first strategy to prevent circular wait
+        if (left_fork < right_fork) {
+            sem_wait(&forks[left_fork]);
+            printf("  Philosopher %d picked left fork %d\n", id, left_fork);
+            sem_wait(&forks[right_fork]);
+            printf("  Philosopher %d picked right fork %d\n", id, right_fork);
+        } else {
+            sem_wait(&forks[right_fork]);
+            printf("  Philosopher %d picked right fork %d\n", id, right_fork);
+            sem_wait(&forks[left_fork]);
+            printf("  Philosopher %d picked left fork %d\n", id, left_fork);
+        }
+
+        // Eating
+        printf("Philosopher %d is EATING (meal #%d)\n", id, eat_count[id] + 1);
+        eat_count[id]++;
+        usleep(200000);
+
+        // Release forks (order doesn't matter)
+        sem_post(&forks[left_fork]);
+        sem_post(&forks[right_fork]);
+        printf("  Philosopher %d put down both forks\n\n", id);
+    }
+
+    return NULL;
+}
+
+int main() {
+    pthread_t philosophers[N];
+    int ids[N];
+    
+   
+    for(int i = 0; i < N; i++) {
+        sem_init(&forks[i], 0, 1);
+        ids[i] = i;
+    }
+    
+    printf("=== DINING PHILOSOPHERS - DEADLOCK VERSION ===\n");
+    printf("Number of philosophers: %d\n", N);
+    printf("Watch for deadlock...\n\n");
+    
+    
+    for(int i = 0; i < N; i++) {
+        pthread_create(&philosophers[i], NULL, philosopher, &ids[i]);
+    }
+    
+   
+    for(int i = 0; i < N; i++) {
+        pthread_join(philosophers[i], NULL);
+    }
+    
+    
+    for(int i = 0; i < N; i++) {
+        sem_destroy(&forks[i]);
+    }
+    
+    printf("\n========== MEAL COUNT ==========\n");
+    for(int i = 0; i < N; i++) {
+        printf("Philosopher %d ate %d times (expected: 3)\n", i, eat_count[i]);
+    }
+    
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA9/code/Given/dp_deadlock.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+#define N 5  
+
+sem_t forks[N];  
+int eat_count[N] = {0};  
+
+void* philosopher(void* arg) {
+    int id = *(int*)arg;
+    int left_fork = id;
+    int right_fork = (id + 1) % N;
+    
+    for(int i = 0; i < 3; i++) {
+        
+        printf("Philosopher %d is thinking...\n", id);
+        usleep(100000);
+        
+       
+        printf("Philosopher %d is hungry, reaching for forks %d and %d\n", 
+               id, left_fork, right_fork);
+        
+        sem_wait(&forks[left_fork]);  
+        printf("  Philosopher %d picked up left fork %d\n", id, left_fork);
+        usleep(50000);  
+        
+        sem_wait(&forks[right_fork]); 
+        printf("  Philosopher %d picked up right fork %d\n", id, right_fork);
+        
+       
+        printf("Philosopher %d is EATING (meal #%d)\n", id, eat_count[id] + 1);
+        eat_count[id]++;
+        usleep(200000);
+        
+        
+        sem_post(&forks[left_fork]);
+        sem_post(&forks[right_fork]);
+        printf("  Philosopher %d put down both forks\n\n", id);
+    }
+    
+    return NULL;
+}
+
+int main() {
+    pthread_t philosophers[N];
+    int ids[N];
+    
+   
+    for(int i = 0; i < N; i++) {
+        sem_init(&forks[i], 0, 1);
+        ids[i] = i;
+    }
+    
+    printf("=== DINING PHILOSOPHERS - DEADLOCK VERSION ===\n");
+    printf("Number of philosophers: %d\n", N);
+    printf("Watch for deadlock...\n\n");
+    
+    
+    for(int i = 0; i < N; i++) {
+        pthread_create(&philosophers[i], NULL, philosopher, &ids[i]);
+    }
+    
+   
+    for(int i = 0; i < N; i++) {
+        pthread_join(philosophers[i], NULL);
+    }
+    
+    
+    for(int i = 0; i < N; i++) {
+        sem_destroy(&forks[i]);
+    }
+    
+    printf("\n========== MEAL COUNT ==========\n");
+    for(int i = 0; i < N; i++) {
+        printf("Philosopher %d ate %d times (expected: 3)\n", i, eat_count[i]);
+    }
+    
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA9/code/Given/lightswitch.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+
+typedef struct {
+    int counter;
+    sem_t mutex;  
+} Lightswitch;
+
+Lightswitch readSwitch;
+sem_t roomEmpty;  
+
+
+void lightswitch_init(Lightswitch *ls) {
+    ls->counter = 0;
+    sem_init(&ls->mutex, 0, 1);
+}
+
+
+void lightswitch_lock(Lightswitch *ls, sem_t *semaphore) {
+    sem_wait(&ls->mutex);
+    ls->counter++;
+    if (ls->counter == 1) {
+          sem_wait(semaphore);
+    }
+    sem_post(&ls->mutex);
+}
+
+
+void lightswitch_unlock(Lightswitch *ls, sem_t *semaphore) {
+    sem_wait(&ls->mutex);
+    ls->counter--;
+    if (ls->counter == 0) {
+         sem_post(semaphore);
+    }
+    sem_post(&ls->mutex);
+}
+
+// ----- Complete Reader Thread -----
+void *reader(void *arg) {
+    int id = *(int *)arg;
+
+    
+    printf("Reader %d is reading...\n", id);
+    sleep(1);
+    printf("Reader %d finished reading.\n", id);
+   
+
+    return NULL;
+}
+
+// ----- Complete Writer Thread -----
+void *writer(void *arg) {
+    int id = *(int *)arg;
+
+   
+    printf("Writer %d is writing...\n", id);
+    sleep(2);
+    printf("Writer %d finished writing.\n", id);
+   
+
+    
+    return NULL;
+}
+
+int main() {
+    pthread_t r1, r2, w1, w2;
+    int rID1 = 1, rID2 = 2;
+    int wID1 = 1, wID2 = 2;
+
+  
+    lightswitch_init(&readSwitch);
+    sem_init(&roomEmpty, 0, 1);
+
+   
+    pthread_create(&r1, NULL, reader, &rID1);
+    pthread_create(&r2, NULL, reader, &rID2);
+    pthread_create(&w1, NULL, writer, &wID1);
+    pthread_create(&w2, NULL, writer, &wID2);
+
+   
+    pthread_join(r1, NULL);
+    pthread_join(r2, NULL);
+    pthread_join(w1, NULL);
+    pthread_join(w2, NULL);
+
+  
+    sem_destroy(&roomEmpty);
+    sem_destroy(&readSwitch.mutex);
+
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA9/code/Given/pc_bug.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE 100
+
+sem_t items;
+int buffer[BUFFER_SIZE];
+int fill_ptr = 0;
+int use_ptr = 0;
+int item_counter = 0;
+int items_produced = 0;  
+int items_consumed = 0;  
+
+int produce_item() {
+    return item_counter++;
+}
+
+void* producer(void* arg) {
+    int id = *(int*)arg;
+    for(int i = 0; i < 100000; i++) {
+        int item = produce_item();
+        buffer[fill_ptr] = item;
+        fill_ptr = (fill_ptr + 1) % BUFFER_SIZE;
+        items_produced++;  
+        printf("Producer %d produced: %d\n", id, item);
+        sem_post(&items);
+        
+    }
+    return NULL;
+}
+
+void* consumer(void* arg) {
+    int id = *(int*)arg;
+    for(int i = 0; i < 100000; i++) {
+        sem_wait(&items);
+        int item = buffer[use_ptr];
+        use_ptr = (use_ptr + 1) % BUFFER_SIZE;
+        items_consumed++;  
+        printf("Consumer %d consumed: %d\n", id, item);
+      
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t prod_threads[2], cons_threads[2];
+    int prod_ids[2] = {1, 2};
+    int cons_ids[2] = {1, 2};
+    
+    sem_init(&items, 0, 0);
+    
+    printf("Starting Producer-Consumer (BUGGY VERSION)\n");
+    
+    for(int i = 0; i < 2; i++) {
+        pthread_create(&prod_threads[i], NULL, producer, &prod_ids[i]);
+        pthread_create(&cons_threads[i], NULL, consumer, &cons_ids[i]);
+    }
+    
+    for(int i = 0; i < 2; i++) {
+        pthread_join(prod_threads[i], NULL);
+        pthread_join(cons_threads[i], NULL);
+    }
+    
+    sem_destroy(&items);
+    
+    printf("\n========== FINAL RESULTS ==========\n");
+    printf("Total items produced: %d\n", items_produced);
+    printf("Total items consumed: %d\n", items_consumed);
+    printf("Final fill_ptr: %d\n", fill_ptr);
+    printf("Final use_ptr: %d\n", use_ptr);
+    
+    
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA9/code/Given/pc_deadlock.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+#define BUFFER_SIZE 5
+
+sem_t items;
+pthread_mutex_t mutex;
+int buffer[BUFFER_SIZE];
+int fill_ptr = 0;
+int use_ptr = 0;
+int item_counter = 0;
+
+int produce_item() {
+    return item_counter++;
+}
+
+void* producer(void* arg) {
+    int id = *(int*)arg;
+    for(int i = 0; i < 10; i++) {
+        pthread_mutex_lock(&mutex);  
+        
+        int item = produce_item();
+        sem_wait(&items);  
+        
+        buffer[fill_ptr] = item;
+        fill_ptr = (fill_ptr + 1) % BUFFER_SIZE;
+        printf("Producer %d produced: %d\n", id, item);
+        
+        pthread_mutex_unlock(&mutex);
+        sem_post(&items);
+        usleep(100000);
+    }
+    return NULL;
+}
+
+void* consumer(void* arg) {
+    int id = *(int*)arg;
+    for(int i = 0; i < 10; i++) {
+        pthread_mutex_lock(&mutex); 
+        sem_wait(&items);
+        
+        int item = buffer[use_ptr];
+        use_ptr = (use_ptr + 1) % BUFFER_SIZE;
+        printf("Consumer %d consumed: %d\n", id, item);
+        
+        pthread_mutex_unlock(&mutex);
+        usleep(150000);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t prod1, cons1;
+    int prod_id = 1, cons_id = 1;
+    
+    sem_init(&items, 0, 0);
+    pthread_mutex_init(&mutex, NULL);
+    
+    printf("Starting code - WILL DEADLOCK!\n");
+    
+    pthread_create(&prod1, NULL, producer, &prod_id);
+    pthread_create(&cons1, NULL, consumer, &cons_id);
+    
+    pthread_join(prod1, NULL);
+    pthread_join(cons1, NULL);
+    
+    sem_destroy(&items);
+    pthread_mutex_destroy(&mutex);
+    printf("Program completed\n");
+    
+    return 0;
+}
+
+
+
+
+================================================
+FILE: CA9/code/Given/rw_bug.c
+================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <semaphore.h>
+#include <unistd.h>
+
+sem_t roomEmpty;
+int readers = 0;
+int shared_data = 0;
+int read_count = 0;   
+int write_count = 0;  
+
+void* reader(void* arg) {
+    int id = *(int*)arg;
+    for(int i = 0; i < 50; i++) {  
+        
+        int local_readers = readers;  
+        usleep(100);  
+        readers = local_readers + 1; 
+        
+        if(readers == 1) {
+            sem_wait(&roomEmpty);
+        }
+        
+       
+        int value = shared_data;
+        read_count++;
+        printf("Reader %d reads: %d (thinks readers=%d)\n", id, value, readers);
+        
+        
+        local_readers = readers;
+        usleep(100);
+        readers = local_readers - 1;
+        
+        if(readers == 0) {
+            sem_post(&roomEmpty);
+        }
+        
+        usleep(10000);
+    }
+    return NULL;
+}
+
+void* writer(void* arg) {
+    int id = *(int*)arg;
+    for(int i = 0; i < 20; i++) {
+        sem_wait(&roomEmpty);
+        
+        // Writing
+        shared_data++;
+        write_count++;
+        printf("Writer %d writes: %d\n", id, shared_data);
+        usleep(50000);
+        
+        sem_post(&roomEmpty);
+        usleep(100000);
+    }
+    return NULL;
+}
+
+int main() {
+    pthread_t reader_threads[4], writer_threads[2];
+    int reader_ids[4] = {1, 2, 3, 4};
+    int writer_ids[2] = {1, 2};
+    
+    sem_init(&roomEmpty, 0, 1);
+    
+    printf("=== BUGGY VERSION - Watch for anomalies ===\n");
+    printf("Expected behavior: Writers should NEVER run while readers>0\n\n");
+    
+    for(int i = 0; i < 4; i++) {
+        pthread_create(&reader_threads[i], NULL, reader, &reader_ids[i]);
+    }
+    for(int i = 0; i < 2; i++) {
+        pthread_create(&writer_threads[i], NULL, writer, &writer_ids[i]);
+    }
+    
+    for(int i = 0; i < 4; i++) {
+        pthread_join(reader_threads[i], NULL);
+    }
+    for(int i = 0; i < 2; i++) {
+        pthread_join(writer_threads[i], NULL);
+    }
+    
+    sem_destroy(&roomEmpty);
+    
+    printf("\n========== RESULTS ==========\n");
+    printf("Final readers counter: %d (should be 0)\n", readers);
+    printf("Total reads: %d\n", read_count);
+    printf("Total writes: %d (expected: 40)\n", write_count);
+    printf("Final shared_data: %d (expected: 40)\n", shared_data);
+    
+    if(readers != 0) {
+        printf("\nBUG DETECTED: readers counter is corrupted!\n");
+    }
+    if(write_count != 40 || shared_data != 40) {
+        printf("BUG DETECTED: Data corruption occurred!\n");
+    }
+    
+    return 0;
+}
+
+
+
+
+================================================
+FILE: HA4/HA4_12340220.zip
+================================================
+[Binary file]
+
+
+================================================
+FILE: HA4/HA4_12340220/HA4_Q1_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+#define SIZE 100
+#define SEGMENT_SIZE 10
+#define NUM_THREADS 11
+
+int arr[SIZE];
+int partial_sums[10];
+
+typedef struct
+{
+    int start;
+    int end;
+    int index;
+} Args;
+
+void *compute_sum(void *arg)
+{
+    Args *a = (Args *)arg;
+    int sum = 0;
+    for (int i = a->start; i < a->end; ++i)
+        sum += arr[i];
+    partial_sums[a->index] = sum;
+    printf("Thread %d partial sum: %d\n", a->index + 1, sum);
+    free(a);
+    pthread_exit(NULL);
+}
+
+void *total_sum(void *arg)
+{
+    int sum = 0;
+    for (int i = 0; i < 10; ++i)
+        sum += partial_sums[i];
+    int *total = malloc(sizeof(int));
+    *total = sum;
+    pthread_exit(total);
+}
+
+int main()
+{
+    pthread_t threads[NUM_THREADS];
+
+    for (int i = 0; i < SIZE; ++i)
+        arr[i] = i + 1;
+
+    for (int i = 0; i < 10; ++i)
+    {
+        Args *a = malloc(sizeof(Args));
+        a->start = i * SEGMENT_SIZE;
+        a->end = (i + 1) * SEGMENT_SIZE;
+        a->index = i;
+        pthread_create(&threads[i], NULL, compute_sum, (void *)a);
+    }
+
+    for (int i = 0; i < 10; ++i)
+        pthread_join(threads[i], NULL);
+
+    pthread_create(&threads[10], NULL, total_sum, NULL);
+
+    int *total;
+    pthread_join(threads[10], (void **)&total);
+
+    printf("Total sum: %d\n", *total);
+    free(total);
+    return 0;
+}
+
+
+
+================================================
+FILE: HA4/HA4_12340220/HA4_Q2_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+#define SIZE 100
+#define SEGMENT_SIZE 10
+#define NUM_THREADS 11
+
+int arr[SIZE];
+int partial_sums[10];
+
+typedef struct
+{
+    int start;
+    int end;
+    int index;
+} Args;
+
+void *compute_sum(void *arg)
+{
+    Args *a = (Args *)arg;
+    int sum = 0;
+    for (int i = a->start; i < a->end; ++i)
+        sum += arr[i];
+    partial_sums[a->index] = sum;
+    printf("Thread %d partial sum: %d\n", a->index + 1, sum);
+    free(a);
+    pthread_exit(NULL);
+}
+
+void *total_sum(void *arg)
+{
+    int sum = 0;
+    for (int i = 0; i < 10; ++i)
+        sum += partial_sums[i];
+    int *total = malloc(sizeof(int));
+    *total = sum;
+    pthread_exit(total);
+}
+
+int main()
+{
+    pthread_t threads[NUM_THREADS];
+
+    for (int i = 0; i < SIZE; ++i)
+        arr[i] = i + 1;
+
+    for (int i = 0; i < 10; ++i)
+    {
+        Args *a = malloc(sizeof(Args));
+        a->start = i * SEGMENT_SIZE;
+        a->end = (i + 1) * SEGMENT_SIZE;
+        a->index = i;
+        pthread_create(&threads[i], NULL, compute_sum, (void *)a);
+    }
+
+    for (int i = 0; i < 10; ++i)
+        pthread_join(threads[i], NULL);
+
+    pthread_create(&threads[10], NULL, total_sum, NULL);
+
+    int *total;
+    pthread_join(threads[10], (void **)&total);
+
+    printf("Total sum: %d\n", *total);
+    printf("Average: %.2f\n", (float)(*total) / SIZE);
+
+    free(total);
+    return 0;
+}
+
+
+
+================================================
+FILE: HA4/HA4_12340220/HA4_Q3_12340220.c
+================================================
+#include <stdio.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+#define SIZE 100
+#define SEGMENT_SIZE 10
+#define NUM_THREADS 11
+
+int arr[SIZE];
+int segment_max[10];
+
+typedef struct
+{
+    int start;
+    int end;
+    int index;
+} Args;
+
+void *find_max(void *arg)
+{
+    Args *a = (Args *)arg;
+    int max = arr[a->start];
+    for (int i = a->start + 1; i < a->end; ++i)
+        if (arr[i] > max)
+            max = arr[i];
+    segment_max[a->index] = max;
+    printf("Thread %d max: %d\n", a->index + 1, max);
+    free(a);
+    pthread_exit(NULL);
+}
+
+void *find_overall_max(void *arg)
+{
+    int max = segment_max[0];
+    for (int i = 1; i < 10; ++i)
+        if (segment_max[i] > max)
+            max = segment_max[i];
+    int *result = malloc(sizeof(int));
+    *result = max;
+    pthread_exit(result);
+}
+
+int main()
+{
+    pthread_t threads[NUM_THREADS];
+
+    for (int i = 0; i < SIZE; ++i)
+        arr[i] = i + 1;
+
+    for (int i = 0; i < 10; ++i)
+    {
+        Args *a = malloc(sizeof(Args));
+        a->start = i * SEGMENT_SIZE;
+        a->end = (i + 1) * SEGMENT_SIZE;
+        a->index = i;
+        pthread_create(&threads[i], NULL, find_max, (void *)a);
+    }
+
+    for (int i = 0; i < 10; ++i)
+        pthread_join(threads[i], NULL);
+
+    pthread_create(&threads[10], NULL, find_overall_max, NULL);
+
+    int *overall_max;
+    pthread_join(threads[10], (void **)&overall_max);
+
+    printf("Overall max: %d\n", *overall_max);
+    free(overall_max);
+    return 0;
+}
+
+
