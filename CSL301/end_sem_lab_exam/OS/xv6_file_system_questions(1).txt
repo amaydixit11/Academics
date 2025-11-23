@@ -1,0 +1,1811 @@
+/*
+================================================================================
+XV6 FILE SYSTEM OPERATIONS - MEGA PRACTICE TEMPLATE
+Based on Questions 2, 3, and 4 from Assignment
+================================================================================
+Contains: 20 Easy-to-Medium File System Practice Questions
+Topics: ls, cp/mv, file metadata, directory operations
+Time: 60-90 minutes per question
+================================================================================
+*/
+
+/*
+================================================================================
+SECTION A: SIMPLIFIED ls COMMAND VARIATIONS (Questions 1-5)
+Based on Q2: Implement simplified ls command
+================================================================================
+*/
+
+/*
+================================================================================
+QUESTION 1: Basic ls - List Files in Directory
+================================================================================
+Problem: Implement a simple ls that lists all files in current directory.
+
+Tasks:
+1. Open current directory "."
+2. Read directory entries
+3. Print each filename
+*/
+
+#include "types.h"
+#include "stat.h"
+#include "user.h"
+#include "fs.h"
+
+// ============ USER/LS1.C ============
+int main(int argc, char *argv[]) {
+  int fd;
+  struct dirent de;
+  
+  // BLANK 1: Open the current directory "."
+  // Hint: fd = open(".", 0);
+  fd = open(".", 0);
+  
+  if (fd < 0) {
+    printf(2, "ls: cannot open directory\n");
+    exit();
+  }
+  
+  // BLANK 2: Read directory entries in a loop
+  // Hint: while(read(fd, &de, sizeof(de)) == sizeof(de))
+  while (read(fd, &de, sizeof(de)) == sizeof(de)) {
+    
+    // BLANK 3: Skip empty entries (inum == 0)
+    if (de.inum == 0)
+      continue;
+    
+    // BLANK 4: Print the filename
+    // Hint: printf(1, "%s\n", de.name);
+    printf(1, "%s\n", de.name);
+  }
+  
+  // BLANK 5: Close the directory
+  close(fd);
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 2: ls with File Type Display
+================================================================================
+Problem: Show file type (file/directory/device) next to each name.
+
+Tasks:
+1. Use stat() to get file information
+2. Check st.type to determine file type
+3. Display type indicator: f=file, d=directory, D=device
+*/
+
+// ============ USER/LS2.C ============
+int main(int argc, char *argv[]) {
+  int fd;
+  struct dirent de;
+  struct stat st;
+  char *path = ".";
+  
+  // BLANK 6: Open directory
+  fd = open(path, 0);
+  
+  if (fd < 0) {
+    printf(2, "ls: cannot open %s\n", path);
+    exit();
+  }
+  
+  while (read(fd, &de, sizeof(de)) == sizeof(de)) {
+    if (de.inum == 0)
+      continue;
+    
+    // Build full path for stat
+    char buf[512];
+    char *p = buf;
+    // BLANK 7: Copy directory path to buf
+    // Hint: Use strcpy or manual copy
+    strcpy(p, path);
+    p += strlen(path);
+    *p++ = '/';
+    
+    // BLANK 8: Copy filename to buf
+    strcpy(p, de.name);
+    
+    // BLANK 9: Get file stats using stat()
+    // Hint: if(stat(buf, &st) < 0)
+    if (stat(buf, &st) < 0) {
+      printf(1, "ls: cannot stat %s\n", buf);
+      continue;
+    }
+    
+    // BLANK 10: Determine and print file type
+    // Hint: Check st.type (T_FILE, T_DIR, T_DEV)
+    char type;
+    switch (st.type) {
+      case T_FILE: type = 'f'; break;
+      case T_DIR:  type = 'd'; break;
+      case T_DEV:  type = 'D'; break;
+      default:     type = '?'; break;
+    }
+    
+    // BLANK 11: Print type and name
+    printf(1, "%c %s\n", type, de.name);
+  }
+  
+  close(fd);
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 3: ls with File Sizes
+================================================================================
+Problem: Display file size in bytes next to each file.
+
+Tasks:
+1. Use stat() to get file size
+2. Format and display size
+*/
+
+// ============ USER/LS3.C ============
+int main(int argc, char *argv[]) {
+  int fd;
+  struct dirent de;
+  struct stat st;
+  
+  fd = open(".", 0);
+  
+  if (fd < 0) {
+    printf(2, "ls: cannot open directory\n");
+    exit();
+  }
+  
+  while (read(fd, &de, sizeof(de)) == sizeof(de)) {
+    if (de.inum == 0)
+      continue;
+    
+    char buf[512];
+    strcpy(buf, ".");
+    // BLANK 12: Add '/' to path
+    strcat(buf, "/");
+    // BLANK 13: Add filename to path
+    strcat(buf, de.name);
+    
+    if (stat(buf, &st) < 0) {
+      printf(1, "ls: cannot stat %s\n", buf);
+      continue;
+    }
+    
+    // BLANK 14: Print size and name
+    // Hint: printf(1, "%d %s\n", st.size, de.name);
+    printf(1, "%d %s\n", st.size, de.name);
+  }
+  
+  close(fd);
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 4: ls -l (Long Format)
+================================================================================
+Problem: Display detailed file information like real ls -l.
+
+Format: type inode size name
+
+Tasks:
+1. Check for -l flag
+2. Display type, inode, size, and name
+*/
+
+// ============ USER/LS4.C ============
+
+void ls_long(char *path) {
+  int fd;
+  struct dirent de;
+  struct stat st;
+  
+  // BLANK 15: Open the directory
+  fd = open(path, 0);
+  
+  if (fd < 0) {
+    printf(2, "ls: cannot open %s\n", path);
+    return;
+  }
+  
+  while (read(fd, &de, sizeof(de)) == sizeof(de)) {
+    if (de.inum == 0)
+      continue;
+    
+    char buf[512];
+    strcpy(buf, path);
+    char *p = buf + strlen(buf);
+    *p++ = '/';
+    // BLANK 16: Copy filename
+    strcpy(p, de.name);
+    
+    // BLANK 17: Get file stats
+    if (stat(buf, &st) < 0) {
+      printf(1, "ls: cannot stat %s\n", buf);
+      continue;
+    }
+    
+    // BLANK 18: Determine file type character
+    char type;
+    if (st.type == T_FILE)
+      type = 'f';
+    else if (st.type == T_DIR)
+      type = 'd';
+    else
+      type = 'D';
+    
+    // BLANK 19: Print in long format: type inode size name
+    printf(1, "%c %d %d %s\n", type, st.ino, st.size, de.name);
+  }
+  
+  close(fd);
+}
+
+int main(int argc, char *argv[]) {
+  // BLANK 20: Check if -l flag provided
+  if (argc > 1 && strcmp(argv[1], "-l") == 0) {
+    ls_long(".");
+  } else {
+    // Regular ls
+    ls_long(".");
+  }
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 5: ls with Argument Support
+================================================================================
+Problem: Support listing specific directory passed as argument.
+
+Tasks:
+1. Parse command line arguments
+2. List specified directory or current if none given
+*/
+
+// ============ USER/LS5.C ============
+
+void list_dir(char *path) {
+  int fd;
+  struct dirent de;
+  
+  fd = open(path, 0);
+  
+  if (fd < 0) {
+    printf(2, "ls: cannot open %s\n", path);
+    return;
+  }
+  
+  while (read(fd, &de, sizeof(de)) == sizeof(de)) {
+    if (de.inum == 0)
+      continue;
+    
+    printf(1, "%s\n", de.name);
+  }
+  
+  close(fd);
+}
+
+int main(int argc, char *argv[]) {
+  // BLANK 21: Check if directory argument provided
+  if (argc < 2) {
+    // BLANK 22: List current directory if no argument
+    list_dir(".");
+  } else {
+    // BLANK 23: List the specified directory
+    list_dir(argv[1]);
+  }
+  
+  exit();
+}
+
+
+/*
+================================================================================
+SECTION B: FILE COPY/MOVE UTILITIES (Questions 6-10)
+Based on Q3: Combined copy/move file utility
+================================================================================
+*/
+
+/*
+================================================================================
+QUESTION 6: Simple File Copy
+================================================================================
+Problem: Copy contents from source file to destination file.
+
+Tasks:
+1. Open source file for reading
+2. Create destination file for writing
+3. Copy data in chunks
+4. Close both files
+*/
+
+// ============ USER/CP1.C ============
+
+int main(int argc, char *argv[]) {
+  int fd_src, fd_dst, n;
+  char buf[512];
+  
+  if (argc < 3) {
+    printf(2, "Usage: cp source dest\n");
+    exit();
+  }
+  
+  // BLANK 24: Open source file for reading
+  // Hint: fd_src = open(argv[1], 0);
+  fd_src = open(argv[1], 0);
+  
+  if (fd_src < 0) {
+    printf(2, "cp: cannot open %s\n", argv[1]);
+    exit();
+  }
+  
+  // BLANK 25: Create destination file for writing
+  // Hint: fd_dst = open(argv[2], O_CREATE | O_WRONLY);
+  fd_dst = open(argv[2], O_CREATE | O_WRONLY);
+  
+  if (fd_dst < 0) {
+    printf(2, "cp: cannot create %s\n", argv[2]);
+    close(fd_src);
+    exit();
+  }
+  
+  // BLANK 26: Copy data in loop
+  // Hint: while((n = read(fd_src, buf, sizeof(buf))) > 0)
+  while ((n = read(fd_src, buf, sizeof(buf))) > 0) {
+    // BLANK 27: Write to destination
+    if (write(fd_dst, buf, n) != n) {
+      printf(2, "cp: write error\n");
+      break;
+    }
+  }
+  
+  // BLANK 28: Close both files
+  close(fd_src);
+  close(fd_dst);
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 7: File Copy with Permission Preservation
+================================================================================
+Problem: Copy file and preserve original file permissions.
+
+Tasks:
+1. Get source file stats
+2. Copy file contents
+3. Apply same permissions to destination
+*/
+
+// ============ USER/CP2.C ============
+
+int main(int argc, char *argv[]) {
+  int fd_src, fd_dst, n;
+  char buf[512];
+  struct stat st;
+  
+  if (argc < 3) {
+    printf(2, "Usage: cp source dest\n");
+    exit();
+  }
+  
+  // BLANK 29: Get source file stats
+  // Hint: if(stat(argv[1], &st) < 0)
+  if (stat(argv[1], &st) < 0) {
+    printf(2, "cp: cannot stat %s\n", argv[1]);
+    exit();
+  }
+  
+  fd_src = open(argv[1], 0);
+  if (fd_src < 0) {
+    printf(2, "cp: cannot open %s\n", argv[1]);
+    exit();
+  }
+  
+  // BLANK 30: Create destination with same permissions
+  // In xv6, we use O_CREATE | O_WRONLY
+  fd_dst = open(argv[2], O_CREATE | O_WRONLY);
+  
+  if (fd_dst < 0) {
+    printf(2, "cp: cannot create %s\n", argv[2]);
+    close(fd_src);
+    exit();
+  }
+  
+  // BLANK 31: Copy loop
+  while ((n = read(fd_src, buf, sizeof(buf))) > 0) {
+    if (write(fd_dst, buf, n) != n) {
+      printf(2, "cp: write error\n");
+      break;
+    }
+  }
+  
+  close(fd_src);
+  close(fd_dst);
+  
+  printf(1, "Copied %s to %s (size: %d bytes)\n", argv[1], argv[2], st.size);
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 8: Simple File Move
+================================================================================
+Problem: Move file from source to destination (copy then delete).
+
+Tasks:
+1. Copy file to destination
+2. Delete source file using unlink()
+*/
+
+// ============ USER/MV1.C ============
+
+int main(int argc, char *argv[]) {
+  int fd_src, fd_dst, n;
+  char buf[512];
+  
+  if (argc < 3) {
+    printf(2, "Usage: mv source dest\n");
+    exit();
+  }
+  
+  // Copy phase
+  fd_src = open(argv[1], 0);
+  if (fd_src < 0) {
+    printf(2, "mv: cannot open %s\n", argv[1]);
+    exit();
+  }
+  
+  fd_dst = open(argv[2], O_CREATE | O_WRONLY);
+  if (fd_dst < 0) {
+    printf(2, "mv: cannot create %s\n", argv[2]);
+    close(fd_src);
+    exit();
+  }
+  
+  // BLANK 32: Copy data
+  while ((n = read(fd_src, buf, sizeof(buf))) > 0) {
+    if (write(fd_dst, buf, n) != n) {
+      printf(2, "mv: write error\n");
+      close(fd_src);
+      close(fd_dst);
+      exit();
+    }
+  }
+  
+  close(fd_src);
+  close(fd_dst);
+  
+  // BLANK 33: Delete source file
+  // Hint: if(unlink(argv[1]) < 0)
+  if (unlink(argv[1]) < 0) {
+    printf(2, "mv: cannot delete %s\n", argv[1]);
+    exit();
+  }
+  
+  printf(1, "Moved %s to %s\n", argv[1], argv[2]);
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 9: Combined cp/mv Utility (Program Name Detection)
+================================================================================
+Problem: Act as cp or mv based on program name (argv[0]).
+
+Tasks:
+1. Check argv[0] to determine operation
+2. Perform copy or move accordingly
+*/
+
+// ============ USER/CPMV.C ============
+
+int copy_file(char *src, char *dst) {
+  int fd_src, fd_dst, n;
+  char buf[512];
+  
+  fd_src = open(src, 0);
+  if (fd_src < 0)
+    return -1;
+  
+  fd_dst = open(dst, O_CREATE | O_WRONLY);
+  if (fd_dst < 0) {
+    close(fd_src);
+    return -1;
+  }
+  
+  while ((n = read(fd_src, buf, sizeof(buf))) > 0) {
+    if (write(fd_dst, buf, n) != n) {
+      close(fd_src);
+      close(fd_dst);
+      return -1;
+    }
+  }
+  
+  close(fd_src);
+  close(fd_dst);
+  return 0;
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 3) {
+    printf(2, "Usage: %s source dest\n", argv[0]);
+    exit();
+  }
+  
+  // BLANK 34: Determine operation based on program name
+  // Hint: Check if argv[0] contains "mv" or "cp"
+  char *progname = argv[0];
+  int is_move = 0;
+  
+  // Simple check: if name contains "mv", it's a move
+  if (strstr(progname, "mv") != 0)
+    is_move = 1;
+  
+  // BLANK 35: Perform copy
+  if (copy_file(argv[1], argv[2]) < 0) {
+    printf(2, "%s: operation failed\n", progname);
+    exit();
+  }
+  
+  // BLANK 36: If move, delete source
+  if (is_move) {
+    if (unlink(argv[1]) < 0) {
+      printf(2, "%s: cannot delete %s\n", progname, argv[1]);
+      exit();
+    }
+  }
+  
+  printf(1, "%s: %s -> %s\n", is_move ? "Moved" : "Copied", argv[1], argv[2]);
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 10: cp/mv with First Argument Mode
+================================================================================
+Problem: Support ./program cp/mv source dest syntax.
+
+Tasks:
+1. Check if first argument is "cp" or "mv"
+2. Shift arguments accordingly
+3. Perform operation
+*/
+
+// ============ USER/CPMV2.C ============
+
+int main(int argc, char *argv[]) {
+  char *operation, *src, *dst;
+  int is_move = 0;
+  
+  // BLANK 37: Parse arguments
+  // Format 1: ./program cp/mv src dst
+  // Format 2: ./cp src dst  or  ./mv src dst
+  
+  if (argc >= 4 && (strcmp(argv[1], "cp") == 0 || strcmp(argv[1], "mv") == 0)) {
+    // Format 1
+    operation = argv[1];
+    src = argv[2];
+    dst = argv[3];
+    // BLANK 38: Set is_move flag
+    if (strcmp(operation, "mv") == 0)
+      is_move = 1;
+  } else if (argc >= 3) {
+    // Format 2: check program name
+    src = argv[1];
+    dst = argv[2];
+    // BLANK 39: Check program name for "mv"
+    if (strstr(argv[0], "mv") != 0)
+      is_move = 1;
+  } else {
+    printf(2, "Usage: %s [cp|mv] source dest\n", argv[0]);
+    exit();
+  }
+  
+  // Copy file
+  int fd_src = open(src, 0);
+  if (fd_src < 0) {
+    printf(2, "cannot open %s\n", src);
+    exit();
+  }
+  
+  int fd_dst = open(dst, O_CREATE | O_WRONLY);
+  if (fd_dst < 0) {
+    printf(2, "cannot create %s\n", dst);
+    close(fd_src);
+    exit();
+  }
+  
+  // BLANK 40: Copy loop
+  char buf[512];
+  int n;
+  while ((n = read(fd_src, buf, sizeof(buf))) > 0) {
+    write(fd_dst, buf, n);
+  }
+  
+  close(fd_src);
+  close(fd_dst);
+  
+  // BLANK 41: Delete source if move operation
+  if (is_move) {
+    unlink(src);
+  }
+  
+  exit();
+}
+
+
+/*
+================================================================================
+SECTION C: FILE METADATA OPERATIONS (Questions 11-15)
+Based on Q4: File creation and deletion with metadata
+================================================================================
+*/
+
+/*
+================================================================================
+QUESTION 11: File Creation with Metadata Simulation
+================================================================================
+Problem: Simulate a file system with inodes containing metadata.
+
+Tasks:
+1. Define inode structure with metadata
+2. Implement create_file() function
+3. Initialize metadata fields
+*/
+
+// ============ USER/FILESIM1.C ============
+
+#define MAX_FILES 100
+#define MAX_FILENAME 32
+
+// BLANK 42: Define inode structure
+struct inode {
+  int used;                    // Is this inode in use?
+  char filename[MAX_FILENAME]; // File name
+  int creator_id;              // Creator process ID
+  int creation_time;           // Creation timestamp
+  char description[64];        // File description
+  int size;                    // File size
+  int data_block;              // Data block number
+};
+
+struct inode inodes[MAX_FILES];
+int next_block = 1;
+
+void init_filesystem() {
+  // BLANK 43: Initialize all inodes to unused
+  for (int i = 0; i < MAX_FILES; i++) {
+    inodes[i].used = 0;
+  }
+}
+
+int create_file(char *filename, int creator_id, char *description) {
+  // BLANK 44: Find free inode
+  int free_inode = -1;
+  for (int i = 0; i < MAX_FILES; i++) {
+    if (inodes[i].used == 0) {
+      free_inode = i;
+      break;
+    }
+  }
+  
+  if (free_inode == -1) {
+    printf(2, "No free inodes\n");
+    return -1;
+  }
+  
+  // BLANK 45: Set inode as used
+  inodes[free_inode].used = 1;
+  
+  // BLANK 46: Copy filename
+  strcpy(inodes[free_inode].filename, filename);
+  
+  // BLANK 47: Set creator ID
+  inodes[free_inode].creator_id = creator_id;
+  
+  // BLANK 48: Set creation time (use uptime() or simple counter)
+  inodes[free_inode].creation_time = uptime();
+  
+  // BLANK 49: Copy description
+  strcpy(inodes[free_inode].description, description);
+  
+  // BLANK 50: Initialize size and allocate data block
+  inodes[free_inode].size = 0;
+  inodes[free_inode].data_block = next_block++;
+  
+  printf(1, "Created file: %s (inode %d)\n", filename, free_inode);
+  
+  return free_inode;
+}
+
+int main(void) {
+  init_filesystem();
+  
+  // Test file creation
+  create_file("test.txt", getpid(), "Test file");
+  create_file("data.dat", getpid(), "Data file");
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 12: File Deletion with Resource Cleanup
+================================================================================
+Problem: Delete file and free associated resources.
+
+Tasks:
+1. Find file by name
+2. Free inode
+3. Free data blocks
+*/
+
+// ============ USER/FILESIM2.C ============
+
+// ... (use same inode structure from Question 11)
+
+int delete_file(char *filename) {
+  // BLANK 51: Find file by name
+  int inode_num = -1;
+  for (int i = 0; i < MAX_FILES; i++) {
+    if (inodes[i].used && strcmp(inodes[i].filename, filename) == 0) {
+      inode_num = i;
+      break;
+    }
+  }
+  
+  if (inode_num == -1) {
+    printf(2, "File not found: %s\n", filename);
+    return -1;
+  }
+  
+  // BLANK 52: Free the data block
+  // In real system, would mark block as free
+  int freed_block = inodes[inode_num].data_block;
+  
+  // BLANK 53: Clear inode
+  inodes[inode_num].used = 0;
+  inodes[inode_num].filename[0] = '\0';
+  inodes[inode_num].size = 0;
+  
+  printf(1, "Deleted file: %s (inode %d, freed block %d)\n", 
+         filename, inode_num, freed_block);
+  
+  return 0;
+}
+
+int main(void) {
+  init_filesystem();
+  
+  create_file("temp.txt", getpid(), "Temporary file");
+  
+  // BLANK 54: Delete the file
+  delete_file("temp.txt");
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 13: Display File Metadata
+================================================================================
+Problem: Show detailed metadata for all files.
+
+Tasks:
+1. Iterate through all inodes
+2. Display metadata for used inodes
+*/
+
+// ============ USER/FILESIM3.C ============
+
+void display_file_info(int inode_num) {
+  struct inode *ip = &inodes[inode_num];
+  
+  if (!ip->used)
+    return;
+  
+  // BLANK 55: Display filename
+  printf(1, "File: %s\n", ip->filename);
+  
+  // BLANK 56: Display creator ID
+  printf(1, "  Creator: %d\n", ip->creator_id);
+  
+  // BLANK 57: Display creation time
+  printf(1, "  Created: %d\n", ip->creation_time);
+  
+  // BLANK 58: Display description
+  printf(1, "  Description: %s\n", ip->description);
+  
+  // BLANK 59: Display size and data block
+  printf(1, "  Size: %d bytes, Block: %d\n", ip->size, ip->data_block);
+  
+  printf(1, "\n");
+}
+
+void list_all_files() {
+  printf(1, "=== File System Contents ===\n");
+  
+  // BLANK 60: Iterate through all inodes
+  for (int i = 0; i < MAX_FILES; i++) {
+    if (inodes[i].used) {
+      display_file_info(i);
+    }
+  }
+}
+
+int main(void) {
+  init_filesystem();
+  
+  create_file("file1.txt", 100, "First file");
+  create_file("file2.txt", 101, "Second file");
+  create_file("file3.txt", 102, "Third file");
+  
+  // BLANK 61: Display all files
+  list_all_files();
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 14: File Search by Creator
+================================================================================
+Problem: Find all files created by a specific creator ID.
+
+Tasks:
+1. Search inodes for matching creator_id
+2. Display matching files
+*/
+
+// ============ USER/FILESIM4.C ============
+
+void find_files_by_creator(int creator_id) {
+  int found = 0;
+  
+  printf(1, "Files created by PID %d:\n", creator_id);
+  
+  // BLANK 62: Search through inodes
+  for (int i = 0; i < MAX_FILES; i++) {
+    // BLANK 63: Check if used and creator matches
+    if (inodes[i].used && inodes[i].creator_id == creator_id) {
+      printf(1, "  %s - %s\n", inodes[i].filename, inodes[i].description);
+      found++;
+    }
+  }
+  
+  // BLANK 64: Display count
+  if (found == 0) {
+    printf(1, "  No files found\n");
+  } else {
+    printf(1, "Total: %d files\n", found);
+  }
+}
+
+int main(void) {
+  init_filesystem();
+  
+  int my_pid = getpid();
+  
+  create_file("myfile1.txt", my_pid, "My first file");
+  create_file("myfile2.txt", my_pid, "My second file");
+  create_file("other.txt", 999, "Someone else's file");
+  
+  // BLANK 65: Find files by current process
+  find_files_by_creator(my_pid);
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 15: File Rename Operation
+================================================================================
+Problem: Rename a file while preserving metadata.
+
+Tasks:
+1. Find file by old name
+2. Update filename field
+3. Keep all other metadata unchanged
+*/
+
+// ============ USER/FILESIM5.C ============
+
+int rename_file(char *oldname, char *newname) {
+  // BLANK 66: Find file by old name
+  int inode_num = -1;
+  for (int i = 0; i < MAX_FILES; i++) {
+    if (inodes[i].used && strcmp(inodes[i].filename, oldname) == 0) {
+      inode_num = i;
+      break;
+    }
+  }
+  
+  if (inode_num == -1) {
+    printf(2, "File not found: %s\n", oldname);
+    return -1;
+  }
+  
+  // BLANK 67: Check if new name already exists
+  for (int i = 0; i < MAX_FILES; i++) {
+    if (inodes[i].used && strcmp(inodes[i].filename, newname) == 0) {
+      printf(2, "File already exists: %s\n", newname);
+      return -1;
+    }
+  }
+  
+  // BLANK 68: Update filename
+  strcpy(inodes[inode_num].filename, newname);
+  
+  printf(1, "Renamed: %s -> %s\n", oldname, newname);
+  
+  return 0;
+}
+
+int main(void) {
+  init_filesystem();
+  
+  create_file("old_name.txt", getpid(), "File to be renamed");
+  
+  // BLANK 69: Rename the file
+  rename_file("old_name.txt", "new_name.txt");
+  
+  list_all_files();
+  
+  exit();
+}
+
+
+/*
+================================================================================
+SECTION D: ADVANCED FILE OPERATIONS (Questions 16-20)
+Extended practice questions
+================================================================================
+*/
+
+/*
+================================================================================
+QUESTION 16: File Concatenation (cat multiple files)
+================================================================================
+Problem: Read and display contents of multiple files sequentially.
+
+Tasks:
+1. Loop through all file arguments
+2. Open and read each file
+3. Print contents to stdout
+*/
+
+// ============ USER/CAT.C ============
+
+void cat_file(char *filename) {
+  int fd;
+  char buf[512];
+  int n;
+  
+  // BLANK 70: Open file for reading
+  fd = open(filename, 0);
+  
+  if (fd < 0) {
+    printf(2, "cat: cannot open %s\n", filename);
+    return;
+  }
+  
+  // BLANK 71: Read and print contents
+  while ((n = read(fd, buf, sizeof(buf))) > 0) {
+    // BLANK 72: Write to stdout (fd 1)
+    write(1, buf, n);
+  }
+  
+  // BLANK 73: Close file
+  close(fd);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf(2, "Usage: cat file1 [file2 ...]\n");
+    exit();
+  }
+  
+  // BLANK 74: Loop through all file arguments
+  for (int i = 1; i < argc; i++) {
+    cat_file(argv[i]);
+  }
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 17: Word Count (wc) Implementation
+================================================================================
+Problem: Count lines, words, and characters in a file.
+
+Tasks:
+1. Read file character by character
+2. Count lines, words, and characters
+3. Display statistics
+*/
+
+// ============ USER/WC.C ============
+
+void wc(char *filename) {
+  int fd, n;
+  char buf[512];
+  int lines = 0, words = 0, chars = 0;
+  int in_word = 0;
+  
+  // BLANK 75: Open file
+  fd = open(filename, 0);
+  
+  if (fd < 0) {
+    printf(2, "wc: cannot open %s\n", filename);
+    return;
+  }
+  
+  // BLANK 76: Read file and count
+  while ((n = read(fd, buf, sizeof(buf))) > 0) {
+    for (int i = 0; i < n; i++) {
+      // BLANK 77: Count characters
+      chars++;
+      
+      // BLANK 78: Count lines (newline character)
+      if (buf[i] == '\n')
+        lines++;
+      
+      // BLANK 79: Count words (space-separated)
+      if (buf[i] == ' ' || buf[i] == '\n' || buf[i] == '\t') {
+        in_word = 0;
+      } else if (!in_word) {
+        in_word = 1;
+        words++;
+      }
+    }
+  }
+  
+  // BLANK 80: Close file
+  close(fd);
+  
+  // BLANK 81: Display statistics
+  printf(1, "%d %d %d %s\n", lines, words, chars, filename);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf(2, "Usage: wc file1 [file2 ...]\n");
+    exit();
+  }
+  
+  for (int i = 1; i < argc; i++) {
+    wc(argv[i]);
+  }
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 18: File Comparison (cmp)
+================================================================================
+Problem: Compare two files byte by byte.
+
+Tasks:
+1. Open both files
+2. Compare contents byte by byte
+3. Report first difference or if files are identical
+*/
+
+// ============ USER/CMP.C ============
+
+int main(int argc, char *argv[]) {
+  int fd1, fd2;
+  char buf1[512], buf2[512];
+  int n1, n2;
+  int byte_count = 0;
+  
+  if (argc < 3) {
+    printf(2, "Usage: cmp file1 file2\n");
+    exit();
+  }
+  
+  // BLANK 82: Open first file
+  fd1 = open(argv[1], 0);
+  if (fd1 < 0) {
+    printf(2, "cmp: cannot open %s\n", argv[1]);
+    exit();
+  }
+  
+  // BLANK 83: Open second file
+  fd2 = open(argv[2], 0);
+  if (fd2 < 0) {
+    printf(2, "cmp: cannot open %s\n", argv[2]);
+    close(fd1);
+    exit();
+  }
+  
+  // BLANK 84: Compare files
+  while (1) {
+    n1 = read(fd1, buf1, sizeof(buf1));
+    n2 = read(fd2, buf2, sizeof(buf2));
+    
+    // BLANK 85: Check if one file ended before the other
+    if (n1 != n2) {
+      printf(1, "cmp: files differ in size\n");
+      break;
+    }
+    
+    // BLANK 86: Check if both files ended
+    if (n1 == 0)
+      break;
+    
+    // BLANK 87: Compare buffers byte by byte
+    for (int i = 0; i < n1; i++) {
+      if (buf1[i] != buf2[i]) {
+        printf(1, "cmp: files differ at byte %d\n", byte_count + i);
+        close(fd1);
+        close(fd2);
+        exit();
+      }
+    }
+    
+    byte_count += n1;
+  }
+  
+  printf(1, "cmp: files are identical\n");
+  
+  close(fd1);
+  close(fd2);
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 19: File Append Utility
+================================================================================
+Problem: Append contents of one file to another.
+
+Tasks:
+1. Open destination file in append mode
+2. Read source file
+3. Append to destination
+*/
+
+// ============ USER/APPEND.C ============
+
+int main(int argc, char *argv[]) {
+  int fd_src, fd_dst;
+  char buf[512];
+  int n;
+  struct stat st;
+  
+  if (argc < 3) {
+    printf(2, "Usage: append source dest\n");
+    exit();
+  }
+  
+  // BLANK 88: Open source file
+  fd_src = open(argv[1], 0);
+  if (fd_src < 0) {
+    printf(2, "append: cannot open %s\n", argv[1]);
+    exit();
+  }
+  
+  // BLANK 89: Open destination file for writing
+  // First check if it exists
+  if (stat(argv[2], &st) < 0) {
+    // File doesn't exist, create it
+    fd_dst = open(argv[2], O_CREATE | O_WRONLY);
+  } else {
+    // File exists, open for appending
+    // In xv6, we need to open and seek to end
+    fd_dst = open(argv[2], O_WRONLY);
+  }
+  
+  if (fd_dst < 0) {
+    printf(2, "append: cannot open %s\n", argv[2]);
+    close(fd_src);
+    exit();
+  }
+  
+  // BLANK 90: If file existed, seek to end
+  // Note: xv6 doesn't have lseek, so we read to end
+  if (stat(argv[2], &st) >= 0) {
+    char dummy[512];
+    while (read(fd_dst, dummy, sizeof(dummy)) > 0);
+  }
+  
+  // BLANK 91: Copy source to destination
+  while ((n = read(fd_src, buf, sizeof(buf))) > 0) {
+    if (write(fd_dst, buf, n) != n) {
+      printf(2, "append: write error\n");
+      break;
+    }
+  }
+  
+  printf(1, "Appended %s to %s\n", argv[1], argv[2]);
+  
+  close(fd_src);
+  close(fd_dst);
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 20: Directory Creation and Listing
+================================================================================
+Problem: Create a new directory and list its contents.
+
+Tasks:
+1. Create directory using mkdir system call
+2. List directory contents
+*/
+
+// ============ USER/MKDIR_TEST.C ============
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf(2, "Usage: mkdir_test dirname\n");
+    exit();
+  }
+  
+  // BLANK 92: Create directory
+  // Hint: if(mkdir(argv[1]) < 0)
+  if (mkdir(argv[1]) < 0) {
+    printf(2, "mkdir_test: cannot create %s\n", argv[1]);
+    exit();
+  }
+  
+  printf(1, "Created directory: %s\n", argv[1]);
+  
+  // BLANK 93: Verify directory was created by trying to open it
+  int fd = open(argv[1], 0);
+  if (fd < 0) {
+    printf(2, "mkdir_test: cannot open %s\n", argv[1]);
+    exit();
+  }
+  
+  // BLANK 94: Get directory stats
+  struct stat st;
+  if (fstat(fd, &st) < 0) {
+    printf(2, "mkdir_test: cannot stat %s\n", argv[1]);
+    close(fd);
+    exit();
+  }
+  
+  // BLANK 95: Verify it's a directory
+  if (st.type != T_DIR) {
+    printf(2, "mkdir_test: %s is not a directory\n", argv[1]);
+  } else {
+    printf(1, "Verified: %s is a directory (inode %d)\n", argv[1], st.ino);
+  }
+  
+  close(fd);
+  exit();
+}
+
+
+/*
+================================================================================
+BONUS QUESTIONS (21-25): Complex File Operations
+================================================================================
+*/
+
+/*
+================================================================================
+QUESTION 21: File Backup Utility
+================================================================================
+Problem: Create a backup of a file with .bak extension.
+
+Tasks:
+1. Generate backup filename
+2. Copy original to backup
+3. Preserve timestamps
+*/
+
+// ============ USER/BACKUP.C ============
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf(2, "Usage: backup filename\n");
+    exit();
+  }
+  
+  // BLANK 96: Create backup filename (add .bak extension)
+  char backup_name[256];
+  strcpy(backup_name, argv[1]);
+  strcat(backup_name, ".bak");
+  
+  // BLANK 97: Get original file stats
+  struct stat st;
+  if (stat(argv[1], &st) < 0) {
+    printf(2, "backup: cannot stat %s\n", argv[1]);
+    exit();
+  }
+  
+  // BLANK 98: Open original file
+  int fd_orig = open(argv[1], 0);
+  if (fd_orig < 0) {
+    printf(2, "backup: cannot open %s\n", argv[1]);
+    exit();
+  }
+  
+  // BLANK 99: Create backup file
+  int fd_backup = open(backup_name, O_CREATE | O_WRONLY);
+  if (fd_backup < 0) {
+    printf(2, "backup: cannot create %s\n", backup_name);
+    close(fd_orig);
+    exit();
+  }
+  
+  // BLANK 100: Copy data
+  char buf[512];
+  int n;
+  while ((n = read(fd_orig, buf, sizeof(buf))) > 0) {
+    write(fd_backup, buf, n);
+  }
+  
+  printf(1, "Created backup: %s -> %s (%d bytes)\n", 
+         argv[1], backup_name, st.size);
+  
+  close(fd_orig);
+  close(fd_backup);
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 22: File Split Utility
+================================================================================
+Problem: Split a file into multiple smaller files.
+
+Tasks:
+1. Read large file
+2. Split into chunks of specified size
+3. Create output files (file.part1, file.part2, etc.)
+*/
+
+// ============ USER/SPLIT.C ============
+
+int main(int argc, char *argv[]) {
+  if (argc < 3) {
+    printf(2, "Usage: split filename chunk_size\n");
+    exit();
+  }
+  
+  char *filename = argv[1];
+  int chunk_size = atoi(argv[2]);
+  
+  if (chunk_size <= 0) {
+    printf(2, "split: invalid chunk size\n");
+    exit();
+  }
+  
+  // BLANK 101: Open source file
+  int fd_src = open(filename, 0);
+  if (fd_src < 0) {
+    printf(2, "split: cannot open %s\n", filename);
+    exit();
+  }
+  
+  char buf[512];
+  int part_num = 1;
+  int bytes_written = 0;
+  int fd_part = -1;
+  
+  // BLANK 102: Read and split file
+  int n;
+  while ((n = read(fd_src, buf, sizeof(buf))) > 0) {
+    for (int i = 0; i < n; i++) {
+      // BLANK 103: Check if need to create new part file
+      if (bytes_written == 0 || bytes_written >= chunk_size) {
+        // Close previous part
+        if (fd_part >= 0)
+          close(fd_part);
+        
+        // BLANK 104: Create new part filename
+        char part_name[256];
+        strcpy(part_name, filename);
+        strcat(part_name, ".part");
+        // Add part number
+        char num[10];
+        // Simple integer to string
+        int temp = part_num;
+        int len = 0;
+        while (temp > 0) {
+          len++;
+          temp /= 10;
+        }
+        for (int j = len - 1; j >= 0; j--) {
+          num[j] = '0' + (part_num % 10);
+          part_num /= 10;
+        }
+        num[len] = '\0';
+        part_num = (part_num == 0) ? 1 : part_num;
+        strcat(part_name, num);
+        
+        // BLANK 105: Create part file
+        fd_part = open(part_name, O_CREATE | O_WRONLY);
+        printf(1, "Creating part: %s\n", part_name);
+        
+        bytes_written = 0;
+        part_num++;
+      }
+      
+      // BLANK 106: Write byte to current part
+      write(fd_part, &buf[i], 1);
+      bytes_written++;
+    }
+  }
+  
+  if (fd_part >= 0)
+    close(fd_part);
+  close(fd_src);
+  
+  printf(1, "Split complete: %d parts created\n", part_num - 1);
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 23: File Merge Utility
+================================================================================
+Problem: Merge multiple part files back into one file.
+
+Tasks:
+1. Find all part files (file.part1, file.part2, etc.)
+2. Merge in order
+3. Create merged output file
+*/
+
+// ============ USER/MERGE.C ============
+
+int main(int argc, char *argv[]) {
+  if (argc < 3) {
+    printf(2, "Usage: merge output_file input_prefix num_parts\n");
+    exit();
+  }
+  
+  char *output = argv[1];
+  char *prefix = argv[2];
+  int num_parts = atoi(argv[3]);
+  
+  // BLANK 107: Create output file
+  int fd_out = open(output, O_CREATE | O_WRONLY);
+  if (fd_out < 0) {
+    printf(2, "merge: cannot create %s\n", output);
+    exit();
+  }
+  
+  // BLANK 108: Loop through all part files
+  for (int i = 1; i <= num_parts; i++) {
+    // BLANK 109: Build part filename
+    char part_name[256];
+    strcpy(part_name, prefix);
+    strcat(part_name, ".part");
+    // Add part number (simplified)
+    if (i < 10) {
+      char num[2] = {'0' + i, '\0'};
+      strcat(part_name, num);
+    }
+    
+    // BLANK 110: Open part file
+    int fd_part = open(part_name, 0);
+    if (fd_part < 0) {
+      printf(2, "merge: cannot open %s\n", part_name);
+      continue;
+    }
+    
+    // BLANK 111: Copy part to output
+    char buf[512];
+    int n;
+    while ((n = read(fd_part, buf, sizeof(buf))) > 0) {
+      write(fd_out, buf, n);
+    }
+    
+    close(fd_part);
+    printf(1, "Merged: %s\n", part_name);
+  }
+  
+  close(fd_out);
+  printf(1, "Merge complete: %s\n", output);
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 24: File Permissions Display
+================================================================================
+Problem: Display file permissions in readable format.
+
+Tasks:
+1. Get file stats
+2. Decode permission bits
+3. Display in rwx format
+*/
+
+// ============ USER/SHOWPERM.C ============
+
+void show_permissions(char *filename) {
+  struct stat st;
+  
+  // BLANK 112: Get file stats
+  if (stat(filename, &st) < 0) {
+    printf(2, "showperm: cannot stat %s\n", filename);
+    return;
+  }
+  
+  // BLANK 113: Display file type
+  char type;
+  if (st.type == T_FILE)
+    type = '-';
+  else if (st.type == T_DIR)
+    type = 'd';
+  else
+    type = 'c';
+  
+  printf(1, "%c ", type);
+  
+  // BLANK 114: Display inode and size
+  printf(1, "inode:%d size:%d ", st.ino, st.size);
+  
+  // BLANK 115: Display filename
+  printf(1, "%s\n", filename);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf(2, "Usage: showperm file1 [file2 ...]\n");
+    exit();
+  }
+  
+  // BLANK 116: Show permissions for all files
+  for (int i = 1; i < argc; i++) {
+    show_permissions(argv[i]);
+  }
+  
+  exit();
+}
+
+
+/*
+================================================================================
+QUESTION 25: File Search by Name Pattern
+================================================================================
+Problem: Search for files matching a simple pattern in a directory.
+
+Tasks:
+1. Read directory entries
+2. Match filename pattern (simple wildcard)
+3. Display matching files
+*/
+
+// ============ USER/FIND.C ============
+
+// Simple pattern match: checks if filename contains pattern
+int matches(char *filename, char *pattern) {
+  // BLANK 117: Simple substring match
+  // Returns 1 if pattern found in filename, 0 otherwise
+  
+  int flen = strlen(filename);
+  int plen = strlen(pattern);
+  
+  if (plen == 0)
+    return 1;
+  
+  for (int i = 0; i <= flen - plen; i++) {
+    int match = 1;
+    for (int j = 0; j < plen; j++) {
+      if (filename[i + j] != pattern[j]) {
+        match = 0;
+        break;
+      }
+    }
+    if (match)
+      return 1;
+  }
+  
+  return 0;
+}
+
+void find_files(char *dir, char *pattern) {
+  int fd;
+  struct dirent de;
+  
+  // BLANK 118: Open directory
+  fd = open(dir, 0);
+  if (fd < 0) {
+    printf(2, "find: cannot open %s\n", dir);
+    return;
+  }
+  
+  printf(1, "Searching in %s for pattern '%s':\n", dir, pattern);
+  
+  // BLANK 119: Read directory entries
+  while (read(fd, &de, sizeof(de)) == sizeof(de)) {
+    if (de.inum == 0)
+      continue;
+    
+    // BLANK 120: Check if filename matches pattern
+    if (matches(de.name, pattern)) {
+      printf(1, "  Found: %s\n", de.name);
+    }
+  }
+  
+  close(fd);
+}
+
+int main(int argc, char *argv[]) {
+  if (argc < 2) {
+    printf(2, "Usage: find pattern [directory]\n");
+    exit();
+  }
+  
+  char *pattern = argv[1];
+  char *dir = (argc >= 3) ? argv[2] : ".";
+  
+  // BLANK 121: Search for files
+  find_files(dir, pattern);
+  
+  exit();
+}
+
+
+/*
+================================================================================
+SUMMARY: Total Blanks to Fill
+================================================================================
+
+SECTION A (ls variations):        21 blanks (1-21)
+SECTION B (cp/mv utilities):      21 blanks (22-42)
+SECTION C (file metadata):        27 blanks (43-69)
+SECTION D (advanced operations):  52 blanks (70-121)
+
+TOTAL: 121 BLANKS
+
+Each question builds on basic file system concepts:
+- Opening/closing files
+- Reading/writing data
+- Using stat() for metadata
+- Directory operations
+- Error handling
+
+================================================================================
+COMPILATION AND TESTING
+================================================================================
+
+To add any program to xv6:
+
+1. Create the .c file in user/ directory
+2. Add to Makefile UPROGS section:
+   _programname\
+
+3. Compile: make clean && make qemu
+
+4. Test in xv6:
+   $ programname arguments
+
+Example workflow for Question 6 (Simple Copy):
+1. Create user/cp1.c
+2. Add "_cp1\" to UPROGS in Makefile
+3. make clean && make qemu
+4. In xv6: $ cp1 README copy_of_readme
+5. Verify: $ cat copy_of_readme
+
+================================================================================
+COMMON xv6 SYSTEM CALLS USED
+================================================================================
+
+File Operations:
+- int open(char *path, int flags)
+  Flags: 0 (read), O_WRONLY, O_CREATE, O_RDWR
+- int read(int fd, void *buf, int n)
+- int write(int fd, void *buf, int n)
+- int close(int fd)
+- int unlink(char *path)
+
+File Information:
+- int stat(char *path, struct stat *st)
+- int fstat(int fd, struct stat *st)
+
+Directory Operations:
+- int mkdir(char *path)
+- int chdir(char *path)
+
+Useful Structures:
+struct stat {
+  short type;  // T_FILE, T_DIR, T_DEV
+  int dev;     // Device number
+  uint ino;    // Inode number
+  short nlink; // Number of links
+  uint size;   // Size in bytes
+};
+
+struct dirent {
+  ushort inum;      // Inode number
+  char name[14];    // File name
+};
+
+================================================================================
+PRACTICE TIPS
+================================================================================
+
+1. Start with simpler questions (1-5) to understand basics
+2. Always check return values for error handling
+3. Remember to close file descriptors
+4. Use printf(2, ...) for error messages (stderr)
+5. Test with small files first
+6. Draw diagrams of file operations flow
+7. Understand difference between file descriptors and inodes
+8. Practice building file paths correctly
+9. Remember xv6 limitations (no lseek, limited string functions)
+10. Test edge cases (empty files, non-existent files, etc.)
+
+================================================================================
+QUICK REFERENCE: Common Patterns
+================================================================================
+
+Pattern 1: Read entire file
+  int fd = open(filename, 0);
+  char buf[512];
+  int n;
+  while ((n = read(fd, buf, sizeof(buf))) > 0) {
+    // process buf[0] to buf[n-1]
+  }
+  close(fd);
+
+Pattern 2: Copy file
+  int src = open(src_file, 0);
+  int dst = open(dst_file, O_CREATE | O_WRONLY);
+  char buf[512];
+  int n;
+  while ((n = read(src, buf, sizeof(buf))) > 0) {
+    write(dst, buf, n);
+  }
+  close(src);
+  close(dst);
+
+Pattern 3: List directory
+  int fd = open(dirname, 0);
+  struct dirent de;
+  while (read(fd, &de, sizeof(de)) == sizeof(de)) {
+    if (de.inum == 0) continue;
+    printf(1, "%s\n", de.name);
+  }
+  close(fd);
+
+Pattern 4: Get file info
+  struct stat st;
+  if (stat(filename, &st) < 0) {
+    // error
+  }
+  printf(1, "Size: %d, Type: %d\n", st.size, st.type);
+
+================================================================================
+*/
