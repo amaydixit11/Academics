@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Max file size 100MB in bytes
+max_size=100000000
+
+# Check staged files
+for file in $(git diff --cached --name-only); do
+    if [ -f "$file" ]; then
+        size=$(wc -c <"$file")
+        if [ "$size" -gt "$max_size" ]; then
+            echo "❌ Error: $file is larger than 100MB."
+            echo "It has size: $(du -h "$file" | cut -f1)"
+            echo "Commit aborted."
+            exit 1
+        fi
+    fi
+done
+
+exit 0
