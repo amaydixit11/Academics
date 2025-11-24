@@ -1,0 +1,75 @@
+-- q1 -- 
+// implement a multithreaded program where N threads (eg N=4) compete to update a shared global variable, critical_limit, which stars at 100. Each thread attempts to reduce critical_limit by 10 in a loop, but only if the current value is greater than 50
+// The critical operation is: Check if critical_limit > 50, if true reduce it by 10
+
+// Write a C program implementing both part (a) and part (b)
+
+// part a: without mutex (observe race condition)
+// implement the logic without any synchroniation (i.e. no mutex) run hte program and record the final value of critical_limit 
+
+// expected output: 
+// -- starting part 1(no mutex) -- 
+// initial value : 100
+// thread 1 decremented. New Value: ??
+// thread 4 decremented. New Value: ??
+// thread 2 decremented. New Value: ??
+// thread 3 decremented. New Value: ??
+// thread 2 decremented. New Value: ??
+// final value (unsafe) : ??
+
+// part b: with mutex (observe consistent result)
+// run the program and record hte final value of critical_limit. The value should be 50 (Since the last successful decrement happens when critical_limit is 60)
+
+// expected output: 
+// -- starting part 2 (mutex) -- 
+// initial value : 100
+// thread 1 decremented. New Value: ??
+// thread 4 decremented. New Value: ??
+// thread 2 decremented. New Value: ??
+// thread 3 decremented. New Value: ??
+// final value (safe) : ??
+
+
+
+-- q2 -- 
+//  write a c program that uses multiple threads to find the minimum and maxikmum values in a large array of integers.
+//  a. create a large integer array (eg, 1000 elements) and initialize it with random values.
+//  b. divide the array into N segments where n is the number of threads
+//  c. create n threads with each thread responsible for finding the min and max values in its assigned segment of the array.
+//  d. each thread should return a structure containing the minimum and the maximum values it found 
+//  e. the main function should collect the results from all threads and determine the overall minimum and maximum values from the partial results.
+//  f. the program should print the overall minimum and maximum values found in the array.
+
+//  note: this question requires you to combine concepts of thread createion, passing arguments, returning complex data structure from threads, and aggregating results in the main thread.
+
+-- q3 -- 
+// write a c program using pthreads, mutex,and condition variables  to iplement an extended write-priority readers-writers problem
+// a. there are 5 readers and 3 writers
+// b. each reader performs 4 read operations,  sleeping for a random time between 100-300 milliseconds between reads
+// c. each writer performs 3 write operations,  sleeping for a random time between 150-350 milliseconds between writes
+// d. a shared integer variable data_value is updated only by writers
+// e. The writer priority rule ensures that no reader may enter if a writer is writing or waiting writers must get exclusive access.
+
+// The program output should include lines like: 
+// Reader 2 is reading... Active Readers = 3 | Data Value = 17
+// ...
+// Final Data Value = 9
+// Final Log Count  = 38
+
+-- q4 -- 
+// Write a C program that simulates a simplified version of linux tree command using directory traversal. The program must recursively list the contents of a directory up to a user-specified depth (Depth represents the level of nesting of directories within directories; for exmple, if depth = 2, it means the home directory contains a subdirectory, and that subdirectory itself contains another directory.). The function S_ISREG() takes one argument returned by stat() or lstat() and returns true (non-zero) if the file is a regular file. Similarly, S_ISLNK() takes the file-mode value returned by stat() or lstat() and returns true (non-zero) if the fle is a symbolic link.
+// a. print file is a directory, a regular file, a link or another type
+// b. call recursively directory for specified depth
+
+// Sample output might be: 
+// On runing 
+// ./a.out /home #represents output inside current directories
+// ./a.out /home/2 #represents output in two level directories inside home
+
+// dtc [DIC] (size: 4096 bytes)
+// Desktop [DIR] (size: 4096 bytes)
+// .gitconfig [FILE] (size: 70 bytes)
+// ticket1.pdf [FILE] (size: 565434 bytes)
+// Videos [DIR] (size: 4096 bytes)
+// Downloads [DIR] (size: 4096 bytes)
+// Public [DIR] (size: 4096 bytes)

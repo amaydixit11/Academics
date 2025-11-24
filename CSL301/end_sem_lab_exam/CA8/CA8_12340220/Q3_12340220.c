@@ -2,15 +2,16 @@
 #include <pthread.h>
 
 #define NUM_THREADS 10
-#define INCREMENTS 1000000
+#define INCREMENTS 100
 
 long counter = 0;
 pthread_mutex_t lock;
 
 void *increment_without_mutex(void *arg)
 {
-    for (int i = 0; i < INCREMENTS / NUM_THREADS; i++)
-        counter++;
+    for (int i = 0; i < INCREMENTS / NUM_THREADS; i++){
+        if (counter > 50) counter -= 10;
+    }
     return NULL;
 }
 
@@ -19,7 +20,7 @@ void *increment_with_mutex(void *arg)
     for (int i = 0; i < INCREMENTS / NUM_THREADS; i++)
     {
         pthread_mutex_lock(&lock);
-        counter++;
+        if (counter > 50) counter -= 10;
         pthread_mutex_unlock(&lock);
     }
     return NULL;
@@ -30,7 +31,7 @@ int main()
     pthread_t threads[NUM_THREADS];
 
     // Part 1: Without Mutex
-    counter = 0;
+    counter = 1000;
     for (int i = 0; i < NUM_THREADS; i++)
         pthread_create(&threads[i], NULL, increment_without_mutex, NULL);
 
@@ -40,7 +41,7 @@ int main()
     printf("Final Counter (without mutex): %ld\n", counter);
 
     // Part 2: With Mutex
-    counter = 0;
+    counter = 1000;
     pthread_mutex_init(&lock, NULL);
 
     for (int i = 0; i < NUM_THREADS; i++)
