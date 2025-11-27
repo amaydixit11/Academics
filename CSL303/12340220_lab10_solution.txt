@@ -1,0 +1,155 @@
+Amay Dixit
+12340220
+25/11/25
+
+=====================================================
+Q1. Recursive CTE — Organizational Hierarchy
+=====================================================
+
+WITH RECURSIVE emp_hierarchy AS (
+    SELECT
+        employee_id,
+        employee_name,
+        manager_id,
+        0 AS level
+    FROM employees
+    WHERE manager_id IS NULL
+
+    UNION ALL
+
+    SELECT
+        e.employee_id,
+        e.employee_name,
+        e.manager_id,
+        eh.level + 1 AS level
+    FROM employees e
+    JOIN emp_hierarchy eh
+      ON e.manager_id = eh.employee_id
+)
+SELECT
+    employee_id,
+    employee_name,
+    manager_id,
+    level
+FROM emp_hierarchy
+ORDER BY level, manager_id, employee_id;
+
+===============================================================
+Q2. Window Functions — 7-Day Moving Average + % Change
+===============================================================
+
+WITH sales_with_prev AS (
+    SELECT
+        product_id,
+        sale_date,
+        sale_amount,
+        LAG(sale_amount) OVER (
+            PARTITION BY product_id
+            ORDER BY sale_date
+        ) AS prev_amount
+    FROM sales
+)
+SELECT
+    product_id,
+    sale_date,
+    sale_amount,
+    AVG(sale_amount) OVER (
+        PARTITION BY product_id
+        ORDER BY sale_date
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ) AS moving_avg_7d,
+    CASE
+        WHEN prev_amount IS NULL OR prev_amount = 0 THEN NULL
+        ELSE ROUND((sale_amount - prev_amount) / prev_amount * 100, 2)
+    END AS pct_change
+FROM sales_with_prev
+ORDER BY product_id, sale_date;
+
+=======================================
+Q3. Indexing Optimization — Explanation
+=======================================
+
+Indices to choose:
+
+CREATE INDEX idx_customers_segment_id_name
+ON customers (customer_segment, customer_id, customer_name);
+
+CREATE INDEX idx_products_category_id_name
+ON products (product_category, product_id, product_name);
+
+CREATE INDEX idx_orders_date_cust_prod
+ON orders (order_date, customer_id, product_id);
+
+Reason:
+
+- The WHERE clause filters by:
+  - customer_segment = 'Premium'
+  - product_category = 'Electronics'
+  - order_date BETWEEN '2023-01-01' AND '2023-12-31'
+
+  So each index starts with the main filter column for that table:
+  - customers: customer_segment
+  - products: product_category
+  - orders: order_date
+
+- The JOINs use customer_id and product_id, which are included in the same indexes,
+  so join lookups can be done using the index keys.
+
+- The SELECT clause only needs:
+  - c.customer_name (present in idx_customers_segment_id_name)
+  - p.product_name (present in idx_products_category_id_name)
+  - o.order_date (present in idx_orders_date_cust_prod)
+
+Each of these indexes is a COVERING INDEX for its table for this query since they contain all necessary columns (filter, join, and select columns). A covering index is one that includes every column required by a query, allowing the database to respond to the query by reading the index alone and avoiding the need to access the rows of the base table. This maximizes performance while minimizing I/O.
+
+=======================================================
+Q4. MongoDB Aggregation Pipeline — Tag-Based Statistics
+=======================================================
+
+db.articles.aggregate([
+  // 4.a. Filter for articles with more than 1000 views
+  { $match: { views: { $gt: 1000 } } },
+
+  {
+    $project: {
+      tags: 1,
+      numComments: { $size: "$comments" },
+      totalLikes: { $sum: "$comments.likes" }
+    }
+  },
+
+  // 4.b. Unwind tags array
+  { $unwind: "$tags" },
+
+  // 4.c. Group by tag: average comments and likes per tag
+  {
+    $group: {
+      _id: "$tags",
+      avgComments: { $avg: "$numComments" },
+      avgLikes: { $avg: "$totalLikes" }
+    }
+  },
+
+  // 4.d. Sort by average likes (descending)
+  { $sort: { avgLikes: -1 } }
+]);
+
+=================================================
+Q5. MongoDB Geospatial Query — Nearby Restaurants
+=================================================
+
+-- Create 2dsphere index on the location field
+db.restaurants.createIndex({ location: "2dsphere" });
+
+-- Find restaurants within 5 km of the given point
+db.restaurants.find({
+  location: {
+    $near: {
+      $geometry: {
+        type: "Point",
+        coordinates: [ -73.98, 40.77 ]
+      },
+      $maxDistance: 5000 
+    }
+  }
+});
